@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.uniovi.uvis.entities.transactions.Transaction;
+import com.uniovi.uvis.util.CryptoUtil;
+
 public class Block implements Serializable{
 
 	/**
@@ -26,7 +29,6 @@ public class Block implements Serializable{
 	/** The actual time at the moment of the creation of the Block */
 	private long timeStamp;
 	
-	
 //	private int nonce;
 	
 	public Block(String previousHash) {
@@ -35,9 +37,29 @@ public class Block implements Serializable{
 		this.hash = this.calculateHash();
 	}
 	
-	
+	/**
+	 * Returns a hash representation of the actual information contained
+	 * into the object. This hash will stay inmutable through the time that
+	 * the block exists.
+	 * 
+	 * @return String
+	 * 			the hash representation of the object.
+	 */
 	private String calculateHash() {
-		
+		String calculatedHash = CryptoUtil.getSha256Hash(
+				this.previousHash + String.valueOf(this.timeStamp) + this.merkleRoot);
+		return calculatedHash;
 	}
+
+	/**
+	 * Returns the hash of the Block.
+	 * 
+	 * @return String
+	 * 			the hash of the Block.
+	 */
+	public String getHash() {
+		return hash;
+	}
+	
 	
 }
