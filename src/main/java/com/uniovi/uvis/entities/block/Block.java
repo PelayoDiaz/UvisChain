@@ -45,7 +45,7 @@ public class Block implements Serializable{
 	 * @return String
 	 * 			the hash representation of the object.
 	 */
-	private String calculateHash() {
+	public String calculateHash() {
 		String calculatedHash = CryptoUtil.getSha256Hash(
 				this.previousHash + String.valueOf(this.timeStamp) + this.merkleRoot);
 		return calculatedHash;
@@ -59,6 +59,16 @@ public class Block implements Serializable{
 	 */
 	public String getHash() {
 		return hash;
+	}
+
+	/**
+	 * Return the hash of the previous Block in the chain.
+	 * 
+	 * @return String
+	 * 			the previousHash.
+	 */
+	public String getPreviousHash() {
+		return previousHash;
 	}
 	
 	

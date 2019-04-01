@@ -22,6 +22,15 @@ public class BlockChain implements Serializable {
 	}
 	
 	public Boolean isChainValid() {
+		try {
+			processChain();
+		} catch (IllegalStateException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	private void processChain() {
 		Block currentBlock;
 		Block previousBlock;
 		
@@ -29,12 +38,21 @@ public class BlockChain implements Serializable {
 			currentBlock = chain.get(i);
 			previousBlock = chain.get(i-1);
 			
-			assertActualBlockHash(currentBlock);
+			checkActualBlockHash(currentBlock);
+			checkPreviousBlockHash(currentBlock, previousBlock);
 		}
 	}
 	
-	private void assertActualBlockHash(Block currentBlock) {
-		t
+	private void checkActualBlockHash(Block currentBlock) {
+		if (!currentBlock.getHash().equals(currentBlock.calculateHash())) {
+			throw new IllegalStateException("The block has been modified!");
+		}
+	}
+	
+	private void checkPreviousBlockHash(Block currentBlock, Block previousBlock) {
+		if (currentBlock.getPreviousHash().equals(previousBlock.getHash())) {
+			throw new IllegalStateException("The previous block has been modified!");
+		}
 	}
 	
 }
