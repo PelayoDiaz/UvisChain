@@ -1,7 +1,5 @@
 package com.uniovi.uvis.entities.block;
 
-import static org.junit.Assert.assertEquals;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,9 +14,10 @@ public class BlockChain implements Serializable {
 
 	/** The BlockChain which contains all the blocks. */
 	private List<Block> chain;
-	
+
 	public BlockChain() {
 		this.chain = new ArrayList<Block>();
+		this.chain.add(new Block("0")); //Genesis Block
 	}
 	
 	public Boolean isChainValid() {
