@@ -29,12 +29,17 @@ public class Block implements Serializable{
 	/** The actual time at the moment of the creation of the Block */
 	private long timeStamp;
 	
-//	private int nonce;
+	/** Counter to increment when mining the block */
+	private int nonce;
+	
+	/** Tells if a block is mined or not */
+	private boolean mined;
 	
 	public Block(String previousHash) {
 		this.previousHash = previousHash;
 		this.timeStamp = new Date().getTime();
 		this.hash = this.calculateHash();
+		this.mined = false;
 	}
 	
 	/**
@@ -47,8 +52,29 @@ public class Block implements Serializable{
 	 */
 	public String calculateHash() {
 		String calculatedHash = CryptoUtil.getSha256Hash(
-				this.previousHash + String.valueOf(this.timeStamp) + this.merkleRoot);
+				this.previousHash + 
+				String.valueOf(this.timeStamp) + 
+				this.merkleRoot +
+				String.valueOf(this.nonce));
 		return calculatedHash;
+	}
+	
+	/**
+	 * Mines the block. For a block to be mined, it is necessary to achieve a number
+	 * of 0's in the hash.
+	 * 
+	 * @param difficulty
+	 * 		the number of 0's to achieve.
+	 */
+	public void mine(int difficulty) {
+		if (mined) return;
+		
+		String target = new String(new char[difficulty]).replace('\0', '0');
+		while (!hash.substring(0, difficulty).equals(target)) {
+			nonce ++;
+			this.hash = this.calculateHash();
+		}
+		this.mined = true;
 	}
 
 	/**
@@ -70,6 +96,17 @@ public class Block implements Serializable{
 	public String getPreviousHash() {
 		return previousHash;
 	}
+
+	/**
+	 * Says if a block is mined or not.
+	 * 
+	 * @return the mined
+	 */
+	public boolean isMined() {
+		return mined;
+	}
+	
+	
 	
 	
 }

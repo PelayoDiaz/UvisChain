@@ -41,5 +41,41 @@ public class BlockTest {
 		assertEquals(genesisBlock.getHash(), secondBlock.getPreviousHash());
 		assertEquals(secondBlock.getHash(), thirdBlock.getPreviousHash());
 	}
+	
+	@Test
+	/**
+	 * Checks that the blocks can be mined correctly.
+	 */
+	public void miningBlocksTests() {
+		Block genesisBlock = new Block("0");
+		genesisBlock.mine(2);
+		assertTrue(genesisBlock.isMined());
+		assertTrue(genesisBlock.getHash().startsWith("00"));
+		
+		Block secondBlock = new Block(genesisBlock.getHash());
+		secondBlock.mine(3);
+		assertTrue(secondBlock.isMined());
+		assertTrue(secondBlock.getHash().startsWith("000"));
+		
+		Block thirdBlock = new Block(secondBlock.getHash());
+		thirdBlock.mine(5);
+		assertTrue(thirdBlock.isMined());
+		assertTrue(thirdBlock.getHash().startsWith("00000"));
+	}
+	
+	@Test
+	/**
+	 * Checks that a mined block can not be mined again.
+	 */
+	public void miningMinedBlockTest() {
+		Block genesisBlock = new Block("0");
+		genesisBlock.mine(2);
+		assertTrue(genesisBlock.isMined());
+		assertTrue(genesisBlock.getHash().startsWith("00"));
+		String previousHash = genesisBlock.getHash();
+		
+		genesisBlock.mine(3);
+		assertEquals(previousHash, genesisBlock.getHash());
+	}
 
 }
