@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.GsonBuilder;
+
 public class BlockChain implements Serializable {
 
 	/**
@@ -45,9 +47,9 @@ public class BlockChain implements Serializable {
 		try {
 			processChain();
 		} catch (IllegalStateException e) {
-			return new Boolean(false);
+			return Boolean.FALSE;
 		}
-		return new Boolean(true);
+		return Boolean.TRUE;
 	}
 	
 	/**
@@ -114,6 +116,12 @@ public class BlockChain implements Serializable {
 	 */
 	public int length() {
 		return this.chain.size();
+	}
+	
+	@Override
+	public String toString() {
+		String gsonChain = new GsonBuilder().setPrettyPrinting().create().toJson(this.chain);
+		return gsonChain;
 	}
 	
 }
