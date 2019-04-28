@@ -16,6 +16,8 @@ import java.util.Base64;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
+import org.bouncycastle.*;
+
 public class CryptoUtil {
 	
 	/**
