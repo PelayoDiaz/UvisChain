@@ -9,6 +9,7 @@ import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.security.Signature;
 import java.security.spec.ECGenParameterSpec;
 import java.util.Base64;
@@ -16,7 +17,7 @@ import java.util.Base64;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
-import org.bouncycastle.*;
+import org.bouncycastle.jce.provider.*;
 
 public class CryptoUtil {
 	
@@ -42,6 +43,8 @@ public class CryptoUtil {
 	 */
 	public static KeyPair generateKeyPair() {
 		try {
+			Security.addProvider(new BouncyCastleProvider());
+			
 			KeyPairGenerator keyGen = KeyPairGenerator.getInstance("ECDSA","BC");
 			SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
 			ECGenParameterSpec ecSpec = new ECGenParameterSpec("prime192v1");
@@ -107,6 +110,7 @@ public class CryptoUtil {
 			return ecdsaVerify.verify(signature);
 		} catch (GeneralSecurityException | UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
+			
 		}
 	}
 }

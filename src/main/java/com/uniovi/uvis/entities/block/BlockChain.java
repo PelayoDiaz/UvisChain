@@ -3,9 +3,12 @@ package com.uniovi.uvis.entities.block;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.GsonBuilder;
+import com.uniovi.uvis.entities.transactions.TransactionOutput;
 
 public class BlockChain implements Serializable {
 
@@ -16,9 +19,13 @@ public class BlockChain implements Serializable {
 
 	/** The BlockChain which contains all the blocks. */
 	private List<Block> chain;
+	
+	/** A hashMap which contains all the unspent outputs that can be used as inputs. */
+	private Map<String, TransactionOutput> utxos;
 
 	public BlockChain() {
 		this.chain = new ArrayList<Block>();
+		this.utxos = new HashMap<String, TransactionOutput>();
 		this.chain.add(new Block("0")); //Genesis Block
 		this.getLastBlock().mine(4);
 	}

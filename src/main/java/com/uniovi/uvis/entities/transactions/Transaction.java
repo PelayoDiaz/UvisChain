@@ -47,20 +47,6 @@ public class Transaction implements Serializable {
 	}
 	
 	/**
-	 * Gets the hash of the transaction. It is used as its id.
-	 * 
-	 * @return String
-	 * 			the hash of the transaction
-	 */
-	private String calculateHash() {
-		return CryptoUtil.getSha256Hash(
-				CryptoUtil.getStringFromKey(this.sender) +
-				CryptoUtil.getStringFromKey(this.receiver) +
-				this.amount +
-				this.timeStamp);
-	}
-	
-	/**
 	 * Sign all the data that can not be modified.
 	 * 
 	 * @param privateKey
@@ -78,7 +64,8 @@ public class Transaction implements Serializable {
 	 * 			True if the signature is valid. False if not
 	 */
 	public boolean verifySignature() {
-		return CryptoUtil.verifyECDSASignature(this.sender, getData(), this.signature);
+		return (signature == null) ? false : 
+			CryptoUtil.verifyECDSASignature(this.sender, getData(), this.signature);
 	}
 	
 	/**
@@ -108,4 +95,17 @@ public class Transaction implements Serializable {
 	}
 	
 	
+	/**
+	 * Gets the hash of the transaction. It is used as its id.
+	 * 
+	 * @return String
+	 * 			the hash of the transaction
+	 */
+	private String calculateHash() {
+		return CryptoUtil.getSha256Hash(
+				CryptoUtil.getStringFromKey(this.sender) +
+				CryptoUtil.getStringFromKey(this.receiver) +
+				this.amount +
+				this.timeStamp);
+	}	
 }

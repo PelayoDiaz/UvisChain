@@ -15,7 +15,7 @@ public class TransactionTest {
 
 	@Test
 	/**
-	 * Checks that a chain is created with a mined genesis block.
+	 * Checks if a transaction is correctly signed and if it is verified in a correct way.
 	 */
 	public void creatingATransactionTest() {
 		Wallet walletA = new Wallet();
