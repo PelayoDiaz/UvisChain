@@ -60,6 +60,20 @@ public class TransactionOutput implements Serializable{
 				this.value +
 				this.timeStamp);
 	}
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * @return the value
+	 */
+	public double getValue() {
+		return value;
+	}
 	
 	
 }

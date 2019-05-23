@@ -16,16 +16,15 @@ public class BlockChain implements Serializable {
 	 * Serializable.
 	 */
 	private static final long serialVersionUID = 1713493104111662876L;
+	
+	/** The minimum value to be sent */
+	public static final double MINIMUM_TRANSACTION = 0.1;
 
 	/** The BlockChain which contains all the blocks. */
 	private List<Block> chain;
-	
-	/** A hashMap which contains all the unspent outputs that can be used as inputs. */
-	private Map<String, TransactionOutput> utxos;
 
 	public BlockChain() {
 		this.chain = new ArrayList<Block>();
-		this.utxos = new HashMap<String, TransactionOutput>();
 		this.chain.add(new Block("0")); //Genesis Block
 		this.getLastBlock().mine(4);
 	}

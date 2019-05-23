@@ -6,6 +6,7 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.util.CryptoUtil;
 
 public class Transaction implements Serializable {
@@ -33,7 +34,10 @@ public class Transaction implements Serializable {
 	/** The actual time at the moment of the creation of the Transaction */
 	private long timeStamp;
 	
+	/** It will be used to reference the outputs which haven't been spent yet */
 	private ArrayList<TransactionInput> inputs;
+	
+	/** The outputs to be sent in the transaction */
 	private ArrayList<TransactionOutput> outputs;
 	
 	public Transaction(PublicKey sender, PublicKey receiver, double amount, ArrayList<TransactionInput> inputs) {
@@ -44,6 +48,71 @@ public class Transaction implements Serializable {
 		this.outputs = new ArrayList<TransactionOutput>();
 		this.timeStamp = new Date().getTime();
 		this.id = calculateHash();
+	}
+	
+	public boolean processTransaction() {
+		if (!this.verifySignature()) {
+			return false;
+		}
+		//Collects all the unspent outputs
+		this.inputs.forEach(x -> x.setUtxo(UTXOs.getInstance().get(x.getOutputId())));
+	
+		if (!this.isValid()) {
+			return false;
+		}
+		this.generateOutputs();
+		this.removeOutputs();
+		return true;
+	}
+	
+	/**
+	 * Generate the different outputs to be sent. It generates an output with the amount to be
+	 * sent to the receiver, and another with the left over of the sender.
+	 */
+	private void generateOutputs() {
+		double leftOver = this.getInputsValue() - this.amount;
+		// The amount to be send to the receiver
+		this.outputs.add(new TransactionOutput(this.receiver, this.amount, this.id));
+		
+		//The left over to be send back to the sender.
+		this.outputs.add(new TransactionOutput(this.sender, leftOver, this.id));
+		
+		//Add outputs to the unspent map
+		this.outputs.forEach(x -> UTXOs.getInstance().put(x.getId(), x));
+	}
+	
+	private void removeOutputs() {
+		this.inputs.stream().filter(y -> y.getUtxo()!=null)
+								.forEach(x -> UTXOs.getInstance().remove(x.getUtxo().getId()));
+	}
+	
+	/**
+	 * Sum all the outputs value and says if it is enough to be a valid transaction.
+	 * 
+	 * @return true if it is enough, false if not.
+	 */
+	private boolean isValid() {
+		return this.getInputsValue() > BlockChain.MINIMUM_TRANSACTION;
+	}
+	
+	/**
+	 * Sum all the outputs of the inputs value.
+	 * 
+	 * @return the outputs value.
+	 */
+	private double getInputsValue() {
+		//Sum all the values of the outputs
+		return this.inputs.stream().filter(y -> y.getUtxo()!=null)
+								.mapToDouble(x -> x.getUtxo().getValue()).sum();
+	}
+	
+	/**
+	 * Returns the sum of the outputs.
+	 * 
+	 * @return the sum of the outputs.
+	 */
+	public double getOutputsValue() {
+		return this.outputs.stream().mapToDouble(x -> x.getValue()).sum();
 	}
 	
 	/**

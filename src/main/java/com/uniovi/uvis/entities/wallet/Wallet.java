@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.uniovi.uvis.entities.transactions.Transaction;
+import com.uniovi.uvis.entities.transactions.TransactionOutput;
 import com.uniovi.uvis.util.CryptoUtil;
 
 public class Wallet implements Serializable {
@@ -21,10 +24,18 @@ public class Wallet implements Serializable {
 	/** The public key to share with people which send you information */
 	private PublicKey publicKey;
 	
+	/** A hashMap which contains all the unspent outputs of the wallet that can be used as inputs. */
+	private Map<String, TransactionOutput> utxos;
+	
 	public Wallet() {
 		KeyPair keyPair = CryptoUtil.generateKeyPair();
 		this.privateKey = keyPair.getPrivate();
 		this.publicKey = keyPair.getPublic();
+		this.utxos = new HashMap<String, TransactionOutput>();
+	}
+	
+	public double getBalance() {
+		return 0.0;
 	}
 
 	/**

@@ -15,12 +15,38 @@ public class TransactionInput implements Serializable {
 	private static final long serialVersionUID = -1567223847398968361L;
 	
 	/**
+	 * Reference to the unspent transactionOutput id.
+	 */
+	private String outputId;
+	
+	/**
 	 * Reference to the unspent transactionOutput.
 	 */
 	private TransactionOutput utxo;
 	
-	public TransactionInput(TransactionOutput utxo) {
+	public TransactionInput(String outputId) {
+		this.outputId = outputId;
+	}
+
+	/**
+	 * @return the outputId
+	 */
+	public String getOutputId() {
+		return outputId;
+	}
+
+	/**
+	 * @param utxo the utxo to set
+	 */
+	public void setUtxo(TransactionOutput utxo) {
 		this.utxo = utxo;
 	}
-	
+
+	/**
+	 * @return the utxo
+	 */
+	public TransactionOutput getUtxo() {
+		return utxo;
+	}
+		
 }
