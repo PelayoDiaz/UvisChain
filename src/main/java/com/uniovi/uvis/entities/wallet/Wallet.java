@@ -4,11 +4,15 @@ import java.io.Serializable;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import com.uniovi.uvis.entities.transactions.Transaction;
+import com.uniovi.uvis.entities.transactions.TransactionInput;
 import com.uniovi.uvis.entities.transactions.TransactionOutput;
+import com.uniovi.uvis.entities.transactions.UTXOs;
 import com.uniovi.uvis.util.CryptoUtil;
 
 public class Wallet implements Serializable {
@@ -34,8 +38,83 @@ public class Wallet implements Serializable {
 		this.utxos = new HashMap<String, TransactionOutput>();
 	}
 	
+	/**
+	 * Returns the total balance of the wallet and stores the UTXOs in it.
+	 * 
+	 * @return double
+	 * 				the total balance of the utxos in the wallet
+	 */
 	public double getBalance() {
-		return 0.0;
+		AtomicDouble total = new AtomicDouble(0);
+		UTXOs.getInstance().getMap().forEach((k, v) -> {
+			if (v.belongsTo(publicKey)) {
+				utxos.put(v.getId(), v);
+				total.addAndGet(v.getValue());
+			}
+		});
+		return total.get();
+	}
+	
+	/**
+	 * Creates a Transaction with an amount of funds to be send to a receiver.
+	 * 
+	 * @param receiver
+	 * 				the receiver of the transaction
+	 * @param amount
+	 * 				the amount of funds to be send
+	 * @return Transaction
+	 * 				the transaction created
+	 */
+	public Transaction sendFunds(PublicKey receiver, double amount) {
+		if (this.getBalance() < amount) { //Checks if there is money enough. 
+			return null;
+		}
+		ArrayList<TransactionInput> inputs = getTransactionInputs(amount);	
+		return createTransaction(receiver, amount, inputs);
+	}
+	
+	/**
+	 * It process all the utxos of the wallet and turns them into Transaction inputs until
+	 * the value of the utxos is enough to the amount required.
+	 * 
+	 * @param amount
+	 * 				the amount to be send
+	 * @return ArrayList<TransactionInput>
+	 * 				the inputs for the transaction.
+	 */
+	private ArrayList<TransactionInput> getTransactionInputs(double amount) {
+		ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
+
+		// Calculates the total utxos that can be send with the transaction
+		AtomicDouble total = new AtomicDouble(0);
+		this.utxos.forEach((k, v) -> {
+			if (total.get() < amount) {
+				total.addAndGet(v.getValue());
+				inputs.add(new TransactionInput(v.getId()));
+			}
+		});
+		
+		return inputs;
+	}
+	
+	/**
+	 * Creates the transaction to be executed.
+	 * 
+	 * @param receiver
+	 * 				The receiver of the funds
+	 * @param amount
+	 * 				The total funds to be sent.
+	 * @param inputs
+	 * 				The outputs of the wallet which contains the funds to be sent.
+	 * @return Transaction
+	 * 				The new transaction to be processed.
+	 */
+	private Transaction createTransaction(PublicKey receiver, double amount, ArrayList<TransactionInput> inputs) {
+		Transaction transaction = new Transaction(this.publicKey, receiver, amount, inputs);
+		this.signTransaction(transaction);
+		inputs.forEach(x -> this.utxos.remove(x.getOutputId()));
+		
+		return transaction;
 	}
 
 	/**

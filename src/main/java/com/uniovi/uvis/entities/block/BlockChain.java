@@ -17,7 +17,7 @@ public class BlockChain implements Serializable {
 	 */
 	private static final long serialVersionUID = 1713493104111662876L;
 	
-	/** The minimum value to be sent */
+	/** The minimum value allowed to be sent */
 	public static final double MINIMUM_TRANSACTION = 0.1;
 
 	/** The BlockChain which contains all the blocks. */

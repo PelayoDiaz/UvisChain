@@ -34,7 +34,7 @@ public class Transaction implements Serializable {
 	/** The actual time at the moment of the creation of the Transaction */
 	private long timeStamp;
 	
-	/** It will be used to reference the outputs which haven't been spent yet */
+	/** It will be used to reference the outputs sent by the sender of the transaction */
 	private ArrayList<TransactionInput> inputs;
 	
 	/** The outputs to be sent in the transaction */
@@ -50,6 +50,13 @@ public class Transaction implements Serializable {
 		this.id = calculateHash();
 	}
 	
+	/**
+	 * Process the transaction. It creates new utxos for the receiver and eliminates 
+	 * the inputs for the sender.
+	 * 
+	 * @return Boolean.
+	 * 				True if everything is correct. False if the transaction is not verified.
+	 */
 	public boolean processTransaction() {
 		if (!this.verifySignature()) {
 			return false;
@@ -81,6 +88,10 @@ public class Transaction implements Serializable {
 		this.outputs.forEach(x -> UTXOs.getInstance().put(x.getId(), x));
 	}
 	
+	/**
+	 * Removes all the utxos that has been used in the transaction for not being 
+	 * used in future transactions
+	 */
 	private void removeOutputs() {
 		this.inputs.stream().filter(y -> y.getUtxo()!=null)
 								.forEach(x -> UTXOs.getInstance().remove(x.getUtxo().getId()));
@@ -92,7 +103,9 @@ public class Transaction implements Serializable {
 	 * @return true if it is enough, false if not.
 	 */
 	private boolean isValid() {
-		return this.getInputsValue() > BlockChain.MINIMUM_TRANSACTION;
+		double total = this.getInputsValue();
+		return this.amount >= BlockChain.MINIMUM_TRANSACTION && 
+				total >= BlockChain.MINIMUM_TRANSACTION && total >= this.amount;
 	}
 	
 	/**

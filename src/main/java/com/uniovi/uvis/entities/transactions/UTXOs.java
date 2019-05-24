@@ -43,6 +43,15 @@ public class UTXOs {
 	}
 	
 	/**
+	 * Returns the hashMap contained in the class.
+	 * 
+	 * @return Map<String, TransactionOutput> the hashMap.
+	 */
+	public Map<String, TransactionOutput> getMap() {
+		return this.utxos;
+	}
+	
+	/**
 	 * Puts a TransactionOutput into the map. It will be stored with its id.
 	 * 
 	 * @param outputId 
