@@ -82,8 +82,10 @@ public class Transaction implements Serializable {
 		this.outputs.add(new TransactionOutput(this.receiver, this.amount, this.id));
 		
 		//The left over to be send back to the sender.
-		this.outputs.add(new TransactionOutput(this.sender, leftOver, this.id));
-		
+		if (leftOver>0) {
+			this.outputs.add(new TransactionOutput(this.sender, leftOver, this.id));
+		}
+				
 		//Add outputs to the unspent map
 		this.outputs.forEach(x -> UTXOs.getInstance().put(x.getId(), x));
 	}
@@ -118,15 +120,15 @@ public class Transaction implements Serializable {
 		return this.inputs.stream().filter(y -> y.getUtxo()!=null)
 								.mapToDouble(x -> x.getUtxo().getValue()).sum();
 	}
-	
-	/**
-	 * Returns the sum of the outputs.
-	 * 
-	 * @return the sum of the outputs.
-	 */
-	public double getOutputsValue() {
-		return this.outputs.stream().mapToDouble(x -> x.getValue()).sum();
-	}
+//	
+//	/**
+//	 * Returns the sum of the outputs.
+//	 * 
+//	 * @return the sum of the outputs.
+//	 */
+//	public double getOutputsValue() {
+//		return this.outputs.stream().mapToDouble(x -> x.getValue()).sum();
+//	}
 	
 	/**
 	 * Sign all the data that can not be modified.
@@ -174,9 +176,15 @@ public class Transaction implements Serializable {
 	 */
 	public PublicKey getReceiver() {
 		return receiver;
+	}	
+	
+	/**
+	 * @return the amount
+	 */
+	public double getAmount() {
+		return amount;
 	}
-	
-	
+
 	/**
 	 * Gets the hash of the transaction. It is used as its id.
 	 * 
@@ -189,5 +197,13 @@ public class Transaction implements Serializable {
 				CryptoUtil.getStringFromKey(this.receiver) +
 				this.amount +
 				this.timeStamp);
-	}	
+	}
+
+	/**
+	 * @return the outputs
+	 */
+	public ArrayList<TransactionOutput> getOutputs() {
+		return outputs;
+	}
+	
 }
