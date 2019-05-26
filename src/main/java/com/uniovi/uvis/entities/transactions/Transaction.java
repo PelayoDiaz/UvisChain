@@ -115,20 +115,20 @@ public class Transaction implements Serializable {
 	 * 
 	 * @return the outputs value.
 	 */
-	private double getInputsValue() {
+	public double getInputsValue() {
 		//Sum all the values of the outputs
 		return this.inputs.stream().filter(y -> y.getUtxo()!=null)
 								.mapToDouble(x -> x.getUtxo().getValue()).sum();
 	}
-//	
-//	/**
-//	 * Returns the sum of the outputs.
-//	 * 
-//	 * @return the sum of the outputs.
-//	 */
-//	public double getOutputsValue() {
-//		return this.outputs.stream().mapToDouble(x -> x.getValue()).sum();
-//	}
+	
+	/**
+	 * Returns the sum of the outputs.
+	 * 
+	 * @return the sum of the outputs.
+	 */
+	public double getOutputsValue() {
+		return this.outputs.stream().mapToDouble(x -> x.getValue()).sum();
+	}
 	
 	/**
 	 * Sign all the data that can not be modified.
@@ -204,6 +204,13 @@ public class Transaction implements Serializable {
 	 */
 	public ArrayList<TransactionOutput> getOutputs() {
 		return outputs;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
 	}
 	
 }

@@ -12,10 +12,14 @@ import java.security.SecureRandom;
 import java.security.Security;
 import java.security.Signature;
 import java.security.spec.ECGenParameterSpec;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
+import com.uniovi.uvis.entities.transactions.Transaction;
 
 import org.bouncycastle.jce.provider.*;
 
@@ -112,5 +116,44 @@ public class CryptoUtil {
 			throw new RuntimeException(e);
 			
 		}
+	}
+	
+	/**
+	 * Gets the merkle root from a list a Transactions.
+	 * 
+	 * @param leafs
+	 * 			A list of transactions
+	 * 
+	 * @return String
+	 * 			The hash representation of the merkle root.
+	 */
+	public static String getMerkleRoot(List<Transaction> leafs) {
+		List<String> stringLeafs = leafs.stream().map(x -> x.getId()).collect(Collectors.toList());
+		return getMerkleRootFromString(stringLeafs);		
+	}
+	
+	/**
+	 * Recursive method to get the merkle root from a list of Strings
+	 * 
+	 * @param leafs the leafs of the tree
+	 * 
+	 * @return String
+	 * 			The hash representation of the merkle root.
+	 */
+	private static String getMerkleRootFromString(List<String> leafs) {
+		if (leafs.size()==1) { //Stop condition
+			return leafs.get(0);
+		}
+		
+		List<String> branches = new ArrayList<String>();
+		for (int i=0; i<leafs.size(); i+=2) {
+			if (i+1==leafs.size()) { //For when it as an odd list.
+				branches.add(leafs.get(i));
+				break;
+			} else {
+				branches.add(getSha256Hash(leafs.get(i).concat(leafs.get(i+1))));
+			}			
+		}
+		return getMerkleRootFromString(branches); //Recursivity
 	}
 }
