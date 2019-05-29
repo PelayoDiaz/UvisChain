@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.uniovi.uvis.entities.abst.AbstractHasheable;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.util.CryptoUtil;
 
-public class Block implements Serializable{
+public class Block extends AbstractHasheable implements Serializable{
 
 	/**
 	 * Serializable
@@ -27,9 +28,6 @@ public class Block implements Serializable{
 	/** The list of transactions contained in the block */
 	private List<Transaction> transactions;
 	
-	/** The actual time at the moment of the creation of the Block */
-	private long timeStamp;
-	
 	/** Counter to increment when mining the block */
 	private int nonce;
 	
@@ -37,25 +35,18 @@ public class Block implements Serializable{
 	private boolean mined;
 	
 	public Block(String previousHash) {
+		super();
 		this.previousHash = previousHash;
-		this.timeStamp = new Date().getTime();
 		this.hash = calculateHash();
 		this.mined = false;
 		this.transactions = new ArrayList<Transaction>();
 	}
-	
-	/**
-	 * Returns a hash representation of the actual information contained
-	 * into the object. This hash will stay inmutable through the time that
-	 * the block exists.
-	 * 
-	 * @return String
-	 * 			the hash representation of the object.
-	 */
+
+	@Override
 	public String calculateHash() {
 		String calculatedHash = CryptoUtil.getSha256Hash(
 				this.previousHash + 
-				String.valueOf(this.timeStamp) + 
+				String.valueOf(this.getTimeStamp()) + 
 				this.merkleRoot +
 				String.valueOf(this.nonce));
 		return calculatedHash;
@@ -151,6 +142,6 @@ public class Block implements Serializable{
 	 * @return the transactions
 	 */
 	public List<Transaction> getTransactions() {
-		return transactions;
+		return new ArrayList<Transaction>(this.transactions);
 	}
 }
