@@ -1,4 +1,4 @@
-package com.uniovi.uvis.conf;
+package com.uniovi.uvis.communication;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
