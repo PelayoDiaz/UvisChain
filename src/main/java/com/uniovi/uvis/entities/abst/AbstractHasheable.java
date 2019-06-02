@@ -3,19 +3,33 @@ package com.uniovi.uvis.entities.abst;
 import java.util.Date;
 
 public abstract class AbstractHasheable {
+	
+	/** The hash of the current object */
+	protected String id;
 
 	/** The actual time at the moment of the creation of the Block */
-	private long timeStamp;
+	protected long timeStamp;
 	
 	public AbstractHasheable() {
 		this.timeStamp = new Date().getTime();
 	}
 
 	/**
-	 * @return the timeStamp
+	 * @return Long
+	 * 			the timeStamp.
 	 */
 	public long getTimeStamp() {
 		return timeStamp;
+	}
+
+	/**
+	 * Returns the hash.
+	 * 
+	 * @return String
+	 * 			the hash of the Block.
+	 */
+	public String getId() {
+		return id;
 	}
 
 	/**

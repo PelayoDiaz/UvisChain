@@ -1,6 +1,7 @@
 package com.uniovi.uvis.entities.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class TransactionDto implements Serializable {
 	
@@ -9,24 +10,13 @@ public class TransactionDto implements Serializable {
 	 */
 	private static final long serialVersionUID = -2161764576648183045L;
 	
-	private String content;
-
-	public TransactionDto() {}
-
-	/**
-	 * @return the content
-	 */
-	public String getContent() {
-		return content;
-	}
-
-	/**
-	 * @param content the content to set
-	 */
-	public void setContent(String content) {
-		this.content = content;
-	}
-	
-	
+	public String id;
+	public byte[] sender;
+	public byte[] receiver;
+	public double amount;
+	public byte[] signature;
+	public long timeStamp;
+	public List<TransactionInputDto> inputs;
+	public List<TransactionOutputDto> outputs;
 
 }

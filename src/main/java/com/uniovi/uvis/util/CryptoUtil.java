@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.Key;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
@@ -12,6 +13,7 @@ import java.security.SecureRandom;
 import java.security.Security;
 import java.security.Signature;
 import java.security.spec.ECGenParameterSpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -155,5 +157,26 @@ public class CryptoUtil {
 			}			
 		}
 		return getMerkleRootFromString(branches); //Recursivity
+	}
+	
+	/**
+	 * It turns a byte[] to a public key to be used into the application.
+	 * 
+	 * @param publicKey
+	 * 				The public key into byte[]
+	 * @return PublicKey
+	 * 				The public key to be used.
+	 */
+	public static PublicKey fromByteToPublicKey(byte[] publicKey) {
+		KeyFactory keyFactory;
+		PublicKey pk = null;
+		try {
+			keyFactory = KeyFactory.getInstance("ECDSA","BC");
+			X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(publicKey);
+			pk = keyFactory.generatePublic(pubKeySpec);
+		} catch (GeneralSecurityException e) {
+			e.printStackTrace();
+		}		
+		return pk;
 	}
 }

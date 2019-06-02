@@ -19,7 +19,7 @@ public class TransactionController {
 	@SendTo("/topic/transactions")
 	public TransactionDto createTransaction(TransactionDto transaction) {
 		TransactionDto transaction2 = new TransactionDto();
-		transaction2.setContent("volvemos");
+//		transaction2.setContent("volvemos");
 		return transaction2;
 	}
 

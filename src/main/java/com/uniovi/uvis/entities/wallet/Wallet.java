@@ -9,10 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.util.concurrent.AtomicDouble;
+import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.entities.transactions.TransactionInput;
 import com.uniovi.uvis.entities.transactions.TransactionOutput;
-import com.uniovi.uvis.entities.transactions.UTXOs;
 import com.uniovi.uvis.util.CryptoUtil;
 
 public class Wallet implements Serializable {
@@ -46,7 +46,7 @@ public class Wallet implements Serializable {
 	 */
 	public double getBalance() {
 		AtomicDouble total = new AtomicDouble(0);
-		UTXOs.getInstance().getMap().forEach((k, v) -> {
+		BlockChain.getInstance().getUTXOMap().forEach((k, v) -> {
 			if (v.belongsTo(publicKey)) {
 				utxos.put(v.getId(), v);
 				total.addAndGet(v.getValue());

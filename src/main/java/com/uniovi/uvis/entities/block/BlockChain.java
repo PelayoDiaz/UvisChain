@@ -1,16 +1,26 @@
 package com.uniovi.uvis.entities.block;
 
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.google.gson.GsonBuilder;
+import com.uniovi.uvis.entities.dto.BlockChainDto;
+import com.uniovi.uvis.entities.dto.Node;
 import com.uniovi.uvis.entities.transactions.Transaction;
+import com.uniovi.uvis.entities.transactions.TransactionInput;
 import com.uniovi.uvis.entities.transactions.TransactionOutput;
+import com.uniovi.uvis.entities.wallet.Wallet;
 
+/**
+ * The chain. Class with a singleton pattern which makes that it only can be instantiated once.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public class BlockChain implements Serializable {
 
 	/**
@@ -22,14 +32,58 @@ public class BlockChain implements Serializable {
 	public static final double MINIMUM_TRANSACTION = 0.1;
 	
 	public static final int DIFFICULTY = 4;
+	
+	/** The unique Blockchain to be instantiated. */
+	private static BlockChain singleChain;
 
 	/** The BlockChain which contains all the blocks. */
 	private List<Block> chain;
+	
+	/** The list of transactions to be added into the next mined block*/
+	private List<Transaction> transactions;
+	
+	/** The list of the nodes using the blockchain. */
+	private List<Node> nodes;
+	
+	/** A hashMap which contains all the unspent outputs that can be used as inputs. */
+	private Map<String, TransactionOutput> utxos;
 
-	public BlockChain() {
+	
+	public static BlockChain getInstance() {
+		if (singleChain == null) {
+			singleChain = new BlockChain();
+		}
+		return singleChain;
+	}
+	
+	/**
+	 * Private Constructor. It doesn't allow default constructor to be generated. 
+	 */
+	private BlockChain() {
 		this.chain = new ArrayList<Block>();
-		this.chain.add(new Block("0")); //Genesis Block
-		this.getLastBlock().mine(4);
+		this.transactions = new ArrayList<Transaction>();
+		this.nodes = new ArrayList<Node>();
+		this.utxos = new HashMap<String, TransactionOutput>();
+		
+		//The wallet and the total amount of coins that can be send in the chain.
+		Wallet coinbase = new Wallet();
+		TransactionOutput output = new TransactionOutput(coinbase.getPublicKey(), 100, null);
+		utxos.put(output.getId(), output);
+		
+		//The original transaction
+		TransactionInput input = new TransactionInput(output.getId());
+		input.setUtxo(output);
+		ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
+		inputs.add(input);
+		
+		Transaction genesisTransaction = new Transaction(coinbase.getPublicKey(), coinbase.getPublicKey(), 100, inputs);
+		coinbase.signTransaction(genesisTransaction);
+		
+		//The first block of the chain
+		Block genesisBlock = new Block("0");
+		genesisBlock.addTransaction(genesisTransaction);
+		this.chain.add(genesisBlock); //Genesis Block
+		this.getLastBlock().mine(1);
 	}
 	
 	/**
@@ -39,7 +93,8 @@ public class BlockChain implements Serializable {
 	 * @param block
 	 * 			the block to be added.
 	 */
-	public void addBlock(Block block) {
+	public void addBlock(Block block) { //Pasarle las transacciones actuales al nodo
+		block.addTransactions(this.transactions);
 		block.mine(DIFFICULTY);
 		if (getLastBlock().isMined() && block.isMined()) { 
 			this.chain.add(block);
@@ -121,7 +176,7 @@ public class BlockChain implements Serializable {
 	 * 		the block to check.
 	 */
 	private void checkActualBlockHash(Block currentBlock) {
-		if (!currentBlock.getHash().equals(currentBlock.calculateHash())) {
+		if (!currentBlock.getId().equals(currentBlock.calculateHash())) {
 			throw new IllegalStateException("The block has been modified!");
 		}
 	}
@@ -137,7 +192,7 @@ public class BlockChain implements Serializable {
 	 * 			the previous block in the chain
 	 */
 	private void checkPreviousBlockHash(Block currentBlock, Block previousBlock) {
-		if (!currentBlock.getPreviousHash().equals(previousBlock.getHash())) {
+		if (!currentBlock.getPreviousHash().equals(previousBlock.getId())) {
 			throw new IllegalStateException("The previous block has been modified!");
 		}
 	}
@@ -162,6 +217,73 @@ public class BlockChain implements Serializable {
 		return this.chain.size();
 	}
 	
+	/**
+	 * Registers the new node to the chain.
+	 * 
+	 * @param node
+	 * 			The new node to be registered.
+	 */
+	public void registerNode(Node node) {
+		this.nodes.add(node);
+	}
+	/**
+	 * @return the nodes
+	 */
+	public List<Node> getNodes() {
+		return new ArrayList<Node>(this.nodes);
+	}
+	
+	/**
+	 * Returns the Output from its id.
+	 * 
+	 * @param outputId 
+	 * 			the output id to be found
+	 * 
+	 * @return the output.
+	 */
+	public TransactionOutput getUTXO(String outputId) {
+		return this.utxos.get(outputId);
+	}
+	
+	/**
+	 * Returns the hashMap contained in the class.
+	 * 
+	 * @return Map<String, TransactionOutput> the hashMap.
+	 */
+	public Map<String, TransactionOutput> getUTXOMap() {
+		return new HashMap<String, TransactionOutput>(this.utxos);
+	}
+	
+	/**
+	 * Puts a TransactionOutput into the map. It will be stored with its id.
+	 * 
+	 * @param outputId 
+	 * 				the id which will be the key in the map.
+	 * @param output
+	 * 				the output to be stored.
+	 */
+	public void putUTXO(String outputId, TransactionOutput output) {
+		this.utxos.put(outputId, output);
+	}
+	
+	/**
+	 * Removes a TransactionOutput from the map.
+	 * 
+	 * @param outputId the id the TransactionOutput was stored with.
+	 */
+	public void removeUTXO(String outputId) {
+		this.utxos.remove(outputId);
+	}
+	
+	public BlockChainDto toDto() {
+		BlockChainDto dto = new BlockChainDto();
+		dto.chain = this.chain.stream().map(x -> x.toDto()).collect(Collectors.toList());
+		dto.transactions = this.transactions.stream().map(x -> x.toDto()).collect(Collectors.toList());
+		dto.nodes = this.nodes;
+		dto.utxos = this.utxos.values().stream().map(x -> x.toDto()).collect(Collectors.toList());
+		return dto;
+	}
+
 	@Override
 	public String toString() {
 		String gsonChain = new GsonBuilder().setPrettyPrinting().create().toJson(this.chain);

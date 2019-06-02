@@ -34,12 +34,12 @@ public class BlockTest {
 	 */
 	public void creatingBlocksTests() {
 		Block genesisBlock = new Block("0");
-		Block secondBlock = new Block(genesisBlock.getHash());
-		Block thirdBlock = new Block(secondBlock.getHash());
+		Block secondBlock = new Block(genesisBlock.getId());
+		Block thirdBlock = new Block(secondBlock.getId());
 		
 		assertEquals("0", genesisBlock.getPreviousHash());
-		assertEquals(genesisBlock.getHash(), secondBlock.getPreviousHash());
-		assertEquals(secondBlock.getHash(), thirdBlock.getPreviousHash());
+		assertEquals(genesisBlock.getId(), secondBlock.getPreviousHash());
+		assertEquals(secondBlock.getId(), thirdBlock.getPreviousHash());
 	}
 	
 	@Test
@@ -50,17 +50,17 @@ public class BlockTest {
 		Block genesisBlock = new Block("0");
 		genesisBlock.mine(2);
 		assertTrue(genesisBlock.isMined());
-		assertTrue(genesisBlock.getHash().startsWith("00"));
+		assertTrue(genesisBlock.getId().startsWith("00"));
 		
-		Block secondBlock = new Block(genesisBlock.getHash());
+		Block secondBlock = new Block(genesisBlock.getId());
 		secondBlock.mine(3);
 		assertTrue(secondBlock.isMined());
-		assertTrue(secondBlock.getHash().startsWith("000"));
+		assertTrue(secondBlock.getId().startsWith("000"));
 		
-		Block thirdBlock = new Block(secondBlock.getHash());
+		Block thirdBlock = new Block(secondBlock.getId());
 		thirdBlock.mine(5);
 		assertTrue(thirdBlock.isMined());
-		assertTrue(thirdBlock.getHash().startsWith("00000"));
+		assertTrue(thirdBlock.getId().startsWith("00000"));
 	}
 	
 	@Test
@@ -71,11 +71,11 @@ public class BlockTest {
 		Block genesisBlock = new Block("0");
 		genesisBlock.mine(2);
 		assertTrue(genesisBlock.isMined());
-		assertTrue(genesisBlock.getHash().startsWith("00"));
-		String previousHash = genesisBlock.getHash();
+		assertTrue(genesisBlock.getId().startsWith("00"));
+		String previousHash = genesisBlock.getId();
 		
 		genesisBlock.mine(3);
-		assertEquals(previousHash, genesisBlock.getHash());
+		assertEquals(previousHash, genesisBlock.getId());
 	}
 
 }

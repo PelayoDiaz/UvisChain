@@ -5,19 +5,20 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import com.uniovi.uvis.entities.abst.AbstractHasheable;
 import com.uniovi.uvis.entities.block.BlockChain;
+import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.util.CryptoUtil;
 
-public class Transaction implements Serializable {
+public class Transaction extends AbstractHasheable implements Serializable {
 
 	/**
 	 * Serializable.
 	 */
 	private static final long serialVersionUID = -4482748116683610567L;
-
-	/** The id of the transaction */
-	private String id;
 	
 	/** The public key of the transaction's sender */
 	private PublicKey sender;
@@ -31,14 +32,11 @@ public class Transaction implements Serializable {
 	/** To prevent anybody else from spending funds in our wallet */
 	private byte[] signature;
 	
-	/** The actual time at the moment of the creation of the Transaction */
-	private long timeStamp;
-	
 	/** It will be used to reference the outputs sent by the sender of the transaction */
-	private ArrayList<TransactionInput> inputs;
+	private List<TransactionInput> inputs;
 	
 	/** The outputs to be sent in the transaction */
-	private ArrayList<TransactionOutput> outputs;
+	private List<TransactionOutput> outputs;
 	
 	public Transaction(PublicKey sender, PublicKey receiver, double amount, ArrayList<TransactionInput> inputs) {
 		this.sender = sender;
@@ -62,7 +60,7 @@ public class Transaction implements Serializable {
 			return false;
 		}
 		//Collects all the unspent outputs
-		this.inputs.forEach(x -> x.setUtxo(UTXOs.getInstance().get(x.getOutputId())));
+		this.inputs.forEach(x -> x.setUtxo(BlockChain.getInstance().getUTXO(x.getOutputId())));
 	
 		if (!this.isValid()) {
 			return false;
@@ -87,7 +85,7 @@ public class Transaction implements Serializable {
 		}
 				
 		//Add outputs to the unspent map
-		this.outputs.forEach(x -> UTXOs.getInstance().put(x.getId(), x));
+		this.outputs.forEach(x -> BlockChain.getInstance().putUTXO(x.getId(), x));
 	}
 	
 	/**
@@ -96,7 +94,7 @@ public class Transaction implements Serializable {
 	 */
 	private void removeOutputs() {
 		this.inputs.stream().filter(y -> y.getUtxo()!=null)
-								.forEach(x -> UTXOs.getInstance().remove(x.getUtxo().getId()));
+								.forEach(x -> BlockChain.getInstance().removeUTXO(x.getUtxo().getId()));
 	}
 	
 	/**
@@ -185,13 +183,9 @@ public class Transaction implements Serializable {
 		return amount;
 	}
 
-	/**
-	 * Gets the hash of the transaction. It is used as its id.
-	 * 
-	 * @return String
-	 * 			the hash of the transaction
-	 */
-	private String calculateHash() {
+
+	@Override
+	public String calculateHash() {
 		return CryptoUtil.getSha256Hash(
 				CryptoUtil.getStringFromKey(this.sender) +
 				CryptoUtil.getStringFromKey(this.receiver) +
@@ -202,7 +196,7 @@ public class Transaction implements Serializable {
 	/**
 	 * @return the outputs
 	 */
-	public ArrayList<TransactionOutput> getOutputs() {
+	public List<TransactionOutput> getOutputs() {
 		return outputs;
 	}
 
@@ -211,6 +205,19 @@ public class Transaction implements Serializable {
 	 */
 	public String getId() {
 		return id;
+	}
+	
+	public TransactionDto toDto() {
+		TransactionDto dto = new TransactionDto();
+		dto.id = this.id;
+		dto.sender = this.sender.getEncoded();
+		dto.receiver = this.receiver.getEncoded();
+		dto.amount = this.amount;
+		dto.signature = this.signature;
+		dto.timeStamp = this.timeStamp;
+		dto.inputs = this.inputs.stream().map(x -> x.toDto()).collect(Collectors.toList());
+		dto.outputs = this.outputs.stream().map(x -> x.toDto()).collect(Collectors.toList());
+		return dto;
 	}
 	
 }

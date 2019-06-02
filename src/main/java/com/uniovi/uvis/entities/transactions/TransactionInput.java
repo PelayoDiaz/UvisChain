@@ -2,6 +2,8 @@ package com.uniovi.uvis.entities.transactions;
 
 import java.io.Serializable;
 
+import com.uniovi.uvis.entities.dto.TransactionInputDto;
+
 /**
  * It will be used to reference TransactionOutputs which haven't been spent yet.
  * 
@@ -47,6 +49,13 @@ public class TransactionInput implements Serializable {
 	 */
 	public TransactionOutput getUtxo() {
 		return utxo;
+	}
+	
+	public TransactionInputDto toDto() {
+		TransactionInputDto dto = new TransactionInputDto();
+		dto.outputId = this.outputId;
+		dto.utxo = this.utxo.toDto();
+		return dto;
 	}
 		
 }

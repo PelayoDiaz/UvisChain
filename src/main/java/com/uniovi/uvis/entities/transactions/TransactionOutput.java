@@ -4,17 +4,16 @@ import java.io.Serializable;
 import java.security.PublicKey;
 import java.util.Date;
 
+import com.uniovi.uvis.entities.abst.AbstractHasheable;
+import com.uniovi.uvis.entities.dto.TransactionOutputDto;
 import com.uniovi.uvis.util.CryptoUtil;
 
-public class TransactionOutput implements Serializable{
+public class TransactionOutput extends AbstractHasheable implements Serializable{
 
 	/**
 	 * Serializable.
 	 */
 	private static final long serialVersionUID = 5665651396410700747L;
-
-	/** The id of the transactionOutput. */
-	private String id;
 	
 	/** The public key of the transaction's receiver */
 	private PublicKey receiver;
@@ -24,9 +23,6 @@ public class TransactionOutput implements Serializable{
 	
 	/** The id of the transaction where this output was created. */
 	private String parentTransactionId;
-	
-	/** The actual time at the moment of the creation of the Transaction */
-	private long timeStamp;
 
 	public TransactionOutput(PublicKey receiver, double value, String parentTransactionId) {
 		this.receiver = receiver;
@@ -54,18 +50,12 @@ public class TransactionOutput implements Serializable{
 	 * @return String
 	 * 			the hash of the transaction
 	 */
-	private String calculateHash() {
+	@Override
+	public String calculateHash() {
 		return CryptoUtil.getSha256Hash(
 				CryptoUtil.getStringFromKey(this.receiver) +
 				this.value +
 				this.timeStamp);
-	}
-
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
 	}
 
 	/**
@@ -75,5 +65,14 @@ public class TransactionOutput implements Serializable{
 		return value;
 	}
 	
+	public TransactionOutputDto toDto() {
+		TransactionOutputDto dto = new TransactionOutputDto();
+		dto.id = this.id;
+		dto.receiver = this.receiver.getEncoded();
+		dto.value = this.value;
+		dto.parentTransactionId = this.parentTransactionId;
+		dto.timeStamp = this.timeStamp;
+		return dto;
+	}
 	
 }
