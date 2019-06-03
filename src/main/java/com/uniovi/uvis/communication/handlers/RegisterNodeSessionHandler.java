@@ -7,6 +7,7 @@ import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 
+import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 
 import java.lang.reflect.Type;
@@ -24,7 +25,7 @@ public class RegisterNodeSessionHandler extends StompSessionHandlerAdapter {
 
     @Override
     public void handleException(StompSession session, StompCommand command, StompHeaders headers, byte[] payload, Throwable exception) {
-        logger.error("Got an exception", exception);
+        logger.error("Got an exception while getting the chain", exception);
     }
 
     @Override
@@ -36,9 +37,8 @@ public class RegisterNodeSessionHandler extends StompSessionHandlerAdapter {
     public void handleFrame(StompHeaders headers, Object payload) {
     	
     	BlockChainDto chain = (BlockChainDto) payload;
-    	//UPDATE
-//    	GetAllChains.chainsList.add(chain);
-        logger.info("----------------Chain: " + chain.toString() + "---------------- ");
+    	BlockChain.getInstance().update(chain);
+    	logger.info("Chain obtained successfully. Ready to make operations!");
     }
 
 }

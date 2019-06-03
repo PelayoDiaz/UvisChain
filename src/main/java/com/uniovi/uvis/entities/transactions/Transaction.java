@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,13 +38,24 @@ public class Transaction extends AbstractHasheable implements Serializable {
 	private List<TransactionOutput> outputs;
 	
 	public Transaction(PublicKey sender, PublicKey receiver, double amount, ArrayList<TransactionInput> inputs) {
+		super();
 		this.sender = sender;
 		this.receiver = receiver;
 		this.amount = amount;
 		this.inputs = inputs;
 		this.outputs = new ArrayList<TransactionOutput>();
-		this.timeStamp = new Date().getTime();
 		this.id = calculateHash();
+	}
+	
+	public Transaction(TransactionDto dto) {
+		this.id = dto.id;
+		this.sender = CryptoUtil.fromByteToPublicKey(dto.sender);
+		this.receiver = CryptoUtil.fromByteToPublicKey(dto.receiver);
+		this.amount = dto.amount;
+		this.signature = dto.signature;
+		this.timeStamp = dto.timeStamp;
+		this.inputs = dto.inputs.stream().map(x -> new TransactionInput(x)).collect(Collectors.toList());
+		this.outputs = dto.outputs.stream().map(x -> new TransactionOutput(x)).collect(Collectors.toList());;
 	}
 	
 	/**

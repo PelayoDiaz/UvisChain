@@ -2,7 +2,6 @@ package com.uniovi.uvis.entities.transactions;
 
 import java.io.Serializable;
 import java.security.PublicKey;
-import java.util.Date;
 
 import com.uniovi.uvis.entities.abst.AbstractHasheable;
 import com.uniovi.uvis.entities.dto.TransactionOutputDto;
@@ -25,11 +24,19 @@ public class TransactionOutput extends AbstractHasheable implements Serializable
 	private String parentTransactionId;
 
 	public TransactionOutput(PublicKey receiver, double value, String parentTransactionId) {
+		super();
 		this.receiver = receiver;
 		this.value = value;
 		this.parentTransactionId = parentTransactionId;
-		this.timeStamp = new Date().getTime();
 		this.id = calculateHash();
+	}
+	
+	public TransactionOutput(TransactionOutputDto dto) {
+		this.id = dto.id;
+		this.receiver = CryptoUtil.fromByteToPublicKey(dto.receiver);
+		this.value = dto.value;
+		this.parentTransactionId = dto.parentTransactionId;
+		this.timeStamp = dto.timeStamp;
 	}
 	
 	/**

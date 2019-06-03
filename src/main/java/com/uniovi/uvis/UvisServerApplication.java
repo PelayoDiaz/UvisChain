@@ -15,7 +15,6 @@ import com.uniovi.uvis.entities.dto.Node;
 @SpringBootApplication
 public class UvisServerApplication {
 	
-	public static final String ROOT_PORT = "6000";
 	public static String port;
 
 	public static void main(String[] args) {

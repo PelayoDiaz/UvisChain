@@ -283,6 +283,25 @@ public class BlockChain implements Serializable {
 		dto.utxos = this.utxos.values().stream().map(x -> x.toDto()).collect(Collectors.toList());
 		return dto;
 	}
+	
+	public void update(BlockChainDto dto) {
+		this.chain = dto.chain.stream().map(x -> new Block(x)).collect(Collectors.toList());
+		this.transactions = dto.transactions.stream().map(x -> new Transaction(x)).collect(Collectors.toList());
+		this.nodes = dto.nodes;
+		this.utxos = new HashMap<String, TransactionOutput>();
+		dto.utxos.forEach(x -> putUTXO(x.id, new TransactionOutput(x)));
+	}
+	
+	/**
+	 * Adds a transaction to the list of transactions which have not been 
+	 * added to a block yet.
+	 * 
+	 * @param transaction
+	 * 			The transaction to be added.
+	 */
+	public void addTransaction(Transaction transaction) {
+		this.transactions.add(transaction);
+	}
 
 	@Override
 	public String toString() {

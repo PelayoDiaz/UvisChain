@@ -1,10 +1,14 @@
 package com.uniovi.uvis.controllers;
 
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.uniovi.uvis.entities.dto.TransactionDto;
+import com.uniovi.uvis.entities.block.BlockChain;
+import com.uniovi.uvis.entities.transactions.Transaction;
+import com.uniovi.uvis.services.impl.TransactionServiceImpl;
+
 
 /**
  * It controlls all the messages related to create and send transactions
@@ -12,15 +16,17 @@ import com.uniovi.uvis.entities.dto.TransactionDto;
  * @author Pelayo Díaz Soto
  *
  */
-@Controller
+@RestController
 public class TransactionController {
+	
+	@Autowired
+	private TransactionServiceImpl transactionService;
 
-	@MessageMapping("/chain.sendTransaction")
-	@SendTo("/topic/transactions")
-	public TransactionDto createTransaction(TransactionDto transaction) {
-		TransactionDto transaction2 = new TransactionDto();
-//		transaction2.setContent("volvemos");
-		return transaction2;
+	@RequestMapping("/transaction/send")
+	public String getList(@RequestParam String description, @RequestParam String score) {
+		Transaction transaction = transactionService.sendFunds();
+		return transaction.getId() + " - " +transaction.getAmount() + "\nBlockchain: " + BlockChain.getInstance().getUTXOMap().toString();
 	}
+	
 
 }

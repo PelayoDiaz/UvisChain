@@ -125,6 +125,18 @@ public class Wallet implements Serializable {
 	}
 	
 	/**
+	 * Puts a TransactionOutput into the map. It will be stored with its id.
+	 * 
+	 * @param outputId 
+	 * 				the id which will be the key in the map.
+	 * @param output
+	 * 				the output to be stored.
+	 */
+	public void putUTXO(String outputId, TransactionOutput output) {
+		this.utxos.put(outputId, output);
+	}
+	
+	/**
 	 * Signs a transaction with the private key of the wallet.
 	 * 
 	 * @param transaction

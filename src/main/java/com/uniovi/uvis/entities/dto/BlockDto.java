@@ -11,7 +11,7 @@ public class BlockDto implements Serializable {
 	 */
 	private static final long serialVersionUID = -5523304275335621145L;
 	
-	public String hash;
+	public String id;
 	public String previousHash;
 	public String merkleRoot;
 	public List<TransactionDto> transactions;

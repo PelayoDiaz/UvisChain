@@ -38,6 +38,16 @@ public class Block extends AbstractHasheable implements Serializable{
 		this.mined = false;
 		this.transactions = new ArrayList<Transaction>();
 	}
+	
+	public Block(BlockDto dto) {
+		this.id = dto.id;
+		this.previousHash = dto.previousHash;
+		this.merkleRoot = dto.merkleRoot;
+		this.transactions = dto.transactions.stream().map(x -> new Transaction(x)).collect(Collectors.toList());
+		this.nonce = dto.nonce;
+		this.timeStamp = dto.timeStamp;
+		this.mined = dto.mined;
+	}
 
 	@Override
 	public String calculateHash() {
@@ -135,7 +145,7 @@ public class Block extends AbstractHasheable implements Serializable{
 	
 	public BlockDto toDto() {
 		BlockDto dto = new BlockDto();
-		dto.hash = this.id;
+		dto.id = this.id;
 		dto.previousHash = this.previousHash;
 		dto.merkleRoot = this.merkleRoot;
 		dto.transactions = this.transactions.stream().map(x -> x.toDto()).collect(Collectors.toList());

@@ -5,6 +5,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
+import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.Node;
 import com.uniovi.uvis.services.impl.BlockChainServiceImpl;
@@ -30,9 +31,7 @@ public class BlockChainController {
 	@MessageMapping("/chain/sendChain")
 	@SendTo("/topic/blockchain")
 	public BlockChainDto sendChain() {
-		BlockChainDto chain = new BlockChainDto();
-//		chain.setCadena(String.valueOf(new Date().getTime()));
-		return chain;
+		return BlockChain.getInstance().toDto();
 	}
 	
 	@MessageMapping("/chain/updateChain")

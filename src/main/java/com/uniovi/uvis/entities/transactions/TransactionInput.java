@@ -29,6 +29,11 @@ public class TransactionInput implements Serializable {
 	public TransactionInput(String outputId) {
 		this.outputId = outputId;
 	}
+	
+	public TransactionInput(TransactionInputDto dto) {
+		this.outputId = dto.outputId;
+		this.utxo = new TransactionOutput(dto.utxo);
+	}
 
 	/**
 	 * @return the outputId
