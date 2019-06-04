@@ -45,8 +45,11 @@ public class BlockChain implements Serializable {
 	/** The list of the nodes using the blockchain. */
 	private List<Node> nodes;
 	
-	/** A hashMap which contains all the unspent outputs that can be used as inputs. */
+	/** A Map which contains all the unspent outputs that can be used as inputs. */
 	private Map<String, TransactionOutput> utxos;
+	
+	/** A map which contains all the wallets in the chain */
+	private Map<String, Wallet> wallets;
 
 	
 	public static BlockChain getInstance() {
@@ -64,6 +67,7 @@ public class BlockChain implements Serializable {
 		this.transactions = new ArrayList<Transaction>();
 		this.nodes = new ArrayList<Node>();
 		this.utxos = new HashMap<String, TransactionOutput>();
+		this.wallets = new HashMap<String, Wallet>();
 		
 		//The wallet and the total amount of coins that can be send in the chain.
 		Wallet coinbase = new Wallet();
@@ -264,6 +268,27 @@ public class BlockChain implements Serializable {
 	 */
 	public void putUTXO(String outputId, TransactionOutput output) {
 		this.utxos.put(outputId, output);
+	}
+	
+	/**
+	 * Puts a Wallet into the map. It will be stored by its address.
+	 * 
+	 * @param walletAddres 
+	 * 				the address which will be the key in the map.
+	 * @param wallet
+	 * 				the wallet to be stored.
+	 */
+	public void putWallet(String walletAddres, Wallet wallet) {
+		this.wallets.put(walletAddres, wallet);
+	}
+	
+	/**
+	 * Returns the hashMap of wallet contained in the class.
+	 * 
+	 * @return Map<String, Wallet> the hashMap.
+	 */
+	public Map<String, Wallet> getWallets() {
+		return new HashMap<String, Wallet>(this.wallets);
 	}
 	
 	/**

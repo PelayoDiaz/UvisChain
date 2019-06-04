@@ -31,11 +31,19 @@ public class Wallet implements Serializable {
 	/** A hashMap which contains all the unspent outputs of the wallet that can be used as inputs. */
 	private Map<String, TransactionOutput> utxos;
 	
+	/** The address of the wallet. It will be used to reference the wallet when it is the receiver of the sent funds. */
+	private String address;
+	
 	public Wallet() {
 		KeyPair keyPair = CryptoUtil.generateKeyPair();
 		this.privateKey = keyPair.getPrivate();
 		this.publicKey = keyPair.getPublic();
 		this.utxos = new HashMap<String, TransactionOutput>();
+	}
+	
+	public Wallet(String address) {
+		this();
+		this.address = address;
 	}
 	
 	/**
@@ -146,6 +154,10 @@ public class Wallet implements Serializable {
 		if (transaction.getSender().equals(this.publicKey)) {
 			transaction.generateSignature(this.privateKey);
 		}
+	}
+
+	public String getAddress() {
+		return address;
 	}
 
 }

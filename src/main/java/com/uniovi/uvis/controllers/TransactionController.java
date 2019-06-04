@@ -23,7 +23,7 @@ public class TransactionController {
 	private TransactionServiceImpl transactionService;
 
 	@RequestMapping("/transaction/send")
-	public String getList(@RequestParam String description, @RequestParam String score) {
+	public String sendTransaction(@RequestParam String description, @RequestParam String score) {
 		Transaction transaction = transactionService.sendFunds();
 		return transaction.getId() + " - " +transaction.getAmount() + "\nBlockchain: " + BlockChain.getInstance().getUTXOMap().toString();
 	}

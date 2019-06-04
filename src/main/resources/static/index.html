@@ -5,10 +5,15 @@
 <title>Test Page</title>
 </head>
 <body>
+	<form method="post" action="/wallet">
+		Address:<br> <input type="text" name="address"></br> <input
+			type="submit" value="Send">
+	</form>
 	<form method="post" action="/transaction/send">
 		Descripción:<br> <input type="text" name="description"></br>
 		Puntuación:<br> <input type="text" name="score"></br> <input
 			type="submit" value="Send">
 	</form>
+	
 </body>
 </html>
