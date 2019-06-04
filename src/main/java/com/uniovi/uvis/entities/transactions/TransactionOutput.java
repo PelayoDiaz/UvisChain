@@ -15,7 +15,9 @@ public class TransactionOutput extends AbstractHasheable implements Serializable
 	private static final long serialVersionUID = 5665651396410700747L;
 	
 	/** The public key of the transaction's receiver */
-	private PublicKey receiver;
+//	private PublicKey receiver;
+	private String receiver;
+	
 	
 	/** The amount of coins they own */
 	private double value;
@@ -23,8 +25,7 @@ public class TransactionOutput extends AbstractHasheable implements Serializable
 	/** The id of the transaction where this output was created. */
 	private String parentTransactionId;
 
-	public TransactionOutput(PublicKey receiver, double value, String parentTransactionId) {
-		super();
+	public TransactionOutput(String receiver, double value, String parentTransactionId) {
 		this.receiver = receiver;
 		this.value = value;
 		this.parentTransactionId = parentTransactionId;
@@ -33,7 +34,7 @@ public class TransactionOutput extends AbstractHasheable implements Serializable
 	
 	public TransactionOutput(TransactionOutputDto dto) {
 		this.id = dto.id;
-		this.receiver = CryptoUtil.fromByteToPublicKey(dto.receiver);
+		this.receiver = dto.receiver;
 		this.value = dto.value;
 		this.parentTransactionId = dto.parentTransactionId;
 		this.timeStamp = dto.timeStamp;
@@ -42,13 +43,13 @@ public class TransactionOutput extends AbstractHasheable implements Serializable
 	/**
 	 * Says if the value belongs to a publicKey or not.
 	 * 
-	 * @param publicKey
-	 * 			The public key to check.
+	 * @param receiver
+	 * 			The address of the transaction's receiver to check.
 	 * @return
 	 * 			True if it belongs to. False if not.
 	 */
-	public boolean belongsTo(PublicKey publicKey) {
-		return this.receiver.equals(publicKey);
+	public boolean belongsTo(String receiver) {
+		return this.receiver.equals(receiver);
 	}
 	
 	/**
@@ -60,7 +61,8 @@ public class TransactionOutput extends AbstractHasheable implements Serializable
 	@Override
 	public String calculateHash() {
 		return CryptoUtil.getSha256Hash(
-				CryptoUtil.getStringFromKey(this.receiver) +
+//				CryptoUtil.getStringFromKey(this.receiver) +
+				this.receiver +
 				this.value +
 				this.timeStamp);
 	}
@@ -75,7 +77,7 @@ public class TransactionOutput extends AbstractHasheable implements Serializable
 	public TransactionOutputDto toDto() {
 		TransactionOutputDto dto = new TransactionOutputDto();
 		dto.id = this.id;
-		dto.receiver = this.receiver.getEncoded();
+		dto.receiver = this.receiver;
 		dto.value = this.value;
 		dto.parentTransactionId = this.parentTransactionId;
 		dto.timeStamp = this.timeStamp;

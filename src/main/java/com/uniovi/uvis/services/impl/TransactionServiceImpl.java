@@ -23,12 +23,12 @@ public class TransactionServiceImpl implements TransactionService {
 	public Transaction sendFunds() {
 		Wallet walletA = new Wallet();
 		Wallet walletB = new Wallet();
-		TransactionOutput output1 = new TransactionOutput(walletA.getPublicKey(), 3, null);
-		TransactionOutput output2 = new TransactionOutput(walletA.getPublicKey(), 0.5, null);
+		TransactionOutput output1 = new TransactionOutput(walletA.getAddress(), 3, null);
+		TransactionOutput output2 = new TransactionOutput(walletA.getAddress(), 0.5, null);
 		BlockChain.getInstance().putUTXO(output1.getId(), output1);
 		BlockChain.getInstance().putUTXO(output2.getId(), output2);
 		
-		Transaction transaction = walletA.sendFunds(walletB.getPublicKey(), 3.0);
+		Transaction transaction = walletA.sendFunds(walletB.getAddress(), 3.0);
 		BlockChain.getInstance().addTransaction(transaction);
 		
 		return transaction;
@@ -38,7 +38,7 @@ public class TransactionServiceImpl implements TransactionService {
 	public double getBalance(Wallet wallet) {
 		AtomicDouble total = new AtomicDouble(0);
 		BlockChain.getInstance().getUTXOMap().forEach((k, v) -> {
-			if (v.belongsTo(wallet.getPublicKey())) {
+			if (v.belongsTo(wallet.getAddress())) {
 				wallet.putUTXO(v.getId(), v);
 				total.addAndGet(v.getValue());
 			}

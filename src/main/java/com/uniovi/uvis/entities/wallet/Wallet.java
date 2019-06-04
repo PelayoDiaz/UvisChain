@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.google.common.util.concurrent.AtomicDouble;
 import com.uniovi.uvis.entities.block.BlockChain;
+import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.entities.transactions.TransactionInput;
 import com.uniovi.uvis.entities.transactions.TransactionOutput;
@@ -55,7 +56,7 @@ public class Wallet implements Serializable {
 	public double getBalance() {
 		AtomicDouble total = new AtomicDouble(0);
 		BlockChain.getInstance().getUTXOMap().forEach((k, v) -> {
-			if (v.belongsTo(publicKey)) {
+			if (v.belongsTo(address)) {
 				utxos.put(v.getId(), v);
 				total.addAndGet(v.getValue());
 			}
@@ -73,7 +74,7 @@ public class Wallet implements Serializable {
 	 * @return Transaction
 	 * 				the transaction created
 	 */
-	public Transaction sendFunds(PublicKey receiver, double amount) {
+	public Transaction sendFunds(String receiver, double amount) {
 		if (this.getBalance() < amount) { //Checks if there is money enough. 
 			return null;
 		}
@@ -117,8 +118,8 @@ public class Wallet implements Serializable {
 	 * @return Transaction
 	 * 				The new transaction to be processed.
 	 */
-	private Transaction createTransaction(PublicKey receiver, double amount, ArrayList<TransactionInput> inputs) {
-		Transaction transaction = new Transaction(this.publicKey, receiver, amount, inputs);
+	private Transaction createTransaction(String receiver, double amount, ArrayList<TransactionInput> inputs) {
+		Transaction transaction = new Transaction(this.publicKey, this.address, receiver, amount, inputs);
 		this.signTransaction(transaction);
 		inputs.forEach(x -> this.utxos.remove(x.getOutputId()));
 		
@@ -158,6 +159,13 @@ public class Wallet implements Serializable {
 
 	public String getAddress() {
 		return address;
+	}
+	
+	public WalletDto toDto() {
+		WalletDto dto = new WalletDto();
+		dto.publicKey = this.publicKey.getEncoded();
+		dto.address = this.address;
+		return dto;
 	}
 
 }

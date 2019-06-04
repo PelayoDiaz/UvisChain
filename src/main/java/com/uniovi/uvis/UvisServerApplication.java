@@ -16,17 +16,19 @@ import com.uniovi.uvis.entities.dto.Node;
 public class UvisServerApplication {
 	
 	public static String port;
+	public static Node node;
 
 	public static void main(String[] args) {
 		if (args.length>=2) {
 			port = args[0];
 			String url = "ws://localhost:"+port+"/uvischain";
 			String rootPort = args[1];
+			node = new Node(url);
 			if (port.equals(rootPort)) { //If both of the ports are equal, it is the genesis node.
-				BlockChain.getInstance().registerNode(new Node(url));
+				BlockChain.getInstance().registerNode(node);
 			} else { //If not, then connect with the second port and initialize the node.
 				String rootUrl = "ws://localhost:"+rootPort+"/uvischain";
-				initialize(rootUrl, new Node(url));
+				initialize(rootUrl, node);
 			}
 			SpringApplication.run(UvisServerApplication.class, args);
 		}		

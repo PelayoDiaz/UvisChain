@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import com.google.gson.GsonBuilder;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.Node;
+import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.entities.transactions.TransactionInput;
 import com.uniovi.uvis.entities.transactions.TransactionOutput;
@@ -33,6 +34,8 @@ public class BlockChain implements Serializable {
 	
 	public static final int DIFFICULTY = 4;
 	
+	public static final String COIN_BASE = "coinBase";
+	
 	/** The unique Blockchain to be instantiated. */
 	private static BlockChain singleChain;
 
@@ -49,7 +52,7 @@ public class BlockChain implements Serializable {
 	private Map<String, TransactionOutput> utxos;
 	
 	/** A map which contains all the wallets in the chain */
-	private Map<String, Wallet> wallets;
+	private Map<String, WalletDto> wallets;
 
 	
 	public static BlockChain getInstance() {
@@ -67,11 +70,12 @@ public class BlockChain implements Serializable {
 		this.transactions = new ArrayList<Transaction>();
 		this.nodes = new ArrayList<Node>();
 		this.utxos = new HashMap<String, TransactionOutput>();
-		this.wallets = new HashMap<String, Wallet>();
+		this.wallets = new HashMap<String, WalletDto>();
 		
 		//The wallet and the total amount of coins that can be send in the chain.
-		Wallet coinbase = new Wallet();
-		TransactionOutput output = new TransactionOutput(coinbase.getPublicKey(), 100, null);
+		Wallet coinbase = new Wallet(COIN_BASE);
+		wallets.put(COIN_BASE, coinbase.toDto());
+		TransactionOutput output = new TransactionOutput(coinbase.getAddress(), 100, null);
 		utxos.put(output.getId(), output);
 		
 		//The original transaction
@@ -80,7 +84,7 @@ public class BlockChain implements Serializable {
 		ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
 		inputs.add(input);
 		
-		Transaction genesisTransaction = new Transaction(coinbase.getPublicKey(), coinbase.getPublicKey(), 100, inputs);
+		Transaction genesisTransaction = new Transaction(coinbase.getPublicKey(), coinbase.getAddress(), coinbase.getAddress(), 100, inputs);
 		coinbase.signTransaction(genesisTransaction);
 		
 		//The first block of the chain
@@ -278,7 +282,7 @@ public class BlockChain implements Serializable {
 	 * @param wallet
 	 * 				the wallet to be stored.
 	 */
-	public void putWallet(String walletAddres, Wallet wallet) {
+	public void putWallet(String walletAddres, WalletDto wallet) {
 		this.wallets.put(walletAddres, wallet);
 	}
 	
@@ -287,8 +291,8 @@ public class BlockChain implements Serializable {
 	 * 
 	 * @return Map<String, Wallet> the hashMap.
 	 */
-	public Map<String, Wallet> getWallets() {
-		return new HashMap<String, Wallet>(this.wallets);
+	public Map<String, WalletDto> getWallets() {
+		return new HashMap<String, WalletDto>(this.wallets);
 	}
 	
 	/**
@@ -306,6 +310,7 @@ public class BlockChain implements Serializable {
 		dto.transactions = this.transactions.stream().map(x -> x.toDto()).collect(Collectors.toList());
 		dto.nodes = this.nodes;
 		dto.utxos = this.utxos.values().stream().map(x -> x.toDto()).collect(Collectors.toList());
+		dto.wallets = this.wallets.values().stream().collect(Collectors.toList());
 		return dto;
 	}
 	

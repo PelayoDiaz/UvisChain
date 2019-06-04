@@ -22,8 +22,11 @@ public class Transaction extends AbstractHasheable implements Serializable {
 	/** The public key of the transaction's sender */
 	private PublicKey sender;
 	
-	/** The public key of the transaction's receiver */
-	private PublicKey receiver;
+	/** The address of the transaction's sender */
+	private String senderAddress;
+	
+	/** The address of the transaction's receiver */
+	private String receiver;
 	
 	/** The amount of money to send */
 	private double amount;
@@ -37,9 +40,10 @@ public class Transaction extends AbstractHasheable implements Serializable {
 	/** The outputs to be sent in the transaction */
 	private List<TransactionOutput> outputs;
 	
-	public Transaction(PublicKey sender, PublicKey receiver, double amount, ArrayList<TransactionInput> inputs) {
+	public Transaction(PublicKey sender, String senderAddress, String receiver, double amount, ArrayList<TransactionInput> inputs) {
 		super();
 		this.sender = sender;
+		this.senderAddress = senderAddress;
 		this.receiver = receiver;
 		this.amount = amount;
 		this.inputs = inputs;
@@ -50,7 +54,8 @@ public class Transaction extends AbstractHasheable implements Serializable {
 	public Transaction(TransactionDto dto) {
 		this.id = dto.id;
 		this.sender = CryptoUtil.fromByteToPublicKey(dto.sender);
-		this.receiver = CryptoUtil.fromByteToPublicKey(dto.receiver);
+		this.senderAddress = dto.senderAddress;
+		this.receiver = dto.receiver;
 		this.amount = dto.amount;
 		this.signature = dto.signature;
 		this.timeStamp = dto.timeStamp;
@@ -91,7 +96,7 @@ public class Transaction extends AbstractHasheable implements Serializable {
 		
 		//The left over to be send back to the sender.
 		if (leftOver>0) {
-			this.outputs.add(new TransactionOutput(this.sender, leftOver, this.id));
+			this.outputs.add(new TransactionOutput(this.senderAddress, leftOver, this.id));
 		}
 				
 		//Add outputs to the unspent map
@@ -168,7 +173,8 @@ public class Transaction extends AbstractHasheable implements Serializable {
 	 */
 	private String getData() {
 		return CryptoUtil.getStringFromKey(this.sender) +
-				CryptoUtil.getStringFromKey(this.receiver) +
+				this.senderAddress +
+				this.receiver +
 				String.valueOf(this.amount);
 	}
 
@@ -182,7 +188,7 @@ public class Transaction extends AbstractHasheable implements Serializable {
 	/**
 	 * @return the receiver
 	 */
-	public PublicKey getReceiver() {
+	public String getReceiver() {
 		return receiver;
 	}	
 	
@@ -198,7 +204,8 @@ public class Transaction extends AbstractHasheable implements Serializable {
 	public String calculateHash() {
 		return CryptoUtil.getSha256Hash(
 				CryptoUtil.getStringFromKey(this.sender) +
-				CryptoUtil.getStringFromKey(this.receiver) +
+				this.senderAddress +
+				this.receiver + 
 				this.amount +
 				this.timeStamp);
 	}
@@ -221,7 +228,8 @@ public class Transaction extends AbstractHasheable implements Serializable {
 		TransactionDto dto = new TransactionDto();
 		dto.id = this.id;
 		dto.sender = this.sender.getEncoded();
-		dto.receiver = this.receiver.getEncoded();
+		dto.senderAddress = this.senderAddress;
+		dto.receiver = this.receiver;
 		dto.amount = this.amount;
 		dto.signature = this.signature;
 		dto.timeStamp = this.timeStamp;

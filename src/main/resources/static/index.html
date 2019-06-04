@@ -5,14 +5,18 @@
 <title>Test Page</title>
 </head>
 <body>
+	<h1>Pa' probar... Mas o menos...</h1>
+	<h2>Creating a Wallet!</h2>
 	<form method="post" action="/wallet">
 		Address:<br> <input type="text" name="address"></br> <input
 			type="submit" value="Send">
 	</form>
-	<form method="post" action="/transaction/send">
-		Descripción:<br> <input type="text" name="description"></br>
-		Puntuación:<br> <input type="text" name="score"></br> <input
-			type="submit" value="Send">
+	<h2>Sending a Transaction!</h2>
+	<form method="post" action="transaction">
+		From:<br> <input type="text" name="from"></br>
+		To:<br> <input type="text" name="to"></br> 
+		Amount:<br> <input type="text" name="amount"></br> 
+		<input type="submit" value="Send">
 	</form>
 	
 </body>

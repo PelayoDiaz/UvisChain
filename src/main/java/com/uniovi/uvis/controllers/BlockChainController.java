@@ -8,7 +8,9 @@ import org.springframework.stereotype.Controller;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.Node;
+import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.services.impl.BlockChainServiceImpl;
+import com.uniovi.uvis.services.impl.WalletServiceImpl;
 
 /**
  * It contains the methods to control the blockchain object
@@ -21,6 +23,9 @@ public class BlockChainController {
 	
 	@Autowired
 	private BlockChainServiceImpl blockChainService;
+	
+	@Autowired
+	private WalletServiceImpl walletService;
 
 	@MessageMapping("/chain/registerNode")
 	@SendTo("/topic/blockchain")
@@ -41,6 +46,12 @@ public class BlockChainController {
 		BlockChainDto chain = new BlockChainDto();
 //		chain.setCadena(String.valueOf(new Date().getTime()));
 		return chain;
+	}
+	
+	@MessageMapping("/chain/addWallet")
+	@SendTo("/topic/wallet")
+	public BlockChainDto addWallet(WalletDto dto) {
+		return this.walletService.addWallet(dto);
 	}
 
 }

@@ -1,9 +1,16 @@
 package com.uniovi.uvis.entities.dto;
 
-public class TransactionOutputDto {
+import java.io.Serializable;
 
+public class TransactionOutputDto implements Serializable {
+	
+	/**
+	 * Serializable
+	 */
+	private static final long serialVersionUID = 3339534868048031036L;
+	
 	public String id;
-	public byte[] receiver;
+	public String receiver;
 	public double value;
 	public String parentTransactionId;
 	public long timeStamp;

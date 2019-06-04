@@ -12,7 +12,8 @@ public class TransactionDto implements Serializable {
 	
 	public String id;
 	public byte[] sender;
-	public byte[] receiver;
+	public String senderAddress;
+	public String receiver;
 	public double amount;
 	public byte[] signature;
 	public long timeStamp;

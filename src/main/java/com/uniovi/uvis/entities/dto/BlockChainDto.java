@@ -14,6 +14,7 @@ public class BlockChainDto implements Serializable {
 	public List<TransactionDto> transactions;
 	public List<Node> nodes;
 	public List<TransactionOutputDto> utxos;
+	public List<WalletDto> wallets;
 	
 
 }
