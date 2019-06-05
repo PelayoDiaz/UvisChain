@@ -74,9 +74,9 @@ public class BlockChain implements Serializable {
 		
 		//The wallet and the total amount of coins that can be send in the chain.
 		Wallet coinbase = new Wallet(COIN_BASE);
-		wallets.put(COIN_BASE, coinbase.toDto());
+		this.wallets.put(COIN_BASE, coinbase.toDto());
 		TransactionOutput output = new TransactionOutput(coinbase.getAddress(), 100, null);
-		utxos.put(output.getId(), output);
+		this.utxos.put(output.getId(), output);
 		
 		//The original transaction
 		TransactionInput input = new TransactionInput(output.getId());
@@ -84,7 +84,7 @@ public class BlockChain implements Serializable {
 		ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
 		inputs.add(input);
 		
-		Transaction genesisTransaction = new Transaction(coinbase.getPublicKey(), coinbase.getAddress(), coinbase.getAddress(), 100, inputs);
+		Transaction genesisTransaction = new Transaction(coinbase, coinbase.getAddress(), 100, inputs);
 		coinbase.signTransaction(genesisTransaction);
 		
 		//The first block of the chain
@@ -283,7 +283,9 @@ public class BlockChain implements Serializable {
 	 * 				the wallet to be stored.
 	 */
 	public void putWallet(String walletAddres, WalletDto wallet) {
-		this.wallets.put(walletAddres, wallet);
+		if (!this.wallets.containsKey(walletAddres)) {
+			this.wallets.put(walletAddres, wallet);
+		}
 	}
 	
 	/**
@@ -320,6 +322,17 @@ public class BlockChain implements Serializable {
 		this.nodes = dto.nodes;
 		this.utxos = new HashMap<String, TransactionOutput>();
 		dto.utxos.forEach(x -> putUTXO(x.id, new TransactionOutput(x)));
+	}
+	
+	/**
+	 * Returns an instance of the coin base to make transactions when a wallet is created
+	 * or a block is mined
+	 * 
+	 * @return Wallet
+	 * 			The coinbase
+	 */
+	public Wallet getCoinBase() {
+		return new Wallet(this.wallets.get(COIN_BASE).address);
 	}
 	
 	/**

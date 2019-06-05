@@ -6,7 +6,6 @@ import org.springframework.messaging.simp.stomp.StompSession;
 
 import com.uniovi.uvis.UvisServerApplication;
 import com.uniovi.uvis.communication.Connection;
-import com.uniovi.uvis.communication.handlers.MyStompSessionHandler;
 import com.uniovi.uvis.communication.handlers.SendWalletSessionHandler;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.Node;

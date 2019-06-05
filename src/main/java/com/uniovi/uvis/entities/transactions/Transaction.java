@@ -8,11 +8,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.uniovi.uvis.entities.abst.AbstractHasheable;
+import com.uniovi.uvis.entities.abst.Sendable;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.TransactionDto;
+import com.uniovi.uvis.entities.wallet.Wallet;
 import com.uniovi.uvis.util.CryptoUtil;
 
-public class Transaction extends AbstractHasheable implements Serializable {
+public class Transaction extends AbstractHasheable implements Serializable, Sendable<TransactionDto> {
 
 	/**
 	 * Serializable.
@@ -40,10 +42,10 @@ public class Transaction extends AbstractHasheable implements Serializable {
 	/** The outputs to be sent in the transaction */
 	private List<TransactionOutput> outputs;
 	
-	public Transaction(PublicKey sender, String senderAddress, String receiver, double amount, ArrayList<TransactionInput> inputs) {
+	public Transaction(Wallet sender, String receiver, double amount, ArrayList<TransactionInput> inputs) {
 		super();
-		this.sender = sender;
-		this.senderAddress = senderAddress;
+		this.sender = sender.getPublicKey();
+		this.senderAddress = sender.getAddress();
 		this.receiver = receiver;
 		this.amount = amount;
 		this.inputs = inputs;
@@ -224,6 +226,7 @@ public class Transaction extends AbstractHasheable implements Serializable {
 		return id;
 	}
 	
+	@Override
 	public TransactionDto toDto() {
 		TransactionDto dto = new TransactionDto();
 		dto.id = this.id;
