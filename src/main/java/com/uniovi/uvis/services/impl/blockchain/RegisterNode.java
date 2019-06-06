@@ -3,7 +3,7 @@ package com.uniovi.uvis.services.impl.blockchain;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.Node;
-import com.uniovi.uvis.services.impl.Command;
+import com.uniovi.uvis.services.impl.command.Command;
 
 public class RegisterNode implements Command<BlockChainDto>{
 	

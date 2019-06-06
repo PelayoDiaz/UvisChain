@@ -12,7 +12,7 @@ import com.uniovi.uvis.communication.handlers.MyStompSessionHandler;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.Node;
-import com.uniovi.uvis.services.impl.Command;
+import com.uniovi.uvis.services.impl.command.Command;
 
 public class GetAllChains implements Command<List<BlockChain>> {
 	

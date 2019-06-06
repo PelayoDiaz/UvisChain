@@ -1,4 +1,4 @@
-package com.uniovi.uvis.services.impl;
+package com.uniovi.uvis.services.impl.command;
 
 public class CommandExecutor {
 

@@ -3,7 +3,7 @@ package com.uniovi.uvis.services.impl.wallet;
 import com.google.common.util.concurrent.AtomicDouble;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.wallet.Wallet;
-import com.uniovi.uvis.services.impl.Command;
+import com.uniovi.uvis.services.impl.command.Command;
 
 
 /**

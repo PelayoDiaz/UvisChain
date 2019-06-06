@@ -5,6 +5,7 @@ import java.util.List;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.Node;
+import com.uniovi.uvis.entities.dto.TransactionDto;
 
 public interface BlockChainService {
 	
@@ -25,5 +26,16 @@ public interface BlockChainService {
 	 * 			The updated blockchain with the new node.
 	 */
 	public BlockChainDto registerNode(Node node);
+	
+	/**
+	 * Adds a new transaction to the chain and stores it until the transaction
+	 * is included into a block.
+	 * 
+	 * @param dto
+	 * 			The TransactionDto which contains the information of the transaction
+	 * @return BlockChainDto
+	 * 			A copy of the actual's node chain.
+	 */
+	public BlockChainDto addTransaction(TransactionDto dto);
 
 }

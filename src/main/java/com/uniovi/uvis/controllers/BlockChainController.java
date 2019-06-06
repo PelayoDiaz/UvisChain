@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.Node;
+import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.services.impl.BlockChainServiceImpl;
 import com.uniovi.uvis.services.impl.WalletServiceImpl;
@@ -51,7 +52,16 @@ public class BlockChainController {
 	@MessageMapping("/chain/addWallet")
 	@SendTo("/topic/wallet")
 	public BlockChainDto addWallet(WalletDto dto) {
+		//TODO: Mover esto a blockchain service
 		return this.walletService.addWallet(dto);
 	}
+	
+	@MessageMapping("/chain/addTransaction")
+	@SendTo("/topic/transaction")
+	public BlockChainDto addTransaction(TransactionDto dto) {
+		return this.blockChainService.addTransaction(dto);
+	}
+	
+	
 
 }

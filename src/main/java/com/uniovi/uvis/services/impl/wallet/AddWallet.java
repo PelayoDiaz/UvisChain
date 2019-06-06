@@ -3,7 +3,7 @@ package com.uniovi.uvis.services.impl.wallet;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.WalletDto;
-import com.uniovi.uvis.services.impl.Command;
+import com.uniovi.uvis.services.impl.command.Command;
 
 public class AddWallet implements Command<BlockChainDto>{
 

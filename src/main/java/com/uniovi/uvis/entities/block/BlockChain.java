@@ -346,6 +346,13 @@ public class BlockChain implements Serializable {
 		this.transactions.add(transaction);
 	}
 
+	/**
+	 * @return the transactions
+	 */
+	public List<Transaction> getTransactions() {
+		return new ArrayList<Transaction>(transactions);
+	}
+
 	@Override
 	public String toString() {
 		String gsonChain = new GsonBuilder().setPrettyPrinting().create().toJson(this.chain);

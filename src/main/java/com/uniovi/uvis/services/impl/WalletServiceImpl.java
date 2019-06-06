@@ -8,6 +8,7 @@ import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.entities.wallet.Wallet;
 import com.uniovi.uvis.services.WalletService;
+import com.uniovi.uvis.services.impl.command.CommandExecutorIf;
 import com.uniovi.uvis.services.impl.wallet.AddWallet;
 import com.uniovi.uvis.services.impl.wallet.CreateWallet;
 import com.uniovi.uvis.services.impl.wallet.GetBalance;

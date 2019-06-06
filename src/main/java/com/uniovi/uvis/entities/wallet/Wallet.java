@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.util.concurrent.AtomicDouble;
+import com.uniovi.uvis.entities.abst.Sendable;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
@@ -16,7 +17,7 @@ import com.uniovi.uvis.entities.transactions.TransactionInput;
 import com.uniovi.uvis.entities.transactions.TransactionOutput;
 import com.uniovi.uvis.util.CryptoUtil;
 
-public class Wallet implements Serializable {
+public class Wallet implements Serializable, Sendable<WalletDto> {
 	
 	/**
 	 * Serializable
@@ -179,6 +180,7 @@ public class Wallet implements Serializable {
 		return address;
 	}
 	
+	@Override
 	public WalletDto toDto() {
 		WalletDto dto = new WalletDto();
 		dto.publicKey = this.publicKey.getEncoded();
