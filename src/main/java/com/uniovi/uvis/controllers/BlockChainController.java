@@ -11,7 +11,6 @@ import com.uniovi.uvis.entities.dto.Node;
 import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.services.impl.BlockChainServiceImpl;
-import com.uniovi.uvis.services.impl.WalletServiceImpl;
 
 /**
  * It contains the methods to control the blockchain object
@@ -24,9 +23,6 @@ public class BlockChainController {
 	
 	@Autowired
 	private BlockChainServiceImpl blockChainService;
-	
-	@Autowired
-	private WalletServiceImpl walletService;
 
 	@MessageMapping("/chain/registerNode")
 	@SendTo("/topic/blockchain")
@@ -52,8 +48,7 @@ public class BlockChainController {
 	@MessageMapping("/chain/addWallet")
 	@SendTo("/topic/wallet")
 	public BlockChainDto addWallet(WalletDto dto) {
-		//TODO: Mover esto a blockchain service
-		return this.walletService.addWallet(dto);
+		return this.blockChainService.addWallet(dto);
 	}
 	
 	@MessageMapping("/chain/addTransaction")

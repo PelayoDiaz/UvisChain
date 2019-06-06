@@ -6,6 +6,7 @@ import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.Node;
 import com.uniovi.uvis.entities.dto.TransactionDto;
+import com.uniovi.uvis.entities.dto.WalletDto;
 
 public interface BlockChainService {
 	
@@ -37,5 +38,15 @@ public interface BlockChainService {
 	 * 			A copy of the actual's node chain.
 	 */
 	public BlockChainDto addTransaction(TransactionDto dto);
+	
+	/**
+	 * Adds a new wallet to the chain and stores it for the users to use it.
+	 * 
+	 * @param dto
+	 * 			The WalletDto which contains the information of the Wallet
+	 * @return BlockChainDto
+	 * 			A copy of the actual's node chain.
+	 */
+	public BlockChainDto addWallet(WalletDto dto);
 
 }

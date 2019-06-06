@@ -8,8 +8,10 @@ import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.Node;
 import com.uniovi.uvis.entities.dto.TransactionDto;
+import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.services.BlockChainService;
 import com.uniovi.uvis.services.impl.blockchain.AddTransaction;
+import com.uniovi.uvis.services.impl.blockchain.AddWallet;
 import com.uniovi.uvis.services.impl.blockchain.GetAllChains;
 import com.uniovi.uvis.services.impl.blockchain.RegisterNode;
 import com.uniovi.uvis.services.impl.command.CommandExecutor;
@@ -37,6 +39,11 @@ public class BlockChainServiceImpl implements BlockChainService{
 	@Override
 	public BlockChainDto addTransaction(TransactionDto dto) {
 		return executor.execute(new AddTransaction(dto));
+	}
+
+	@Override
+	public BlockChainDto addWallet(WalletDto dto) {
+		return executor.execute(new AddWallet(dto));
 	}
 
 }

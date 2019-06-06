@@ -4,16 +4,12 @@ import java.io.Serializable;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.common.util.concurrent.AtomicDouble;
 import com.uniovi.uvis.entities.abst.Sendable;
-import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
-import com.uniovi.uvis.entities.transactions.TransactionInput;
 import com.uniovi.uvis.entities.transactions.TransactionOutput;
 import com.uniovi.uvis.util.CryptoUtil;
 

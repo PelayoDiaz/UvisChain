@@ -1,4 +1,4 @@
-package com.uniovi.uvis.services.impl.wallet;
+package com.uniovi.uvis.services.impl.blockchain;
 
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;

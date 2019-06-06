@@ -32,7 +32,7 @@ public class TransactionInput implements Serializable {
 	
 	public TransactionInput(TransactionInputDto dto) {
 		this.outputId = dto.outputId;
-		this.utxo = new TransactionOutput(dto.utxo);
+		this.utxo = (dto.utxo == null) ? null : new TransactionOutput(dto.utxo);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class TransactionInput implements Serializable {
 	public TransactionInputDto toDto() {
 		TransactionInputDto dto = new TransactionInputDto();
 		dto.outputId = this.outputId;
-		dto.utxo = this.utxo.toDto();
+		dto.utxo = (this.utxo == null) ? null : this.utxo.toDto();
 		return dto;
 	}
 		

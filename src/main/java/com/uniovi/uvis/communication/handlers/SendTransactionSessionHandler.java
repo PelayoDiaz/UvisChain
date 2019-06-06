@@ -15,12 +15,15 @@ import java.lang.reflect.Type;
 public class SendTransactionSessionHandler extends StompSessionHandlerAdapter {
 
 	private Logger logger = LogManager.getLogger(SendTransactionSessionHandler.class);
+	
+	private StompSession session;
 
     @Override
     public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
         logger.info("New session established : " + session.getSessionId());
         session.subscribe("/topic/transaction", this);
         logger.info("Subscribed to /topic/transaction");
+        this.session = session;
     }
 
     @Override
@@ -38,10 +41,11 @@ public class SendTransactionSessionHandler extends StompSessionHandlerAdapter {
     	
     	BlockChainDto chain = (BlockChainDto) payload;
     	if (BlockChain.getInstance().getTransactions().size() == chain.transactions.size()) {
-    		logger.info("Transaction sent succesfully! Keep going!");
+    		logger.info("Transaction sent succesfully! It's time to recover that money kid!");
     	} else {
     		logger.error("Seems like the receiver doesn't have the same number of transactions.");
     	}
+    	this.session.disconnect();
     	
     }
 

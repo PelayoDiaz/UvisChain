@@ -1,8 +1,6 @@
 package com.uniovi.uvis.entities.transactions;
 
 import java.io.Serializable;
-import java.security.PublicKey;
-
 import com.uniovi.uvis.entities.abst.AbstractHasheable;
 import com.uniovi.uvis.entities.dto.TransactionOutputDto;
 import com.uniovi.uvis.util.CryptoUtil;

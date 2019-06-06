@@ -15,12 +15,15 @@ import java.lang.reflect.Type;
 public class RegisterNodeSessionHandler extends StompSessionHandlerAdapter {
 
 	private Logger logger = LogManager.getLogger(RegisterNodeSessionHandler.class);
+	
+	private StompSession session;
 
     @Override
     public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
         logger.info("New session established : " + session.getSessionId());
         session.subscribe("/topic/blockchain", this);
-        logger.info("Subscribed to /topic/blockchain");     
+        logger.info("Subscribed to /topic/blockchain");
+        this.session = session;
     }
 
     @Override
@@ -39,6 +42,7 @@ public class RegisterNodeSessionHandler extends StompSessionHandlerAdapter {
     	BlockChainDto chain = (BlockChainDto) payload;
     	BlockChain.getInstance().update(chain);
     	logger.info("Chain obtained successfully. Ready to make operations!");
+    	this.session.disconnect();
     }
 
 }

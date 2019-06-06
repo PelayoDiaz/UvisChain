@@ -100,13 +100,19 @@ public class BlockChain implements Serializable {
 	 * 
 	 * @param block
 	 * 			the block to be added.
+	 * @return Boolean
+	 * 		true if the block has been added. False if not.
 	 */
-	public void addBlock(Block block) { //Pasarle las transacciones actuales al nodo
+	public boolean addBlock() {
+		Block block = new Block(this.getLastBlock().getId());
 		block.addTransactions(this.transactions);
 		block.mine(DIFFICULTY);
 		if (getLastBlock().isMined() && block.isMined()) { 
 			this.chain.add(block);
+			this.transactions = new ArrayList<Transaction>();
+			return true;
 		}
+		return false;
 	}
 	
 	/**

@@ -15,12 +15,15 @@ import java.lang.reflect.Type;
 public class SendWalletSessionHandler extends StompSessionHandlerAdapter {
 
 	private Logger logger = LogManager.getLogger(SendWalletSessionHandler.class);
+	
+	private StompSession session;
 
     @Override
     public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
         logger.info("New session established : " + session.getSessionId());
         session.subscribe("/topic/wallet", this);
         logger.info("Subscribed to /topic/wallet");
+        this.session = session;
     }
 
     @Override
@@ -42,6 +45,7 @@ public class SendWalletSessionHandler extends StompSessionHandlerAdapter {
     	} else {
     		logger.error("Seems like the receiver doesn't have the same number of wallets.");
     	}
+    	this.session.disconnect();
     	
     }
 

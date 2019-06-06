@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.google.common.util.concurrent.AtomicDouble;
 import com.uniovi.uvis.communication.handlers.SendTransactionSessionHandler;
 import com.uniovi.uvis.entities.abst.AbstractSender;
+import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.entities.transactions.TransactionInput;
@@ -12,6 +13,9 @@ import com.uniovi.uvis.entities.wallet.Wallet;
 import com.uniovi.uvis.services.impl.command.Command;
 
 public class SendFunds extends AbstractSender<Transaction, TransactionDto> implements Command<Transaction>{
+	
+	/** Url where the other nodes are listening. */
+	public static final String LISTENER = "/app/chain/addTransaction";
 	
 	private Wallet sender;
 	private String receiverAddress;
@@ -37,7 +41,8 @@ public class SendFunds extends AbstractSender<Transaction, TransactionDto> imple
 	public Transaction execute() {
 		ArrayList<TransactionInput> inputs = getTransactionInputs();
 		Transaction transaction = createTransaction(inputs);
-		this.send(transaction, new SendTransactionSessionHandler(), "/app/chain/addTransaction");
+		BlockChain.getInstance().addTransaction(transaction);
+		this.send(transaction, new SendTransactionSessionHandler(), LISTENER);
 		return transaction;
 	}
 	
