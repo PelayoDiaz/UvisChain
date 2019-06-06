@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
+import com.uniovi.uvis.entities.dto.BlockDto;
 import com.uniovi.uvis.entities.dto.Node;
 import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.dto.WalletDto;
@@ -55,6 +57,13 @@ public class BlockChainController {
 	@SendTo("/topic/transaction")
 	public BlockChainDto addTransaction(TransactionDto dto) {
 		return this.blockChainService.addTransaction(dto);
+	}
+	
+	@RequestMapping("/mine")
+	public BlockDto mine() {
+		//1- BlockService: añadir transacciones al bloque (crear bloque)
+		//2- Minar bloque
+		return this.blockChainService.mine();
 	}
 	
 	
