@@ -188,6 +188,13 @@ public class Transaction extends AbstractHasheable implements Serializable, Send
 	}
 
 	/**
+	 * @return the senderAddress
+	 */
+	public String getSenderAddress() {
+		return senderAddress;
+	}
+
+	/**
 	 * @return the receiver
 	 */
 	public String getReceiver() {

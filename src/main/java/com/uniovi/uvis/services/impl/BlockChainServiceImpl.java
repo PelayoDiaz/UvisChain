@@ -19,6 +19,7 @@ import com.uniovi.uvis.services.impl.blockchain.IsChainValid;
 import com.uniovi.uvis.services.impl.blockchain.Mine;
 import com.uniovi.uvis.services.impl.blockchain.RegisterNode;
 import com.uniovi.uvis.services.impl.blockchain.Send;
+import com.uniovi.uvis.services.impl.blockchain.UpdateChain;
 import com.uniovi.uvis.services.impl.command.CommandExecutorIf;
 
 @Service
@@ -29,13 +30,6 @@ public class BlockChainServiceImpl implements BlockChainService{
 	
 	public BlockChainServiceImpl() {
 		this.executor = new CommandExecutorIf();
-	}
-	
-	@Override
-	public List<BlockChain> getAllChains() {
-		//TODO: realmente necesario?
-		return null;
-//		return executor.execute(new GetAllChains());
 	}
 
 	@Override
@@ -62,6 +56,17 @@ public class BlockChainServiceImpl implements BlockChainService{
 	public Void send() {
 		return executor.execute(executor.execute(new IsChainValid(BlockChain.getInstance())), new Send(BlockChain.getInstance()));
 		
+	}
+
+	@Override
+	public BlockChainDto updateChain(BlockChainDto dto) {
+		//Updates with the new content and stores the previous one.
+		BlockChainDto previousDto = executor.execute(new UpdateChain(dto));
+		//If the new chain is not valid, restores the previous content
+		boolean isValid = executor.execute(new IsChainValid(BlockChain.getInstance()));
+		executor.execute(!isValid, new UpdateChain(previousDto));
+		//If the chain is valid, returns the new one, if not, returns an empty Dto
+		return (isValid) ? BlockChain.getInstance().toDto() : new BlockChainDto();
 	}
 
 }

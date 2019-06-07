@@ -26,6 +26,12 @@ public class WalletController {
 		Wallet wallet = walletService.createWallet(address);
 		return wallet.getAddress() + " - Blockchain: " + BlockChain.getInstance().getWallets();
 	}
+	
+	@RequestMapping("/transaction")
+	public String sendFunds(@RequestParam String sender, String receiver, String amount) {
+		Transaction transaction = walletService.createWallet(address);
+		return wallet.getAddress() + " - Blockchain: " + BlockChain.getInstance().getWallets();
+	}
 
 	
 }

@@ -17,7 +17,6 @@ import com.uniovi.uvis.services.impl.command.Command;
 public class GetValidTransactions implements Command<List<Transaction>>{
 	
 	
-
 	@Override
 	public List<Transaction> execute() {
 		List<Transaction> validTransactions = BlockChain.getInstance().getTransactions()

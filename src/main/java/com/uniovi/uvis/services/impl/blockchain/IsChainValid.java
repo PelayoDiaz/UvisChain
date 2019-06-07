@@ -111,11 +111,10 @@ public class IsChainValid implements Command<Boolean>{
 			if (!transaction.getOutputs().get(0).belongsTo(transaction.getReceiver())) {
 				throw new IllegalStateException("Output receiver is not who it should be");
 			}
-			if (transaction.getOutputs().get(1)!=null && !transaction.getOutputs().get(1).belongsTo(transaction.getReceiver())) {
+			if (transaction.getOutputs().get(1)!=null && !transaction.getOutputs().get(1).belongsTo(transaction.getSenderAddress())) {
 				throw new IllegalStateException("The left over of the transaction is not for the sender");
 			}
 		}
-		
 	}
 
 }

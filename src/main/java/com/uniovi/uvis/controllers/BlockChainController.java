@@ -49,11 +49,8 @@ public class BlockChainController {
 	
 	@MessageMapping("/chain/updateChain")
 	@SendTo("/topic/blockchain")
-	public BlockChainDto updateChain() { //TODO: hacer el consenso
-		blockChainService.getAllChains();
-		BlockChainDto chain = new BlockChainDto();
-//		chain.setCadena(String.valueOf(new Date().getTime()));
-		return chain;
+	public BlockChainDto updateChain(BlockChainDto dto) {
+		return this.blockChainService.updateChain(dto);
 	}
 	
 	@MessageMapping("/chain/addWallet")

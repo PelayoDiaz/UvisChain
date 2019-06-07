@@ -3,7 +3,6 @@ package com.uniovi.uvis.services;
 import java.util.List;
 
 import com.uniovi.uvis.entities.block.Block;
-import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.BlockDto;
 import com.uniovi.uvis.entities.dto.Node;
@@ -12,14 +11,6 @@ import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
 
 public interface BlockChainService {
-	
-	/**
-	 * Recollects all the chains of the connected nodes.
-	 * 
-	 * @return List<BlockChain>
-	 * 			All the chains of the connected nodes.
-	 */
-	public List<BlockChain> getAllChains();
 	
 	/**
 	 * Registers a new node into the chain for communication.
@@ -71,5 +62,16 @@ public interface BlockChainService {
 	 * in the chain at the moment.
 	 */
 	public Void send();
+	
+	/**
+	 * Updates the chain from the node for another send by other node.
+	 * 
+	 * @param dto
+	 * 			The new chain.
+	 * @return BlockChainDto
+	 * 			The updated chain.
+	 * 		
+	 */
+	public BlockChainDto updateChain(BlockChainDto dto);
 
 }
