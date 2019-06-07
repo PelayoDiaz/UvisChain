@@ -2,12 +2,14 @@ package com.uniovi.uvis.services;
 
 import java.util.List;
 
+import com.uniovi.uvis.entities.block.Block;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.BlockDto;
 import com.uniovi.uvis.entities.dto.Node;
 import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.dto.WalletDto;
+import com.uniovi.uvis.entities.transactions.Transaction;
 
 public interface BlockChainService {
 	
@@ -53,9 +55,21 @@ public interface BlockChainService {
 	/**
 	 * It tries to mine a block to be added to the chain.
 	 * 
+	 * @param block
+	 * 			The block to be added to the chain if mined goes successfully.
+	 * 
+	 * @param originalTransactions
+	 * 			The block to be added to the chain if mined goes successfully.
+	 * 
 	 * @return BlockDto
 	 * 			The information of the generated node
 	 */
-	public BlockDto mine();
+	public BlockDto mine(Block block, List<Transaction> originalTransactions);
+	
+	/**
+	 * It sends the chain of the node to the rest of nodes which are
+	 * in the chain at the moment.
+	 */
+	public Void send();
 
 }

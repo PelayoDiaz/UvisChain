@@ -1,6 +1,5 @@
 package com.uniovi.uvis.services.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -16,23 +15,27 @@ import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.services.BlockChainService;
 import com.uniovi.uvis.services.impl.blockchain.AddTransaction;
 import com.uniovi.uvis.services.impl.blockchain.AddWallet;
-import com.uniovi.uvis.services.impl.blockchain.GetAllChains;
+import com.uniovi.uvis.services.impl.blockchain.IsChainValid;
+import com.uniovi.uvis.services.impl.blockchain.Mine;
 import com.uniovi.uvis.services.impl.blockchain.RegisterNode;
-import com.uniovi.uvis.services.impl.command.CommandExecutor;
+import com.uniovi.uvis.services.impl.blockchain.Send;
+import com.uniovi.uvis.services.impl.command.CommandExecutorIf;
 
 @Service
 public class BlockChainServiceImpl implements BlockChainService{
 
 	/** Code executor for services. */
-	private CommandExecutor executor;
+	private CommandExecutorIf executor;
 	
 	public BlockChainServiceImpl() {
-		this.executor = new CommandExecutor();
+		this.executor = new CommandExecutorIf();
 	}
 	
 	@Override
 	public List<BlockChain> getAllChains() {
-		return executor.execute(new GetAllChains());
+		//TODO: realmente necesario?
+		return null;
+//		return executor.execute(new GetAllChains());
 	}
 
 	@Override
@@ -51,13 +54,14 @@ public class BlockChainServiceImpl implements BlockChainService{
 	}
 
 	@Override
-	public BlockDto mine() {
-		List<Transaction> transactions = new ArrayList<Transaction>(BlockChain.getInstance().getTransactions());
-		Block block = new Block(BlockChain.getInstance().getLastBlock().getId());
+	public BlockDto mine(Block block, List<Transaction> originalTransactions) {
+		return executor.execute(new Mine(block, originalTransactions));
+	}
+
+	@Override
+	public Void send() {
+		return executor.execute(executor.execute(new IsChainValid(BlockChain.getInstance())), new Send(BlockChain.getInstance()));
 		
-		//1- Executor: Minar Bloque
-		//2- Executor: Añadir bloque a cadena y limpiar transacciones
-		return executor.execute(new Mine());
 	}
 
 }

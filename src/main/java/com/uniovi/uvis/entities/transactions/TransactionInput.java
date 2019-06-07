@@ -2,6 +2,7 @@ package com.uniovi.uvis.entities.transactions;
 
 import java.io.Serializable;
 
+import com.uniovi.uvis.entities.abst.Sendable;
 import com.uniovi.uvis.entities.dto.TransactionInputDto;
 
 /**
@@ -9,7 +10,7 @@ import com.uniovi.uvis.entities.dto.TransactionInputDto;
  * 
  * @author Pelayo Díaz Soto
  */
-public class TransactionInput implements Serializable {
+public class TransactionInput implements Serializable, Sendable<TransactionInputDto> {
 	
 	/**
 	 * Serializable
@@ -56,6 +57,7 @@ public class TransactionInput implements Serializable {
 		return utxo;
 	}
 	
+	@Override
 	public TransactionInputDto toDto() {
 		TransactionInputDto dto = new TransactionInputDto();
 		dto.outputId = this.outputId;

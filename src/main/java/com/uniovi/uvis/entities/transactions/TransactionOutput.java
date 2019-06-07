@@ -2,10 +2,11 @@ package com.uniovi.uvis.entities.transactions;
 
 import java.io.Serializable;
 import com.uniovi.uvis.entities.abst.AbstractHasheable;
+import com.uniovi.uvis.entities.abst.Sendable;
 import com.uniovi.uvis.entities.dto.TransactionOutputDto;
 import com.uniovi.uvis.util.CryptoUtil;
 
-public class TransactionOutput extends AbstractHasheable implements Serializable{
+public class TransactionOutput extends AbstractHasheable implements Serializable, Sendable<TransactionOutputDto> {
 
 	/**
 	 * Serializable.
@@ -72,6 +73,7 @@ public class TransactionOutput extends AbstractHasheable implements Serializable
 		return value;
 	}
 	
+	@Override
 	public TransactionOutputDto toDto() {
 		TransactionOutputDto dto = new TransactionOutputDto();
 		dto.id = this.id;

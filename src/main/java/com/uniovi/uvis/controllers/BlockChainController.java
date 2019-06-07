@@ -1,18 +1,24 @@
 package com.uniovi.uvis.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.uniovi.uvis.entities.block.Block;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.BlockDto;
 import com.uniovi.uvis.entities.dto.Node;
 import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.dto.WalletDto;
+import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.services.impl.BlockChainServiceImpl;
+import com.uniovi.uvis.services.impl.BlockServiceImpl;
 
 /**
  * It contains the methods to control the blockchain object
@@ -25,6 +31,9 @@ public class BlockChainController {
 	
 	@Autowired
 	private BlockChainServiceImpl blockChainService;
+	
+	@Autowired
+	private BlockServiceImpl blockService;
 
 	@MessageMapping("/chain/registerNode")
 	@SendTo("/topic/blockchain")
@@ -40,7 +49,7 @@ public class BlockChainController {
 	
 	@MessageMapping("/chain/updateChain")
 	@SendTo("/topic/blockchain")
-	public BlockChainDto updateChain() { //hacer el consenso
+	public BlockChainDto updateChain() { //TODO: hacer el consenso
 		blockChainService.getAllChains();
 		BlockChainDto chain = new BlockChainDto();
 //		chain.setCadena(String.valueOf(new Date().getTime()));
@@ -59,11 +68,13 @@ public class BlockChainController {
 		return this.blockChainService.addTransaction(dto);
 	}
 	
-	@RequestMapping("/mine")
-	public BlockDto mine() {
-		//1- BlockService: añadir transacciones al bloque (crear bloque)
-		//2- Minar bloque
-		return this.blockChainService.mine();
+	@RequestMapping("/mine") //No se muestra en pantalla porque es un controller no un restcontroller, pero funciona.
+	public String mine() {
+		List<Transaction> originalTransactions = new ArrayList<Transaction>(BlockChain.getInstance().getTransactions());
+		Block newBlock = this.blockService.createBlock();
+		BlockDto dto = this.blockChainService.mine(newBlock, originalTransactions);
+		this.blockChainService.send();
+		return "Block id: "+ dto.id+ " - PreviousHash: "+ dto.previousHash;
 	}
 	
 	

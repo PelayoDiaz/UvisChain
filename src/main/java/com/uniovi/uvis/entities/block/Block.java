@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.uniovi.uvis.entities.abst.AbstractHasheable;
+import com.uniovi.uvis.entities.abst.Sendable;
 import com.uniovi.uvis.entities.dto.BlockDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.util.CryptoUtil;
 
-public class Block extends AbstractHasheable implements Serializable{
+public class Block extends AbstractHasheable implements Serializable, Sendable<BlockDto> {
 
 	/**
 	 * Serializable
@@ -79,49 +80,14 @@ public class Block extends AbstractHasheable implements Serializable{
 	}
 	
 	/**
-	 * Adds a list of transactions to the block. It will check every transaction and
-	 * add to the block only the valid ones.
+	 * Adds a list of transactions to the block. The transactions must be 
+	 * previously validated.
 	 * 
 	 * @param transactions
 	 * 			The transactions to be added.
 	 */
 	public void addTransactions(List<Transaction> transactions) {
-		transactions.forEach(x -> addTransaction(x));
-	}
-	
-	/**
-	 * Add a transaction to the block. A transaction can only be added if:
-	 *  - The Block is not the genesis block.
-	 *  - The Transaction is processed correctly.
-	 *  
-	 * @param transaction
-	 * 			The transaction to be added.
-	 * 
-	 * @return Boolean
-	 * 			True if it is added, false if not
-	 */
-	public boolean addTransaction(Transaction transaction) {
-		//If it is the genesis block, add it without process.
-		if (!this.previousHash.equals("0") && !canBeAdded(transaction)) {
-			return false;
-		}
-		this.transactions.add(transaction);
-		return true;
-	}
-	
-	/**
-	 * Checks if a transaction can be added to the block.
-	 * It checks if the transaction is null and if the block is not the genesis block.
-	 * Finally, it proccess the transaction and allow to add the transaction if everything is correct.
-	 * 
-	 * @param transaction
-	 * 			The transaction to be checked.
-	 * 
-	 * @return Boolean
-	 * 			True, if the transaction can be added. False if not.
-	 */
-	private boolean canBeAdded(Transaction transaction) {
-		return transaction != null && transaction.processTransaction();
+		this.transactions.addAll(transactions);
 	}
 
 	/**
@@ -143,6 +109,7 @@ public class Block extends AbstractHasheable implements Serializable{
 		return mined;
 	}
 	
+	@Override
 	public BlockDto toDto() {
 		BlockDto dto = new BlockDto();
 		dto.id = this.id;

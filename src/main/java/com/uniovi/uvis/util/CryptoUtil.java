@@ -137,7 +137,8 @@ public class CryptoUtil {
 	/**
 	 * Recursive method to get the merkle root from a list of Strings
 	 * 
-	 * @param leafs the leafs of the tree
+	 * @param leafs 
+	 *			The leafs of the tree
 	 * 
 	 * @return String
 	 * 			The hash representation of the merkle root.
