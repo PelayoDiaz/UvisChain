@@ -55,7 +55,6 @@ public class BlockChainServiceImpl implements BlockChainService{
 	@Override
 	public Void send() {
 		return executor.execute(executor.execute(new IsChainValid(BlockChain.getInstance())), new Send(BlockChain.getInstance()));
-		
 	}
 
 	@Override

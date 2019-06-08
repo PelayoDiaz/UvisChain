@@ -208,6 +208,12 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 		return dto;
 	}
 	
+	/**
+	 * Updates the content of the chain from a dto received.
+	 * 
+	 * @param dto
+	 * 			The dto with the new information of the chain.
+	 */
 	public void update(BlockChainDto dto) {
 		this.chain = dto.chain.stream().map(x -> new Block(x)).collect(Collectors.toList());
 		this.transactions = dto.transactions.stream().map(x -> new Transaction(x)).collect(Collectors.toList());

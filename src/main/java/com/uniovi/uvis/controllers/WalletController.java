@@ -29,9 +29,9 @@ public class WalletController {
 	}
 	
 	@RequestMapping("/transaction")
-	public String sendFunds(@RequestParam String sender, String receiver, String amount) {
-		//TODO: Pendiente creación de transacciones. Misma manera que cuando se crea una cartera y se asocia una transaccion.
-		return "";
+	public String sendFunds(@RequestParam String from, String to, String amount) {
+		Transaction transaction = walletService.sendFunds(from, to, Double.valueOf(amount));
+		return "Transaction: " + transaction.getId() + " - UTXOs: " + transaction.getOutputs();
 	}
 
 	
