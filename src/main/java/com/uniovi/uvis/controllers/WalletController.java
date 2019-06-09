@@ -31,7 +31,7 @@ public class WalletController {
 	@RequestMapping("/transaction")
 	public String sendFunds(@RequestParam String to, String amount) {
 		Transaction transaction = walletService.sendFunds(to, Double.valueOf(amount));
-		return "Transaction: " + transaction.getId() + " - UTXOs: " + transaction.getOutputs();
+		return "Transaction: " + transaction.getId() + " - To: " + transaction.getReceiver();
 	}
 	
 	@RequestMapping("/login")

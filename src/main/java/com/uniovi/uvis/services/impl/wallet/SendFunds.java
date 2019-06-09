@@ -25,15 +25,15 @@ public class SendFunds extends AbstractSender<Transaction, TransactionDto> imple
 	 * Creates a Transaction with an amount of funds to be send to a receiver.
 	 * 
 	 * @param receiver
-	 * 				the receiver of the transaction
+	 * 				the receiver's username of the transaction. Is used to obtain the wallet id.
 	 * @param amount
 	 * 				the amount of funds to be send
 	 * @return Transaction
 	 * 				the transaction created
 	 */
-	public SendFunds(Wallet sender, String receiverAddress, double amount) {
+	public SendFunds(Wallet sender, String receiver, double amount) {
 		this.sender = sender;
-		this.receiverAddress = receiverAddress;
+		this.receiverAddress = BlockChain.getInstance().getWallets().get(receiver).id;
 		this.amount = amount;
 	}
 

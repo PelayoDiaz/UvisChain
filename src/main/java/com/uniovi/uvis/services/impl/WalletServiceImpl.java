@@ -26,7 +26,7 @@ public class WalletServiceImpl implements WalletService {
 	public Wallet createWallet(String username, String password, String name, String surname1, String surname2) {
 		Wallet createdWallet = executor.execute(new CreateWallet(username, password, name, surname1, surname2));
 		Wallet sender = BlockChain.getInstance().getCoinBase();
-		executor.execute(executor.execute(new GetBalance(sender))>5, new SendFunds(sender, createdWallet.getId(), 5));
+		executor.execute(executor.execute(new GetBalance(sender))>5, new SendFunds(sender, createdWallet.getUser().username, 5));
 		return createdWallet;
 	}
 
