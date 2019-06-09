@@ -45,7 +45,7 @@ public class Transaction extends AbstractHasheable implements Serializable, Send
 	public Transaction(Wallet sender, String receiver, double amount, ArrayList<TransactionInput> inputs) {
 		super();
 		this.sender = sender.getPublicKey();
-		this.senderAddress = sender.getAddress();
+		this.senderAddress = sender.getId();
 		this.receiver = receiver;
 		this.amount = amount;
 		this.inputs = inputs;

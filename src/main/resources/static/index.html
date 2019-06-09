@@ -6,14 +6,24 @@
 </head>
 <body>
 	<h1>Pa' probar... Mas o menos...</h1>
+	<h2>Log In</h2>
+	<form method="post" action="/login">
+		Username:<br> <input type="text" name="username"></br> 
+		Password:<br> <input type="text" name="password"></br> 
+		<input
+			type="submit" value="login">
+	</form>
 	<h2>Creating a Wallet!</h2>
 	<form method="post" action="/wallet">
-		Address:<br> <input type="text" name="address"></br> <input
+		Username:<br> <input type="text" name="username"></br> 
+		Password:<br> <input type="text" name="password"></br>
+		Name:<br> <input type="text" name="name"></br> 
+		Surname1:<br> <input type="text" name="surname1"></br>  
+		Surname2:<br> <input type="text" name="surname2"></br> <input
 			type="submit" value="Send">
 	</form>
 	<h2>Sending a Transaction!</h2>
 	<form method="post" action="transaction">
-		From:<br> <input type="text" name="from"></br>
 		To:<br> <input type="text" name="to"></br> 
 		Amount:<br> <input type="text" name="amount"></br> 
 		<input type="submit" value="Send">

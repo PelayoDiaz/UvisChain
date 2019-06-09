@@ -15,7 +15,7 @@ public class AddWallet implements Command<BlockChainDto>{
 
 	@Override
 	public BlockChainDto execute() {
-		BlockChain.getInstance().putWallet(walletDto.address, walletDto);
+		BlockChain.getInstance().putWallet(walletDto.user.username, walletDto);
 		return BlockChain.getInstance().toDto();
 	}
 

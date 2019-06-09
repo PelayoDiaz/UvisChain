@@ -13,11 +13,9 @@ public class TransactionOutput extends AbstractHasheable implements Serializable
 	 */
 	private static final long serialVersionUID = 5665651396410700747L;
 	
-	/** The public key of the transaction's receiver */
-//	private PublicKey receiver;
+	/** The id of the wallet's receiver */
 	private String receiver;
-	
-	
+
 	/** The amount of coins they own */
 	private double value;
 	
@@ -60,7 +58,6 @@ public class TransactionOutput extends AbstractHasheable implements Serializable
 	@Override
 	public String calculateHash() {
 		return CryptoUtil.getSha256Hash(
-//				CryptoUtil.getStringFromKey(this.receiver) +
 				this.receiver +
 				this.value +
 				this.timeStamp);

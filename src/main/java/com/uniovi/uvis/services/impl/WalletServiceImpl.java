@@ -9,7 +9,7 @@ import com.uniovi.uvis.services.WalletService;
 import com.uniovi.uvis.services.impl.command.CommandExecutorIf;
 import com.uniovi.uvis.services.impl.wallet.CreateWallet;
 import com.uniovi.uvis.services.impl.wallet.GetBalance;
-import com.uniovi.uvis.services.impl.wallet.GetWallet;
+import com.uniovi.uvis.services.impl.wallet.SetActiveWallet;
 import com.uniovi.uvis.services.impl.wallet.SendFunds;
 
 @Service
@@ -23,18 +23,23 @@ public class WalletServiceImpl implements WalletService {
 	}
 	
 	@Override
-	public Wallet createWallet(String address) {
-		Wallet createdWallet = executor.execute(new CreateWallet(address));
+	public Wallet createWallet(String username, String password, String name, String surname1, String surname2) {
+		Wallet createdWallet = executor.execute(new CreateWallet(username, password, name, surname1, surname2));
 		Wallet sender = BlockChain.getInstance().getCoinBase();
-		executor.execute(executor.execute(new GetBalance(sender))>5, new SendFunds(sender, createdWallet.getAddress(), 5));
+		executor.execute(executor.execute(new GetBalance(sender))>5, new SendFunds(sender, createdWallet.getId(), 5));
 		return createdWallet;
 	}
 
 	@Override
-	public Transaction sendFunds(String sender, String receiver, double amount) {
-		Wallet senderWallet = executor.execute(new GetWallet(sender));
+	public Transaction sendFunds(String receiver, double amount) {
+		Wallet senderWallet = BlockChain.getInstance().getActiveWallet();
 		Transaction transaction = executor.execute(executor.execute(new GetBalance(senderWallet))>amount, new SendFunds(senderWallet, receiver, amount));
 		return transaction;
+	}
+
+	@Override
+	public boolean setActiveWallet(String username, String password) {
+		return executor.execute(new SetActiveWallet(username, password));
 	}
 
 }

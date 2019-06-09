@@ -7,13 +7,15 @@ import java.security.PublicKey;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.uniovi.uvis.entities.abst.AbstractHasheable;
 import com.uniovi.uvis.entities.abst.Sendable;
+import com.uniovi.uvis.entities.dto.UserDto;
 import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.entities.transactions.TransactionOutput;
 import com.uniovi.uvis.util.CryptoUtil;
 
-public class Wallet implements Serializable, Sendable<WalletDto> {
+public class Wallet extends AbstractHasheable implements Serializable, Sendable<WalletDto> {
 	
 	/**
 	 * Serializable
@@ -29,24 +31,31 @@ public class Wallet implements Serializable, Sendable<WalletDto> {
 	/** A hashMap which contains all the unspent outputs of the wallet that can be used as inputs. */
 	private Map<String, TransactionOutput> utxos;
 	
-	/** The address of the wallet. It will be used to reference the wallet when it is the receiver of the sent funds. */
-	private String address;
+	/** The user the wallet belongs to */
+	private UserDto user;
 	
-	public Wallet() {
+	private Wallet() {
 		KeyPair keyPair = CryptoUtil.generateKeyPair();
 		this.privateKey = keyPair.getPrivate();
 		this.publicKey = keyPair.getPublic();
 		this.utxos = new HashMap<String, TransactionOutput>();
+		this.user = new UserDto();
 	}
 	
-	public Wallet(String address) {
+	public Wallet(String username, String password, String name, String surname1, String surname2) {
 		this();
-		this.address = address;
+		this.user.username = username;
+		this.user.password = password;
+		this.user.name = name;
+		this.user.surname1 = surname1;
+		this.user.surname2 = surname2;
+		this.id = this.calculateHash();
 	}
 	
 	public Wallet(WalletDto dto) {
 		this();
-		this.address = dto.address;
+		this.id = dto.id;
+		this.user = dto.user;
 	}
 
 	/**
@@ -97,17 +106,31 @@ public class Wallet implements Serializable, Sendable<WalletDto> {
 			transaction.generateSignature(this.privateKey);
 		}
 	}
-
-	public String getAddress() {
-		return address;
-	}
 	
 	@Override
 	public WalletDto toDto() {
 		WalletDto dto = new WalletDto();
-		dto.publicKey = this.publicKey.getEncoded();
-		dto.address = this.address;
+		dto.id = this.id;
+		dto.user = this.user;
 		return dto;
+	}
+
+	/**
+	 * @return the user
+	 */
+	public UserDto getUser() {
+		return user;
+	}
+
+	@Override
+	public String calculateHash() {
+		return CryptoUtil.getSha256Hash(
+				this.user.username +
+				this.user.password +
+				this.user.name + 
+				this.user.surname1 + 
+				this.user.surname2 +
+				this.timeStamp);
 	}
 
 }

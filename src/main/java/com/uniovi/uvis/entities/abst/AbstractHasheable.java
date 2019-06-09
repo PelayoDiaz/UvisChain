@@ -26,7 +26,7 @@ public abstract class AbstractHasheable {
 	 * Returns the hash.
 	 * 
 	 * @return String
-	 * 			the hash of the Block.
+	 * 			the hash of the entity.
 	 */
 	public String getId() {
 		return id;
