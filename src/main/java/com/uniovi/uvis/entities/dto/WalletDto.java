@@ -9,6 +9,7 @@ public class WalletDto implements Serializable{
 	 */
 	private static final long serialVersionUID = 7621705334565136287L;
 	
-	public String id;
-	public UserDto user;
+	public String name;
+	public String address;
+	public String username;
 }

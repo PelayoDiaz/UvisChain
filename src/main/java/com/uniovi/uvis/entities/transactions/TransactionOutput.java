@@ -13,7 +13,7 @@ public class TransactionOutput extends AbstractHasheable implements Serializable
 	 */
 	private static final long serialVersionUID = 5665651396410700747L;
 	
-	/** The id of the wallet's receiver */
+	/** The address of the wallet's receiver */
 	private String receiver;
 
 	/** The amount of coins they own */

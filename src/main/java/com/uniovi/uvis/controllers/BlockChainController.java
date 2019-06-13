@@ -42,8 +42,8 @@ public class BlockChainController {
 	}
 	
 	@MessageMapping("/chain/sendChain")
-	@SendTo("/topic/blockchain")
-	public BlockChainDto sendChain() {
+	@SendTo("/topic/blockchainClient")
+	public BlockChainDto sendChain(BlockChainDto dto) {
 		return BlockChain.getInstance().toDto();
 	}
 	

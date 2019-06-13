@@ -78,11 +78,9 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 		this.wallets = new HashMap<String, WalletDto>();
 		
 		//The wallet and the total amount of coins that can be send in the chain.
-		WalletDto dto = new WalletDto();
-		dto.id = COIN_BASE;
-		Wallet coinbase = new Wallet(dto);
+		Wallet coinbase = new Wallet(COIN_BASE, COIN_BASE, COIN_BASE);
 		this.wallets.put(COIN_BASE, coinbase.toDto());
-		TransactionOutput output = new TransactionOutput(coinbase.getId(), 100, null);
+		TransactionOutput output = new TransactionOutput(coinbase.getAddress(), 256000, null);
 		this.utxos.put(output.getId(), output);
 		
 		//The original transaction
@@ -91,7 +89,7 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 		ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
 		inputs.add(input);
 		
-		Transaction genesisTransaction = new Transaction(coinbase, coinbase.getId(), 100, inputs);
+		Transaction genesisTransaction = new Transaction(coinbase, coinbase.getAddress(), 100, inputs);
 		coinbase.signTransaction(genesisTransaction);
 		
 		//The first block of the chain
@@ -226,7 +224,7 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 		this.utxos = new HashMap<String, TransactionOutput>();
 		dto.utxos.forEach(x -> putUTXO(x.id, new TransactionOutput(x)));
 		this.wallets = new HashMap<String, WalletDto>();
-		dto.wallets.forEach(x -> putWallet((x.user!=null) ? x.user.username : COIN_BASE, x));
+		dto.wallets.forEach(x -> putWallet(x.address, x));
 	}
 	
 	/**
