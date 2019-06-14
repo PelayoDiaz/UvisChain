@@ -24,7 +24,7 @@ public class UvisServerApplication {
 			String url = "ws://localhost:"+port+"/uvischain";
 			String rootPort = args[1];
 			node = new Node(url);
-			if (port.equals(rootPort)) { //If both of the ports are equal, it is the genesis node.
+			if (port.equals(rootPort)) { //If both ports are equal, it is the genesis node.
 				BlockChain.getInstance().registerNode(node);
 			} else { //If not, then connect with the second port and initialize the node.
 				String rootUrl = "ws://localhost:"+rootPort+"/uvischain";

@@ -27,7 +27,7 @@ public class WalletController {
 
 	@MessageMapping("/chain/createWallet")
 	@SendTo("/topic/blockchainClient")
-	public BlockChainDto createWallet(WalletDto dto) {
+	public synchronized BlockChainDto createWallet(WalletDto dto) {
 		walletService.createWallet(dto);
 		return BlockChain.getInstance().toDto();
 	}
