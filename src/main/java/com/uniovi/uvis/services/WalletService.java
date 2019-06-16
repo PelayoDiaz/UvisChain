@@ -1,5 +1,6 @@
 package com.uniovi.uvis.services;
 
+import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.entities.wallet.Wallet;
@@ -17,14 +18,13 @@ public interface WalletService {
 	/**
 	 * It creates a transaction to send funds to receiver.
 	 * 
-	 * @param receiver
-	 * 			The receiver's address of the transaction
-	 * @param amount
-	 * 			The amount of funds to be sent
+	 * @param dto
+	 * 			The transaction dto. It contains the sender and receiver address,
+	 * 			and the amount of funds to be sent.
 	 * 
 	 * @return 	Transaction
 	 * 			The created transaction.
 	 */
-	public Transaction sendFunds(String receiver, double amount);
+	public Transaction sendFunds(TransactionDto dto);
 
 }

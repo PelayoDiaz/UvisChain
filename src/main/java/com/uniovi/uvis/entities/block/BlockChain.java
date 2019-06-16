@@ -56,10 +56,6 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	/** A map which contains all the wallets in the chain */
 	private Map<String, WalletDto> wallets;
 	
-	//TODO: CAMBIAR POR SPRING SECURITY
-	private Wallet activeWallet;
-
-	
 	public static BlockChain getInstance() {
 		if (singleChain == null) {
 			singleChain = new BlockChain();
@@ -289,21 +285,5 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 		String gsonChain = new GsonBuilder().setPrettyPrinting().create().toJson(this.chain);
 		return gsonChain;
 	}
-
-	/**
-	 * @return the activeWallet
-	 */
-	public Wallet getActiveWallet() {
-		return activeWallet;
-	}
-
-	/**
-	 * @param activeWallet the activeWallet to set
-	 */
-	public void setActiveWallet(Wallet activeWallet) {
-		this.activeWallet = activeWallet;
-	}
-	
-	
 	
 }

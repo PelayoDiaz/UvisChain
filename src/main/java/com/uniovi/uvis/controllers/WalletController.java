@@ -3,14 +3,12 @@ package com.uniovi.uvis.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
+import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.dto.WalletDto;
-import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.services.impl.WalletServiceImpl;
 
 /**
@@ -32,10 +30,12 @@ public class WalletController {
 		return BlockChain.getInstance().toDto();
 	}
 	
-	@RequestMapping("/transaction")
-	public String sendFunds(@RequestParam String to, String amount) {
-		Transaction transaction = walletService.sendFunds(to, Double.valueOf(amount));
-		return "Transaction: " + transaction.getId() + " - To: " + transaction.getReceiver();
+	@MessageMapping("/chain/createTransaction")
+	@SendTo("/topic/blockchainClient")
+	public BlockChainDto sendFunds(TransactionDto dto) {
+		System.out.println("llegué");
+		walletService.sendFunds(dto);
+		return BlockChain.getInstance().toDto();
 	}
 	
 }
