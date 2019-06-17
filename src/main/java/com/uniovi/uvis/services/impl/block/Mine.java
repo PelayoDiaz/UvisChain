@@ -1,4 +1,4 @@
-package com.uniovi.uvis.services.impl.blockchain;
+package com.uniovi.uvis.services.impl.block;
 
 import java.util.List;
 

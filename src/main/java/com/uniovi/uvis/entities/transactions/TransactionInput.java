@@ -51,6 +51,13 @@ public class TransactionInput implements Serializable, Sendable<TransactionInput
 	}
 
 	/**
+	 * @param outputId the outputId to set
+	 */
+	public void setOutputId(String outputId) {
+		this.outputId = outputId;
+	}
+
+	/**
 	 * @return the utxo
 	 */
 	public TransactionOutput getUtxo() {

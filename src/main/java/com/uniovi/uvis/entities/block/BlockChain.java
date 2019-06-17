@@ -188,12 +188,37 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	}
 	
 	/**
-	 * Removes a TransactionOutput from the map.
+	 * Removes an utxo updating its transactions to the new leftover.
 	 * 
-	 * @param outputId the id the TransactionOutput was stored with.
+	 * @param outputId
+	 * 			The id the TransactionOutput was stored with.
+	 * 
+	 * @param leftOver
+	 * 			The new utxo for the transactions which use the utxo that
+	 * 			is going to be deleted.
 	 */
-	public void removeUTXO(String outputId) {
+	public void removeUTXO(String outputId, TransactionOutput leftOver) {
+		if (leftOver!=null) {
+			this.updateTransactionsOutput(outputId, leftOver);
+		}
 		this.utxos.remove(outputId);
+	}
+	
+	/**
+	 * It checks if any input of the pending transactions depends on the output
+	 * that is going to be deleted. If it does, then updates the input's reference
+	 * to the new leftover output.
+	 * 
+	 * @param outputId
+	 * 			The output that is going to be deleted.
+	 * 
+	 * @param leftOver
+	 * 			The new transaction output stored.
+	 */
+	private void updateTransactionsOutput(String outputId, TransactionOutput leftOver) {
+		this.transactions.forEach(x -> x.getInputs()
+				.stream().filter(y -> y.getOutputId().equals(outputId) && y.getUtxo()==null)
+				.forEach(a -> a.setOutputId(leftOver.getId())));
 	}
 	
 	@Override

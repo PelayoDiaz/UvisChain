@@ -82,36 +82,48 @@ public class Transaction extends AbstractHasheable implements Serializable, Send
 		if (!this.isValid()) {
 			return false;
 		}
-		this.generateOutputs();
-		this.removeOutputs();
+		TransactionOutput leftOver = this.generateOutputs();
+		this.removeOutputs(leftOver);
 		return true;
 	}
 	
 	/**
 	 * Generate the different outputs to be sent. It generates an output with the amount to be
 	 * sent to the receiver, and another with the left over of the sender.
+	 * 
+	 * @return TransactionOutput
+	 * 			The left over of the transaction. It will be used to change the UTXO reference
+	 * 			for those transactions which are pending of being processed.
 	 */
-	private void generateOutputs() {
+	private TransactionOutput generateOutputs() {
 		double leftOver = this.getInputsValue() - this.amount;
 		// The amount to be send to the receiver
 		this.outputs.add(new TransactionOutput(this.receiver, this.amount, this.id));
 		
 		//The left over to be send back to the sender.
+		TransactionOutput trLeftOver = null;
 		if (leftOver>0) {
-			this.outputs.add(new TransactionOutput(this.senderAddress, leftOver, this.id));
+			trLeftOver = new TransactionOutput(this.senderAddress, leftOver, this.id); 
+			this.outputs.add(trLeftOver);
 		}
 				
 		//Add outputs to the unspent map
 		this.outputs.forEach(x -> BlockChain.getInstance().putUTXO(x.getId(), x));
+		
+		return trLeftOver;
 	}
 	
 	/**
 	 * Removes all the utxos that has been used in the transaction for not being 
 	 * used in future transactions
+	 * 
+	 * @param leftOver
+	 * 			The transaction output which is the leftover resulted from generating
+	 * 			outputs.
 	 */
-	private void removeOutputs() {
+	private void removeOutputs(TransactionOutput leftOver) {
 		this.inputs.stream().filter(y -> y.getUtxo()!=null)
-								.forEach(x -> BlockChain.getInstance().removeUTXO(x.getUtxo().getId()));
+								.forEach(x -> BlockChain.getInstance().removeUTXO(x.getUtxo().getId(), leftOver));
 	}
 	
 	/**
@@ -223,7 +235,14 @@ public class Transaction extends AbstractHasheable implements Serializable, Send
 	 * @return the outputs
 	 */
 	public List<TransactionOutput> getOutputs() {
-		return outputs;
+		return new ArrayList<TransactionOutput>(outputs);
+	}
+
+	/**
+	 * @return the inputs
+	 */
+	public List<TransactionInput> getInputs() {
+		return new ArrayList<TransactionInput>(inputs);
 	}
 
 	/**
