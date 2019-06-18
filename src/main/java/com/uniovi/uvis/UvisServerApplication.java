@@ -1,16 +1,12 @@
 package com.uniovi.uvis;
 
-import java.util.concurrent.ExecutionException;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.messaging.simp.stomp.StompSession;
 
-import com.uniovi.uvis.communication.Connection;
+import com.uniovi.uvis.communication.Sender;
 import com.uniovi.uvis.communication.handlers.RegisterNodeSessionHandler;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.Node;
-
 
 @SpringBootApplication
 public class UvisServerApplication {
@@ -43,17 +39,10 @@ public class UvisServerApplication {
 	 * 			The node to be registered.
 	 */
 	private static void initialize(String url, Node node) {
-		try {
-			StompSession session = Connection.initialize(url, new RegisterNodeSessionHandler());
-			session.send("/app/chain/registerNode", node);
-			
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Sender sender = new Sender(node, url, new RegisterNodeSessionHandler(), "/app/chain/registerNode");
+		sender.start();
+//			StompSession session = Connection.initialize(url, new RegisterNodeSessionHandler());
+//			session.send("/app/chain/registerNode", node);
 	}
 
 }

@@ -19,7 +19,7 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 public class Connection {
 
-	public static StompSession initialize(String url, StompSessionHandler sessionHandler) throws InterruptedException, ExecutionException { 
+	public static StompSession initialize(String url, StompSessionHandler sessionHandler) { 
 		
 		WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 	    container.setDefaultMaxBinaryMessageBufferSize(1024 * 1024);
@@ -33,7 +33,11 @@ public class Connection {
 		WebSocketStompClient stompClient = new WebSocketStompClient(sockJsClient);
 		stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
-		return stompClient.connect(url, sessionHandler).get();
+		try {
+			return stompClient.connect(url, sessionHandler).get();
+		} catch (InterruptedException | ExecutionException e) {
+			return null;
+		}
 	}
 
 

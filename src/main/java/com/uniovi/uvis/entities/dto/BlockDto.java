@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 
-public class BlockDto implements Serializable {
+public class BlockDto extends AbstractDto implements Serializable {
 
 	/**
 	 * Serializable

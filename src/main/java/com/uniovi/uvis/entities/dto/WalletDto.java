@@ -2,7 +2,7 @@ package com.uniovi.uvis.entities.dto;
 
 import java.io.Serializable;
 
-public class WalletDto implements Serializable{
+public class WalletDto extends AbstractDto implements Serializable{
 
 	/**
 	 * Serializable

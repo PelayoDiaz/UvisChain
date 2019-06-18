@@ -1,6 +1,8 @@
 package com.uniovi.uvis.entities.abst;
 
-public interface Sendable<T> {
+import com.uniovi.uvis.entities.dto.AbstractDto;
+
+public interface Sendable<T extends AbstractDto> {
 	
 	public T toDto();
 

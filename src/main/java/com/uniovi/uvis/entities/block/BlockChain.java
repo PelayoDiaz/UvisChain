@@ -205,6 +205,16 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	}
 	
 	/**
+	 * Removes a node from the list of nodes conected to the chain.
+	 * 
+	 * @param url
+	 * 			The url of the node to be removed.
+	 */
+	public void removeNode(String url) {
+		this.nodes.remove(new Node(url));
+	}
+	
+	/**
 	 * It checks if any input of the pending transactions depends on the output
 	 * that is going to be deleted. If it does, then updates the input's reference
 	 * to the new leftover output.

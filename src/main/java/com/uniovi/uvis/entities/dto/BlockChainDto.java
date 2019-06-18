@@ -3,7 +3,7 @@ package com.uniovi.uvis.entities.dto;
 import java.io.Serializable;
 import java.util.List;
 
-public class BlockChainDto implements Serializable {
+public class BlockChainDto extends AbstractDto implements Serializable {
 	
 	/**
 	 * Serializable

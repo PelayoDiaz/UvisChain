@@ -2,7 +2,7 @@ package com.uniovi.uvis.entities.dto;
 
 import java.io.Serializable;
 
-public class TransactionInputDto implements Serializable {
+public class TransactionInputDto extends AbstractDto implements Serializable {
 
 	/**
 	 * Serializable.
