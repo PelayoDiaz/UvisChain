@@ -3,7 +3,7 @@ package com.uniovi.uvis.services.impl.wallet;
 import java.util.ArrayList;
 
 import com.google.common.util.concurrent.AtomicDouble;
-import com.uniovi.uvis.communication.handlers.SendTransactionSessionHandler;
+import com.uniovi.uvis.communication.handlers.BlockChainSessionHandler;
 import com.uniovi.uvis.entities.abst.AbstractSender;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.TransactionDto;
@@ -42,7 +42,7 @@ public class SendFunds extends AbstractSender<Transaction, TransactionDto> imple
 		ArrayList<TransactionInput> inputs = getTransactionInputs();
 		Transaction transaction = createTransaction(inputs);
 		BlockChain.getInstance().addTransaction(transaction);
-		this.send(transaction, new SendTransactionSessionHandler(), LISTENER);
+		this.send(transaction, new BlockChainSessionHandler(), LISTENER);
 		return transaction;
 	}
 	

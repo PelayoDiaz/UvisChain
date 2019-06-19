@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.uniovi.uvis.communication.Sender;
-import com.uniovi.uvis.communication.handlers.RegisterNodeSessionHandler;
+import com.uniovi.uvis.communication.handlers.BlockChainSessionHandler;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.Node;
 
@@ -39,7 +39,7 @@ public class UvisServerApplication {
 	 * 			The node to be registered.
 	 */
 	private static void initialize(String url, Node node) {
-		Sender sender = new Sender(node, url, new RegisterNodeSessionHandler(), "/app/chain/registerNode");
+		Sender sender = new Sender(node, url, new BlockChainSessionHandler(), "/app/chain/registerNode");
 		sender.start();
 //			StompSession session = Connection.initialize(url, new RegisterNodeSessionHandler());
 //			session.send("/app/chain/registerNode", node);

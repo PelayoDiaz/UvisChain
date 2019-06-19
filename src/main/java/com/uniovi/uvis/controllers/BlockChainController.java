@@ -54,13 +54,13 @@ public class BlockChainController {
 	}
 	
 	@MessageMapping("/chain/addWallet")
-	@SendTo("/topic/wallet")
+	@SendTo("/topic/blockchain")
 	public BlockChainDto addWallet(WalletDto dto) {
 		return this.blockChainService.addWallet(dto);
 	}
 	
 	@MessageMapping("/chain/addTransaction")
-	@SendTo("/topic/transaction")
+	@SendTo("/topic/blockchain")
 	public BlockChainDto addTransaction(TransactionDto dto) {
 		return this.blockChainService.addTransaction(dto);
 	}

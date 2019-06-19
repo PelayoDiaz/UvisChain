@@ -1,6 +1,6 @@
 package com.uniovi.uvis.services.impl.wallet;
 
-import com.uniovi.uvis.communication.handlers.SendWalletSessionHandler;
+import com.uniovi.uvis.communication.handlers.BlockChainSessionHandler;
 import com.uniovi.uvis.entities.abst.AbstractSender;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.WalletDto;
@@ -28,7 +28,7 @@ public class CreateWallet extends AbstractSender<Wallet, WalletDto> implements C
 	public Wallet execute() {
 		Wallet wallet = new Wallet(this.dto);
 		BlockChain.getInstance().putWallet(wallet.getAddress(), wallet.toDto());
-		this.send(wallet, new SendWalletSessionHandler(), LISTENER);
+		this.send(wallet, new BlockChainSessionHandler(), LISTENER);
 		return wallet;
 	}
 

@@ -12,18 +12,15 @@ import com.uniovi.uvis.entities.dto.BlockChainDto;
 
 import java.lang.reflect.Type;
 
-public class RegisterNodeSessionHandler extends StompSessionHandlerAdapter {
+public class BlockChainSessionHandler extends StompSessionHandlerAdapter {
 
-	private Logger logger = LogManager.getLogger(RegisterNodeSessionHandler.class);
-	
-	private StompSession session;
+	private Logger logger = LogManager.getLogger(BlockChainSessionHandler.class);
 
     @Override
     public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
         logger.info("New session established : " + session.getSessionId());
         session.subscribe("/topic/blockchain", this);
         logger.info("Subscribed to /topic/blockchain");
-        this.session = session;
     }
 
     @Override
@@ -40,9 +37,12 @@ public class RegisterNodeSessionHandler extends StompSessionHandlerAdapter {
     public void handleFrame(StompHeaders headers, Object payload) {
     	
     	BlockChainDto chain = (BlockChainDto) payload;
-    	BlockChain.getInstance().update(chain);
+    	if (BlockChain.getInstance().getNodes().size()==0) {
+    		logger.info("Updating chain...");
+    		BlockChain.getInstance().update(chain);
+    	}
     	logger.info("Chain obtained successfully. Ready to make operations!");
-    	this.session.disconnect();
+//    	this.session.disconnect();
     }
 
 }

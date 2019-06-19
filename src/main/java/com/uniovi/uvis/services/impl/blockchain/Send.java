@@ -1,6 +1,6 @@
 package com.uniovi.uvis.services.impl.blockchain;
 
-import com.uniovi.uvis.communication.handlers.UpdateChainSessionHandler;
+import com.uniovi.uvis.communication.handlers.BlockChainSessionHandler;
 import com.uniovi.uvis.entities.abst.AbstractSender;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
@@ -19,7 +19,7 @@ public class Send extends AbstractSender<BlockChain, BlockChainDto> implements C
 
 	@Override
 	public Void execute() {
-		this.send(chain, new UpdateChainSessionHandler(), LISTENER);
+		this.send(chain, new BlockChainSessionHandler(), LISTENER);
 		return null;
 	}
 

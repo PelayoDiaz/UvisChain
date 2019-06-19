@@ -31,6 +31,9 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	 */
 	private static final long serialVersionUID = 1713493104111662876L;
 	
+	/** The total amount of many available in  the blockchain */
+	private static final double QUARRY = 256000;
+	
 	/** The minimum value allowed to be sent */
 	public static final double MINIMUM_TRANSACTION = 0.1;
 	
@@ -76,7 +79,7 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 		//The wallet and the total amount of coins that can be send in the chain.
 		Wallet coinbase = new Wallet(COIN_BASE, COIN_BASE, COIN_BASE);
 		this.wallets.put(COIN_BASE, coinbase.toDto());
-		TransactionOutput output = new TransactionOutput(coinbase.getAddress(), 256000, null);
+		TransactionOutput output = new TransactionOutput(coinbase.getAddress(), QUARRY, null);
 		this.utxos.put(output.getId(), output);
 		
 		//The original transaction
@@ -85,7 +88,7 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 		ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
 		inputs.add(input);
 		
-		Transaction genesisTransaction = new Transaction(coinbase, coinbase.getAddress(), 100, inputs);
+		Transaction genesisTransaction = new Transaction(coinbase, coinbase.getAddress(), QUARRY, inputs);
 		coinbase.signTransaction(genesisTransaction);
 		
 		//The first block of the chain

@@ -33,7 +33,6 @@ public class WalletController {
 	@MessageMapping("/chain/createTransaction")
 	@SendTo("/topic/blockchainClient")
 	public BlockChainDto sendFunds(TransactionDto dto) {
-		System.out.println("llegué");
 		walletService.sendFunds(dto);
 		return BlockChain.getInstance().toDto();
 	}
