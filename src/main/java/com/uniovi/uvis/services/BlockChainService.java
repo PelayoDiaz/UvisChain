@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.uniovi.uvis.entities.block.Block;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
-import com.uniovi.uvis.entities.dto.BlockDto;
 import com.uniovi.uvis.entities.dto.Node;
 import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.dto.WalletDto;
@@ -55,13 +54,7 @@ public interface BlockChainService {
 	 * @return BlockDto
 	 * 			The information of the generated node
 	 */
-	public BlockDto mine(Block block, List<Transaction> originalTransactions);
-	
-	/**
-	 * It sends the chain of the node to the rest of nodes which are
-	 * in the chain at the moment.
-	 */
-	public Void send();
+	public void mine(Block block, List<Transaction> originalTransactions);
 	
 	/**
 	 * Updates the chain from the node for another send by other node.

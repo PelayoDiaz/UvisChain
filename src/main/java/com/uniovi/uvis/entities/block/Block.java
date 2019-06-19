@@ -9,6 +9,7 @@ import com.uniovi.uvis.entities.abst.AbstractHasheable;
 import com.uniovi.uvis.entities.abst.Sendable;
 import com.uniovi.uvis.entities.dto.BlockDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
+import com.uniovi.uvis.services.impl.block.Miner;
 import com.uniovi.uvis.util.CryptoUtil;
 
 public class Block extends AbstractHasheable implements Serializable, Sendable<BlockDto> {
@@ -75,8 +76,11 @@ public class Block extends AbstractHasheable implements Serializable, Sendable<B
 		do {
 			nonce ++;
 			this.id = this.calculateHash();
-		} while (!id.substring(0, difficulty).equals(target));
-		this.mined = true;
+		} while (!id.substring(0, difficulty).equals(target) && Miner.keepMining());
+		if (id.substring(0, difficulty).equals(target)) {
+			this.mined = true;
+		}
+		Miner.keepMining(true);
 	}
 	
 	/**

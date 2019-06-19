@@ -48,13 +48,8 @@ public class BlockChainServiceImpl implements BlockChainService{
 	}
 
 	@Override
-	public BlockDto mine(Block block, List<Transaction> originalTransactions) {
-		return executor.execute(new Mine(block, originalTransactions));
-	}
-
-	@Override
-	public Void send() {
-		return executor.execute(executor.execute(new IsChainValid(BlockChain.getInstance())), new Send(BlockChain.getInstance()));
+	public void mine(Block block, List<Transaction> originalTransactions) {
+		executor.execute(new Mine(block, originalTransactions));
 	}
 
 	@Override

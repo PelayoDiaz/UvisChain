@@ -2,15 +2,11 @@ package com.uniovi.uvis.services.impl.block;
 
 import java.util.List;
 
-import com.uniovi.uvis.entities.abst.AbstractSender;
 import com.uniovi.uvis.entities.block.Block;
-import com.uniovi.uvis.entities.block.BlockChain;
-import com.uniovi.uvis.entities.dto.BlockChainDto;
-import com.uniovi.uvis.entities.dto.BlockDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.services.impl.command.Command;
 
-public class Mine extends AbstractSender<BlockChain, BlockChainDto> implements Command<BlockDto> {
+public class Mine implements Command<Void> {
 
 	/** Url where the other nodes are listening. */
 	public static final String LISTENER = "/app/chain/updateChain";
@@ -18,16 +14,24 @@ public class Mine extends AbstractSender<BlockChain, BlockChainDto> implements C
 	private Block block;
 	private List<Transaction> originalTransactions;
 
+	/**
+	 * It tries to mine a block by creating a thread.
+	 * 
+	 * @param block
+	 * 			The block to be mined
+	 * @param originalTransactions
+	 * 			The transactions to be stored in the block.
+	 */
 	public Mine(Block block, List<Transaction> originalTransactions) {
 		this.block = block;
 		this.originalTransactions = originalTransactions;
 	}
 
 	@Override
-	public BlockDto execute() {
-		this.block.mine(BlockChain.DIFFICULTY);
-		BlockChain.getInstance().addBlock(this.block, this.originalTransactions);
-		return this.block.toDto();
+	public Void execute() {
+		Miner miner = new Miner(block, originalTransactions);
+		miner.start();
+		return null;
 	}
 
 }

@@ -37,7 +37,7 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	/** The minimum value allowed to be sent */
 	public static final double MINIMUM_TRANSACTION = 0.1;
 	
-	public static final int DIFFICULTY = 4;
+	public static final int DIFFICULTY = 6;
 	
 	public static final String COIN_BASE = "coinBase";
 	
@@ -296,6 +296,10 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	 *  
 	 * @param block
 	 * 			The new block to be added.
+	 * 
+	 * @param originalTransactions
+	 * 			The transactions to be deleted. If a transaction is not valid
+	 * 			must be deleted because it can't be processed.
 	 * 
 	 * @return Boolean
 	 * 			True if the block has been added. False if not.
