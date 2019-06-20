@@ -79,6 +79,9 @@ public class Block extends AbstractHasheable implements Serializable, Sendable<B
 		} while (!id.substring(0, difficulty).equals(target) && Miner.keepMining());
 		if (id.substring(0, difficulty).equals(target)) {
 			this.mined = true;
+			System.out.println("=====================GANÉ======================");
+		} else {
+			System.out.println("=====================CANCELO======================");
 		}
 		Miner.keepMining(true);
 	}

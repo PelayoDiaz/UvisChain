@@ -31,8 +31,8 @@ public class Miner extends Thread {
 		if (this.block.isMined()) { 
 			BlockChain.getInstance().addBlock(this.block, this.originalTransactions);
 			executor.execute(executor.execute(new IsChainValid(BlockChain.getInstance())), new Send(BlockChain.getInstance()));
+			System.out.println("=====================Mandando Cadena======================");
 		}
-		System.out.println("=====================TERMINE======================");
 		mining = false;
 	}
 	
