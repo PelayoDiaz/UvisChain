@@ -7,20 +7,21 @@ import org.springframework.stereotype.Service;
 import com.uniovi.uvis.entities.block.Block;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
-import com.uniovi.uvis.entities.dto.BlockDto;
 import com.uniovi.uvis.entities.dto.Node;
 import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
+import com.uniovi.uvis.entities.wallet.Wallet;
 import com.uniovi.uvis.services.BlockChainService;
 import com.uniovi.uvis.services.impl.block.Mine;
 import com.uniovi.uvis.services.impl.blockchain.AddTransaction;
 import com.uniovi.uvis.services.impl.blockchain.AddWallet;
 import com.uniovi.uvis.services.impl.blockchain.IsChainValid;
 import com.uniovi.uvis.services.impl.blockchain.RegisterNode;
-import com.uniovi.uvis.services.impl.blockchain.Send;
 import com.uniovi.uvis.services.impl.blockchain.UpdateChain;
 import com.uniovi.uvis.services.impl.command.CommandExecutorIf;
+import com.uniovi.uvis.services.impl.wallet.GetBalance;
+import com.uniovi.uvis.services.impl.wallet.SendFunds;
 
 @Service
 public class BlockChainServiceImpl implements BlockChainService{
@@ -61,6 +62,13 @@ public class BlockChainServiceImpl implements BlockChainService{
 		executor.execute(!isValid, new UpdateChain(previousDto));
 		//If the chain is valid, returns the new one, if not, returns an empty Dto
 		return (isValid) ? BlockChain.getInstance().toDto() : new BlockChainDto();
+	}
+	
+	@Override
+	public List<Transaction> sendPrizeTo(String receiverAddress) {
+		Wallet sender = BlockChain.getInstance().getCoinBase();
+		executor.execute(executor.execute(new GetBalance(sender))>=BlockChain.PRIZE, new SendFunds(sender, receiverAddress, BlockChain.PRIZE));
+		return BlockChain.getInstance().getTransactions();
 	}
 
 }

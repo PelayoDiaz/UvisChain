@@ -37,6 +37,9 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	/** The minimum value allowed to be sent */
 	public static final double MINIMUM_TRANSACTION = 0.1;
 	
+	/** The amount of funds send by coinbase when mining a block or wallet has been created. */
+	public static final double PRIZE = 5;
+	
 	public static final int DIFFICULTY = 6;
 	
 	public static final String COIN_BASE = "coinBase";

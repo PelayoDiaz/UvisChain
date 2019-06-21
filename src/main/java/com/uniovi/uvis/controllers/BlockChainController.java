@@ -8,6 +8,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.uniovi.uvis.entities.block.Block;
 import com.uniovi.uvis.entities.block.BlockChain;
@@ -67,11 +68,12 @@ public class BlockChainController {
 	}
 	
 	@RequestMapping("/mine") //No se muestra en pantalla porque es un controller no un restcontroller, pero funciona.
-	public String mine() {
+	public String mine(@RequestParam String receiverAddress) {
+		System.out.println("====================="+receiverAddress+"======================");
 		if (Miner.isMining()) {
 			return "";
 		} else {
-			List<Transaction> originalTransactions = new ArrayList<Transaction>(BlockChain.getInstance().getTransactions());
+			List<Transaction> originalTransactions = this.blockChainService.sendPrizeTo(receiverAddress);
 			Block newBlock = this.blockService.createBlock();
 			this.blockChainService.mine(newBlock, originalTransactions);
 			System.out.println("=====================MINANDO======================");

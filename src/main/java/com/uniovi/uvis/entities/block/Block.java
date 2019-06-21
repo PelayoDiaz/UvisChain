@@ -73,6 +73,7 @@ public class Block extends AbstractHasheable implements Serializable, Sendable<B
 		
 		this.merkleRoot = CryptoUtil.getMerkleRoot(this.transactions);
 		String target = new String(new char[difficulty]).replace('\0', '0');
+		System.out.println("=====================ME PONGO A ELLO======================");
 		do {
 			nonce ++;
 			this.id = this.calculateHash();

@@ -66,5 +66,15 @@ public interface BlockChainService {
 	 * 		
 	 */
 	public BlockChainDto updateChain(BlockChainDto dto);
+	
+	/**
+	 * It sends funds to a wallet given by address from the coinbase.
+	 * 
+	 * @param receiverAddress
+	 * 			The wallet's address which receives the funds.
+	 * @return List<Transaction>
+	 * 			The list of pending transactions contained in the chain.
+	 */
+	public List<Transaction> sendPrizeTo(String receiverAddress);
 
 }
