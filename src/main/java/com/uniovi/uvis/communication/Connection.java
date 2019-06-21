@@ -10,6 +10,7 @@ import javax.websocket.WebSocketContainer;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandler;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
@@ -19,13 +20,13 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 public class Connection {
 
-	public static StompSession initialize(String url, StompSessionHandler sessionHandler) { 
-		
+	public static StompSession initialize(String url, StompSessionHandler sessionHandler) throws ExecutionException {
+
 		WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-	    container.setDefaultMaxBinaryMessageBufferSize(1024 * 1024);
-	    container.setDefaultMaxTextMessageBufferSize(1024 * 1024);
+		container.setDefaultMaxBinaryMessageBufferSize(1024 * 1024);
+		container.setDefaultMaxTextMessageBufferSize(1024 * 1024);
 		WebSocketClient simpleWebSocketClient = new StandardWebSocketClient(container);
-		
+
 		List<Transport> transports = new ArrayList<Transport>(1);
 		transports.add(new WebSocketTransport(simpleWebSocketClient));
 
@@ -35,10 +36,9 @@ public class Connection {
 
 		try {
 			return stompClient.connect(url, sessionHandler).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (InterruptedException e) {
 			return null;
-		}
+		} 
 	}
-
 
 }

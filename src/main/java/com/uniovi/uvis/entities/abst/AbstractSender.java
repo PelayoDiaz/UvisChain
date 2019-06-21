@@ -2,7 +2,10 @@ package com.uniovi.uvis.entities.abst;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 
 import com.uniovi.uvis.UvisServerApplication;
@@ -12,6 +15,8 @@ import com.uniovi.uvis.entities.dto.AbstractDto;
 import com.uniovi.uvis.entities.dto.Node;
 
 public abstract class AbstractSender<T extends Sendable<E>, E extends AbstractDto> {
+	
+	private Logger logger = LogManager.getLogger(AbstractSender.class);
 	
 	public void send(T sendable, StompSessionHandlerAdapter handler, String listener) {
 		List<Node> originalNodes = new ArrayList<Node>(BlockChain.getInstance().getNodes());
@@ -23,15 +28,12 @@ public abstract class AbstractSender<T extends Sendable<E>, E extends AbstractDt
 	}
 	
 	private void doSend(T sendable, String url, StompSessionHandlerAdapter handler, String listener) {	
-		Sender sender = new Sender(sendable.toDto(), url, handler, listener);
-		sender.start();
-		
-//		try {
-//			StompSession session = Connection.initialize(url, handler);
-//			session.send(listener, sendable.toDto());
-//		} catch (IllegalStateException e) { //The node is not listening anymore, gets the next node and retries.
-//			logger.info("Connection with actual node lost: Searching a new node to communicate with");
-//			
-//		}
+		Sender sender;
+		try {
+			sender = new Sender(sendable.toDto(), url, handler, listener);
+			sender.start();
+		} catch (ExecutionException e) {
+			logger.error(String.format("Something went wrong while trying to communicate with node %s", url));
+		}
 	}
 }

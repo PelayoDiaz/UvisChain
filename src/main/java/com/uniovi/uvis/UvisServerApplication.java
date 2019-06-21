@@ -1,5 +1,10 @@
 package com.uniovi.uvis;
 
+import java.net.ConnectException;
+import java.util.concurrent.ExecutionException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -11,11 +16,14 @@ import com.uniovi.uvis.entities.dto.Node;
 @SpringBootApplication
 public class UvisServerApplication {
 	
+	private static Logger logger = LogManager.getLogger(UvisServerApplication.class);
+	
 	public static String port;
 	public static Node node;
 
 	public static void main(String[] args) {
 		if (args.length>=2) {
+			boolean start = true;
 			port = args[0];
 			String url = "ws://localhost:"+port+"/uvischain";
 			String rootPort = args[1];
@@ -24,9 +32,11 @@ public class UvisServerApplication {
 				BlockChain.getInstance().registerNode(node);
 			} else { //If not, then connect with the second port and initialize the node.
 				String rootUrl = "ws://localhost:"+rootPort+"/uvischain";
-				initialize(rootUrl, node);
+				start = initialize(rootUrl, node);
 			}
-			SpringApplication.run(UvisServerApplication.class, args);
+			if (start) {
+				SpringApplication.run(UvisServerApplication.class, args);
+			}
 		}		
 	}
 	
@@ -38,11 +48,16 @@ public class UvisServerApplication {
 	 * @param node
 	 * 			The node to be registered.
 	 */
-	private static void initialize(String url, Node node) {
-		Sender sender = new Sender(node, url, new BlockChainSessionHandler(), "/app/chain/registerNode");
-		sender.start();
-//			StompSession session = Connection.initialize(url, new RegisterNodeSessionHandler());
-//			session.send("/app/chain/registerNode", node);
+	private static boolean initialize(String url, Node node) {
+		Sender sender;
+		try {
+			sender = new Sender(node, url, new BlockChainSessionHandler(), "/app/chain/registerNode");
+			sender.start();
+			return true;
+		} catch (ExecutionException e) {
+			logger.error("Can not connect with the indicated node. Please try it again with another address.");
+			return false;
+		}
 	}
 
 }

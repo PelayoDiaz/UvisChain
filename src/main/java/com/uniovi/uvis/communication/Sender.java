@@ -2,6 +2,7 @@ package com.uniovi.uvis.communication;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,17 +33,21 @@ public class Sender extends Thread {
 	 * 			The handler of the sessions established
 	 * @param listener
 	 * 			The listener where the node is listening
+	 * @throws ExecutionException 
 	 */
-	public Sender(AbstractDto dto, String url, StompSessionHandlerAdapter handler, String listener) {
+	public Sender(AbstractDto dto, String url, StompSessionHandlerAdapter handler, String listener) throws ExecutionException {
 		this.dto = dto;
 		this.listener = listener;
 		this.url = url;
 		initSession(url, handler);
 	}
 	
-	private void initSession(String url, StompSessionHandlerAdapter handler) {
+	private void initSession(String url, StompSessionHandlerAdapter handler) throws ExecutionException {
 		if (!sessions.containsKey(url)) {
-			sessions.put(url, Connection.initialize(url, handler));
+			StompSession session = Connection.initialize(url, handler); 
+			if (session!=null) {
+				sessions.put(url, session);
+			}
 		}
 	}
 	
