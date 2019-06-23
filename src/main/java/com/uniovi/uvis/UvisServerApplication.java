@@ -1,6 +1,5 @@
 package com.uniovi.uvis;
 
-import java.net.ConnectException;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.logging.log4j.LogManager;
