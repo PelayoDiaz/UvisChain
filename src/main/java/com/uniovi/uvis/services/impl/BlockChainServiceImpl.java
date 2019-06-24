@@ -2,6 +2,8 @@ package com.uniovi.uvis.services.impl;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.uniovi.uvis.entities.block.Block;
@@ -25,6 +27,8 @@ import com.uniovi.uvis.services.impl.wallet.SendPrize;
 
 @Service
 public class BlockChainServiceImpl implements BlockChainService{
+	
+	private Logger logger = LogManager.getLogger(BlockChainServiceImpl.class);
 
 	/** Code executor for services. */
 	private CommandExecutorIf executor;
@@ -66,6 +70,10 @@ public class BlockChainServiceImpl implements BlockChainService{
 	
 	@Override
 	public List<Transaction> sendPrizeTo(String receiverAddress) {
+		if (BlockChain.getInstance().getWallets().get(receiverAddress)==null) {
+			logger.error("There is no receiver address like the given contained in the chain.");
+			return null;
+		}
 		Wallet sender = BlockChain.getInstance().getCoinBase();
 		executor.execute(executor.execute(new GetBalance(sender))>=BlockChain.PRIZE, new SendPrize(sender, receiverAddress, BlockChain.PRIZE));
 		return BlockChain.getInstance().getTransactions();

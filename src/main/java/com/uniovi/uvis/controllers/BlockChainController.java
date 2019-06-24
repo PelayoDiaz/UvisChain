@@ -73,6 +73,9 @@ public class BlockChainController {
 			return "";
 		} else {
 			List<Transaction> originalTransactions = this.blockChainService.sendPrizeTo(receiverAddress);
+//			if (originalTransactions!=null) {
+//			
+//			}
 			Block newBlock = this.blockService.createBlock();
 			this.blockChainService.mine(newBlock, originalTransactions);
 			System.out.println("=====================MINANDO======================");
