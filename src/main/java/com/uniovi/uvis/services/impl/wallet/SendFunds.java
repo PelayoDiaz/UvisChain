@@ -53,7 +53,7 @@ public class SendFunds extends AbstractSender<Transaction, TransactionDto> imple
 	 * @return ArrayList<TransactionInput>
 	 * 				the inputs for the transaction.
 	 */
-	private ArrayList<TransactionInput> getTransactionInputs() {
+	protected ArrayList<TransactionInput> getTransactionInputs() {
 		ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
 
 		// Calculates the total utxos that can be send with the transaction
@@ -80,7 +80,7 @@ public class SendFunds extends AbstractSender<Transaction, TransactionDto> imple
 	 * @return Transaction
 	 * 				The new transaction to be processed.
 	 */
-	private Transaction createTransaction(ArrayList<TransactionInput> inputs) {
+	protected Transaction createTransaction(ArrayList<TransactionInput> inputs) {
 		Transaction transaction = new Transaction(this.sender, this.receiverAddress, amount, inputs);
 		this.sender.signTransaction(transaction);
 		inputs.forEach(x -> this.sender.removeUTXO(x.getOutputId()));

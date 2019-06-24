@@ -21,7 +21,7 @@ import com.uniovi.uvis.services.impl.blockchain.RegisterNode;
 import com.uniovi.uvis.services.impl.blockchain.UpdateChain;
 import com.uniovi.uvis.services.impl.command.CommandExecutorIf;
 import com.uniovi.uvis.services.impl.wallet.GetBalance;
-import com.uniovi.uvis.services.impl.wallet.SendFunds;
+import com.uniovi.uvis.services.impl.wallet.SendPrize;
 
 @Service
 public class BlockChainServiceImpl implements BlockChainService{
@@ -67,7 +67,7 @@ public class BlockChainServiceImpl implements BlockChainService{
 	@Override
 	public List<Transaction> sendPrizeTo(String receiverAddress) {
 		Wallet sender = BlockChain.getInstance().getCoinBase();
-		executor.execute(executor.execute(new GetBalance(sender))>=BlockChain.PRIZE, new SendFunds(sender, receiverAddress, BlockChain.PRIZE));
+		executor.execute(executor.execute(new GetBalance(sender))>=BlockChain.PRIZE, new SendPrize(sender, receiverAddress, BlockChain.PRIZE));
 		return BlockChain.getInstance().getTransactions();
 	}
 
