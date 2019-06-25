@@ -8,6 +8,7 @@ import com.uniovi.uvis.entities.block.Block;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.services.BlockService;
 import com.uniovi.uvis.services.impl.block.CreateBlock;
+import com.uniovi.uvis.services.impl.block.Mine;
 import com.uniovi.uvis.services.impl.command.CommandExecutor;
 import com.uniovi.uvis.services.impl.transaction.GetValidTransactions;;
 
@@ -25,6 +26,12 @@ public class BlockServiceImpl implements BlockService {
 	public Block createBlock() { 
 		List<Transaction> validTransactions = executor.execute(new GetValidTransactions());
 		return executor.execute(new CreateBlock(validTransactions));
+	}
+	
+
+	@Override
+	public void mine(Block block, List<Transaction> originalTransactions) {
+		executor.execute(new Mine(block, originalTransactions));
 	}
 
 }

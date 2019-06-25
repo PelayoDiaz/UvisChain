@@ -77,7 +77,7 @@ public class BlockChainController {
 //			
 //			}
 			Block newBlock = this.blockService.createBlock();
-			this.blockChainService.mine(newBlock, originalTransactions);
+			this.blockService.mine(newBlock, originalTransactions);
 			System.out.println("=====================MINANDO======================");
 			return "";
 		}

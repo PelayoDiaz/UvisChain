@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.uniovi.uvis.entities.block.Block;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.Node;
@@ -15,7 +14,6 @@ import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.entities.wallet.Wallet;
 import com.uniovi.uvis.services.BlockChainService;
-import com.uniovi.uvis.services.impl.block.Mine;
 import com.uniovi.uvis.services.impl.blockchain.AddTransaction;
 import com.uniovi.uvis.services.impl.blockchain.AddWallet;
 import com.uniovi.uvis.services.impl.blockchain.IsChainValid;
@@ -50,11 +48,6 @@ public class BlockChainServiceImpl implements BlockChainService{
 	@Override
 	public BlockChainDto addWallet(WalletDto dto) {
 		return executor.execute(new AddWallet(dto));
-	}
-
-	@Override
-	public void mine(Block block, List<Transaction> originalTransactions) {
-		executor.execute(new Mine(block, originalTransactions));
 	}
 
 	@Override
