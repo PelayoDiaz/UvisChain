@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import com.google.common.util.concurrent.AtomicDouble;
 import com.uniovi.uvis.communication.handlers.BlockChainSessionHandler;
-import com.uniovi.uvis.entities.abst.AbstractSender;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.entities.transactions.TransactionInput;
 import com.uniovi.uvis.entities.wallet.Wallet;
+import com.uniovi.uvis.services.impl.abst.AbstractSender;
 import com.uniovi.uvis.services.impl.command.Command;
 
 public class SendFunds extends AbstractSender<Transaction, TransactionDto> implements Command<Transaction>{

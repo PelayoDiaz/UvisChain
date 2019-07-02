@@ -1,4 +1,4 @@
-package com.uniovi.uvis.entities.abst;
+package com.uniovi.uvis.services.impl.abst;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,7 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 
 import com.uniovi.uvis.UvisServerApplication;
 import com.uniovi.uvis.communication.Sender;
+import com.uniovi.uvis.entities.abst.Sendable;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.AbstractDto;
 import com.uniovi.uvis.entities.dto.Node;

@@ -1,10 +1,10 @@
 package com.uniovi.uvis.services.impl.wallet;
 
 import com.uniovi.uvis.communication.handlers.BlockChainSessionHandler;
-import com.uniovi.uvis.entities.abst.AbstractSender;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.entities.wallet.Wallet;
+import com.uniovi.uvis.services.impl.abst.AbstractSender;
 import com.uniovi.uvis.services.impl.command.Command;
 
 public class CreateWallet extends AbstractSender<Wallet, WalletDto> implements Command<Wallet> {
