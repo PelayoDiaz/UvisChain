@@ -26,5 +26,16 @@ public interface WalletService {
 	 * 			The created transaction.
 	 */
 	public Transaction sendFunds(TransactionDto dto);
+	
+	/**
+	 * It returns a wallet by address if it is contained in the chain.
+	 * 
+	 * @param address
+	 * 			The address of the wallet to search.
+	 * 
+	 * @return Wallet
+	 * 			The wallet searched or null if it doesn't exist
+	 */
+	public Wallet findByAddress(String address);
 
 }

@@ -71,4 +71,10 @@ public class WalletServiceImpl implements WalletService {
 		}
 		return true;
 	}
+
+	@Override
+	public Wallet findByAddress(String address) {
+		WalletDto dto = BlockChain.getInstance().getWallets().get(address);
+		return (dto != null) ? new Wallet(dto) : null;
+	}
 }

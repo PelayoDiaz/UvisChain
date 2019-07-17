@@ -1,23 +1,16 @@
 package com.uniovi.uvis.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.uniovi.uvis.entities.block.Block;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.Node;
 import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.dto.WalletDto;
-import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.services.impl.BlockChainServiceImpl;
-import com.uniovi.uvis.services.impl.BlockServiceImpl;
 import com.uniovi.uvis.services.impl.block.Miner;
 
 /**
@@ -31,9 +24,6 @@ public class BlockChainController {
 	
 	@Autowired
 	private BlockChainServiceImpl blockChainService;
-	
-	@Autowired
-	private BlockServiceImpl blockService;
 
 	@MessageMapping("/chain/registerNode")
 	@SendTo("/topic/blockchain")
@@ -64,22 +54,5 @@ public class BlockChainController {
 	@SendTo("/topic/blockchain")
 	public BlockChainDto addTransaction(TransactionDto dto) {
 		return this.blockChainService.addTransaction(dto);
-	}
-	
-	@RequestMapping("/mine") //No se muestra en pantalla porque es un controller no un restcontroller, pero funciona.
-	public String mine(@RequestParam String receiverAddress) {
-		System.out.println("====================="+receiverAddress+"======================");
-		if (Miner.isMining()) {
-			return "";
-		} else {
-			List<Transaction> originalTransactions = this.blockChainService.sendPrizeTo(receiverAddress);
-//			if (originalTransactions!=null) {
-//			
-//			}
-			Block newBlock = this.blockService.createBlock();
-			this.blockService.mine(newBlock, originalTransactions);
-			System.out.println("=====================MINANDO======================");
-			return "";
-		}
 	}
 }
