@@ -56,9 +56,6 @@ public class HomeController {
 				return "homeNotMining";
 			}
 			List<Transaction> originalTransactions = this.blockChainService.sendPrizeTo(wallet.address);
-//			if (originalTransactions!=null) {
-//			
-//			}
 			Block newBlock = this.blockService.createBlock();
 			this.blockService.mine(newBlock, originalTransactions);
 			System.out.println("=====================MINANDO======================");

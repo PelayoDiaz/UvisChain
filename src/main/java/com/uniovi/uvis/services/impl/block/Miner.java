@@ -28,10 +28,14 @@ public class Miner extends Thread {
 	public void run() {
 		mining = true;
 		this.block.mine(BlockChain.DIFFICULTY);
-		if (this.block.isMined()) { 
+		if (this.block.isMined()) {
+			this.block.getTransactions().forEach(x -> x.processTransaction());
 			BlockChain.getInstance().addBlock(this.block, this.originalTransactions);
 			executor.execute(executor.execute(new IsChainValid(BlockChain.getInstance())), new Send(BlockChain.getInstance()));
 			System.out.println("=====================Mandando Cadena======================");
+		} else {
+			BlockChain.getInstance().removePrize(this.originalTransactions.get(this.originalTransactions.size()-1));
+			System.out.println("=====================Restaurando Cadena======================");
 		}
 		mining = false;
 	}

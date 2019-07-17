@@ -3,13 +3,11 @@ package com.uniovi.uvis.services.impl.block;
 import java.util.List;
 
 import com.uniovi.uvis.entities.block.Block;
+import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.services.impl.command.Command;
 
 public class Mine implements Command<Void> {
-
-	/** Url where the other nodes are listening. */
-	public static final String LISTENER = "/app/chain/updateChain";
 	
 	private Block block;
 	private List<Transaction> originalTransactions;

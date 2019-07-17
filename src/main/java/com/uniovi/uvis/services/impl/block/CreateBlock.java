@@ -7,6 +7,12 @@ import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.services.impl.command.Command;
 
+/**
+ * Creates a new block with the valid transactions pending of being processed in the chain
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public class CreateBlock implements Command<Block>{
 	
 	private List<Transaction> transactions;

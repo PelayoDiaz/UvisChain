@@ -79,7 +79,7 @@ public class Transaction extends AbstractHasheable implements Serializable, Send
 		//Collects all the unspent outputs
 		this.inputs.forEach(x -> x.setUtxo(BlockChain.getInstance().getUTXO(x.getOutputId())));
 	
-		if (!this.isValid()) {
+		if (!this.isValid(this.getInputsValue())) {
 			return false;
 		}
 		TransactionOutput leftOver = this.generateOutputs();
@@ -127,14 +127,16 @@ public class Transaction extends AbstractHasheable implements Serializable, Send
 	}
 	
 	/**
-	 * Sum all the outputs value and says if it is enough to be a valid transaction.
+	 * Checks if a value is enough to make a transaction valid.
+	 * 
+	 * @param valueToCheck
+	 * 			The value to check
 	 * 
 	 * @return true if it is enough, false if not.
 	 */
-	private boolean isValid() {
-		double total = this.getInputsValue();
+	private boolean isValid(double valueToCheck) {
 		return this.amount >= BlockChain.MINIMUM_TRANSACTION && 
-				total >= BlockChain.MINIMUM_TRANSACTION && total >= this.amount;
+				valueToCheck >= BlockChain.MINIMUM_TRANSACTION && valueToCheck >= this.amount;
 	}
 	
 	/**
@@ -146,6 +148,27 @@ public class Transaction extends AbstractHasheable implements Serializable, Send
 		//Sum all the values of the outputs
 		return this.inputs.stream().filter(y -> y.getUtxo()!=null)
 								.mapToDouble(x -> x.getUtxo().getValue()).sum();
+	}
+	
+	/**
+	 * Says if a transaction is valid to be included in a block. It checks its signature
+	 * and if its amount of money is enough.
+	 * 
+	 * @return True if it is valid, false if not.
+	 */
+	public boolean isValid() {
+		if (!this.verifySignature()) {
+			return false;
+		}
+		// Collects all the unspent outputs
+		List<TransactionOutput> outputs = new ArrayList<TransactionOutput>();
+		this.inputs.forEach(x -> outputs.add(BlockChain.getInstance().getUTXO(x.getOutputId())));
+		double value = outputs.stream().mapToDouble(x -> x.getValue()).sum();
+		
+		if (!this.isValid(value)) {
+			return false;
+		}
+		return true;
 	}
 	
 	/**

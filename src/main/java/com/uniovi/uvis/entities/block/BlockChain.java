@@ -285,6 +285,18 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	public void addTransaction(Transaction transaction) {
 		this.transactions.add(transaction);
 	}
+	
+	/**
+	 * Removes a transaction if it is send by the coinBase.
+	 * 
+	 * @param transaction
+	 * 			The transaction to be removed.
+	 */
+	public void removePrize(Transaction transaction) {
+		if (transaction.getSenderAddress().equals(COIN_BASE)) {
+			this.transactions.remove(transaction);
+		}
+	}
 
 	/**
 	 * @return the transactions
