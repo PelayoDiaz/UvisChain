@@ -3,7 +3,6 @@ package com.uniovi.uvis.services.impl.block;
 import java.util.List;
 
 import com.uniovi.uvis.entities.block.Block;
-import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.services.impl.command.Command;
 

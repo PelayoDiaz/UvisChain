@@ -1,6 +1,5 @@
 package com.uniovi.uvis.services.impl.abst;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -20,7 +19,7 @@ public abstract class AbstractSender<T extends Sendable<E>, E extends AbstractDt
 	private Logger logger = LogManager.getLogger(AbstractSender.class);
 	
 	public void send(T sendable, StompSessionHandlerAdapter handler, String listener) {
-		List<Node> originalNodes = new ArrayList<Node>(BlockChain.getInstance().getNodes());
+		List<Node> originalNodes = BlockChain.getInstance().getNodes();
 		for (Node node : originalNodes) {
 			if (!node.equals(UvisServerApplication.node)) {
 				doSend(sendable, node.getUrl(), handler, listener);
