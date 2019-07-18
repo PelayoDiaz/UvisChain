@@ -41,8 +41,7 @@ public class BlockChainSessionHandler extends StompSessionHandlerAdapter {
     		logger.info("Updating chain...");
     		BlockChain.getInstance().update(chain);
     	}
-    	logger.info("Chain obtained successfully. Ready to make operations!");
-//    	this.session.disconnect();
+    	logger.info("Communication completed successfully. Keep going!");
     }
 
 }

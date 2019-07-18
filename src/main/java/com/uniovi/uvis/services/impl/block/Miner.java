@@ -2,6 +2,9 @@ package com.uniovi.uvis.services.impl.block;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.uniovi.uvis.entities.block.Block;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.transactions.Transaction;
@@ -10,6 +13,8 @@ import com.uniovi.uvis.services.impl.blockchain.Send;
 import com.uniovi.uvis.services.impl.command.CommandExecutorIf;
 
 public class Miner extends Thread {
+	
+	private Logger logger = LogManager.getLogger(Miner.class);
 	
 	private static boolean mining = false;
 	private static boolean keepMining = true;
@@ -32,10 +37,10 @@ public class Miner extends Thread {
 			this.block.getTransactions().forEach(x -> x.processTransaction());
 			BlockChain.getInstance().addBlock(this.block, this.originalTransactions);
 			executor.execute(executor.execute(new IsChainValid(BlockChain.getInstance())), new Send(BlockChain.getInstance()));
-			System.out.println("=====================Mandando Cadena======================");
+			logger.info("Sending your chain to the rest of nodes.");
 		} else {
 			BlockChain.getInstance().removePrize(this.originalTransactions.get(this.originalTransactions.size()-1));
-			System.out.println("=====================Restaurando Cadena======================");
+			logger.info("Restoring your chain.");
 		}
 		mining = false;
 	}

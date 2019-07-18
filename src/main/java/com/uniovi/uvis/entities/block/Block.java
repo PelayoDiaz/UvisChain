@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.uniovi.uvis.entities.abst.AbstractHasheable;
 import com.uniovi.uvis.entities.abst.Sendable;
 import com.uniovi.uvis.entities.dto.BlockDto;
@@ -13,6 +16,8 @@ import com.uniovi.uvis.services.impl.block.Miner;
 import com.uniovi.uvis.util.CryptoUtil;
 
 public class Block extends AbstractHasheable implements Serializable, Sendable<BlockDto> {
+	
+	private Logger logger = LogManager.getLogger(Block.class);
 
 	/**
 	 * Serializable
@@ -73,7 +78,7 @@ public class Block extends AbstractHasheable implements Serializable, Sendable<B
 		
 		this.merkleRoot = CryptoUtil.getMerkleRoot(this.transactions);
 		String target = new String(new char[difficulty]).replace('\0', '0');
-		System.out.println("=====================ME PONGO A ELLO======================");
+		logger.info("Process of Mining started. Go for something to do. This may take a while");
 		
 		do {
 			nonce ++;
@@ -82,9 +87,9 @@ public class Block extends AbstractHasheable implements Serializable, Sendable<B
 		
 		if (id.substring(0, difficulty).equals(target)) {
 			this.mined = true;
-			System.out.println("=====================GANÉ======================");
+			logger.info("Congrats! You found a solution!");
 		} else {
-			System.out.println("=====================CANCELO======================");
+			logger.info("Canceling... You may want to try it later?");
 		}
 		Miner.keepMining(true);
 	}
