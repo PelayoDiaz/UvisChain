@@ -1,32 +1,15 @@
-package com.uniovi.uvis;
+package com.uniovi.uvis.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.uniovi.uvis.AbstractTest;
 import com.uniovi.uvis.entities.block.Block;
 
-public class BlockTest {
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
+public class BlockTest extends AbstractTest {
 
 	@Test
 	/**
@@ -48,19 +31,22 @@ public class BlockTest {
 	 */
 	public void miningBlocksTests() {
 		Block genesisBlock = new Block("0");
+		genesisBlock.addTransactions(this.createTransactionsList());
 		genesisBlock.mine(2);
 		assertTrue(genesisBlock.isMined());
 		assertTrue(genesisBlock.getId().startsWith("00"));
 		
 		Block secondBlock = new Block(genesisBlock.getId());
+		secondBlock.addTransactions(this.createTransactionsList());
 		secondBlock.mine(3);
 		assertTrue(secondBlock.isMined());
 		assertTrue(secondBlock.getId().startsWith("000"));
 		
 		Block thirdBlock = new Block(secondBlock.getId());
-		thirdBlock.mine(5);
+		thirdBlock.addTransactions(this.createTransactionsList());
+		thirdBlock.mine(4);
 		assertTrue(thirdBlock.isMined());
-		assertTrue(thirdBlock.getId().startsWith("00000"));
+		assertTrue(thirdBlock.getId().startsWith("0000"));
 	}
 	
 	@Test
@@ -69,6 +55,7 @@ public class BlockTest {
 	 */
 	public void miningMinedBlockTest() {
 		Block genesisBlock = new Block("0");
+		genesisBlock.addTransactions(this.createTransactionsList());
 		genesisBlock.mine(2);
 		assertTrue(genesisBlock.isMined());
 		assertTrue(genesisBlock.getId().startsWith("00"));
@@ -76,6 +63,16 @@ public class BlockTest {
 		
 		genesisBlock.mine(3);
 		assertEquals(previousHash, genesisBlock.getId());
+	}
+	
+	@Test
+	/**
+	 * Checks that a block can not be mined withou transactions.
+	 */
+	public void miningBlockWithoutTransactionsTest() {
+		Block genesisBlock = new Block("0");
+		genesisBlock.mine(2);
+		assertFalse(genesisBlock.isMined());
 	}
 
 }

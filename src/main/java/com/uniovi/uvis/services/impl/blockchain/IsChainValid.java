@@ -1,5 +1,8 @@
 package com.uniovi.uvis.services.impl.blockchain;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.uniovi.uvis.entities.block.Block;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.transactions.Transaction;
@@ -13,6 +16,8 @@ import com.uniovi.uvis.services.impl.command.Command;
  *
  */
 public class IsChainValid implements Command<Boolean>{
+	
+	private Logger logger = LogManager.getLogger(IsChainValid.class);
 	
 	private BlockChain chain;
 
@@ -42,8 +47,8 @@ public class IsChainValid implements Command<Boolean>{
 			currentBlock = this.chain.getChain().get(i);
 			previousBlock = this.chain.getChain().get(i-1);
 			
-			checkActualBlockProofOfWork(currentBlock);
 			checkPreviousBlockHash(currentBlock, previousBlock);
+			checkActualBlockProofOfWork(currentBlock);
 			checkIfActualIsMined(currentBlock);
 			checkTransactions(currentBlock);
 		}
@@ -60,6 +65,7 @@ public class IsChainValid implements Command<Boolean>{
 	 */
 	private void checkActualBlockProofOfWork(Block currentBlock) {
 		if (!currentBlock.getId().equals(currentBlock.calculateHash())) {
+			logger.error("The block has been modified!");
 			throw new IllegalStateException("The block has been modified!");
 		}
 	}
@@ -76,6 +82,7 @@ public class IsChainValid implements Command<Boolean>{
 	 */
 	private void checkPreviousBlockHash(Block currentBlock, Block previousBlock) {
 		if (!currentBlock.getPreviousHash().equals(previousBlock.getId())) {
+			logger.error("The previous block has been modified!");
 			throw new IllegalStateException("The previous block has been modified!");
 		}
 	}
@@ -88,6 +95,7 @@ public class IsChainValid implements Command<Boolean>{
 	 */
 	private void checkIfActualIsMined(Block currentBlock) {
 		if (!currentBlock.isMined()) {
+			logger.error("The block is not Mined!");
 			throw new IllegalStateException("The block is not Mined!");
 		}
 	}
@@ -102,16 +110,20 @@ public class IsChainValid implements Command<Boolean>{
 		for (Transaction transaction : currentBlock.getTransactions()) {
 			//Checks if the Transaction is verified
 			if (!transaction.verifySignature()) {
+				logger.error("Signature in transaction is invalid!");
 				throw new IllegalStateException("Signature in transaction is invalid!");
 			}
 			//Checks if the inputs or outputs have been modified
 			if (transaction.getInputsValue() != transaction.getOutputsValue()) {
+				logger.error("Inputs are not equals to outputs in transaction");
 				throw new IllegalStateException("Inputs are not equals to outputs in transaction");
 			}
 			if (!transaction.getOutputs().get(0).belongsTo(transaction.getReceiver())) {
+				logger.error("Output receiver is not who it should be");
 				throw new IllegalStateException("Output receiver is not who it should be");
 			}
 			if (transaction.getOutputs().get(1)!=null && !transaction.getOutputs().get(1).belongsTo(transaction.getSenderAddress())) {
+				logger.error("The left over of the transaction is not for the sender");
 				throw new IllegalStateException("The left over of the transaction is not for the sender");
 			}
 		}

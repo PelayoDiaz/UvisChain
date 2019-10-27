@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.uniovi.uvis.entities.block.Block;
 import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
-import com.uniovi.uvis.services.impl.BlockChainServiceImpl;
-import com.uniovi.uvis.services.impl.BlockServiceImpl;
+import com.uniovi.uvis.services.BlockChainService;
+import com.uniovi.uvis.services.BlockService;
 import com.uniovi.uvis.services.impl.block.Miner;
 import com.uniovi.uvis.validator.MineFormValidator;
 
@@ -26,10 +26,10 @@ public class HomeController {
 	private Logger logger = LogManager.getLogger(HomeController.class);
 	
 	@Autowired
-	private BlockChainServiceImpl blockChainService;
+	private BlockChainService blockChainService;
 	
 	@Autowired
-	private BlockServiceImpl blockService;
+	private BlockService blockService;
 	
 	@Autowired
 	private MineFormValidator mineFormValidator;

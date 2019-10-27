@@ -16,7 +16,9 @@ public class AddTransaction implements Command<BlockChainDto> {
 
 	@Override
 	public BlockChainDto execute() {
-		BlockChain.getInstance().addTransaction(new Transaction(transactionDto));
+		if (this.transactionDto != null) {
+			BlockChain.getInstance().addPendingTransaction(new Transaction(transactionDto));
+		}
 		return BlockChain.getInstance().toDto();
 	}
 

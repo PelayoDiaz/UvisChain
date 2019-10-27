@@ -22,6 +22,15 @@ public class TransactionOutput extends AbstractHasheable implements Serializable
 	/** The id of the transaction where this output was created. */
 	private String parentTransactionId;
 
+	/**
+	 * Constructor.
+	 * @param receiver
+	 * 			The address of the wallet's receiver
+	 * @param value
+	 * 			The amount of coins they own
+	 * @param parentTransactionId
+	 * 			The id of the transaction where this output was created.
+	 */
 	public TransactionOutput(String receiver, double value, String parentTransactionId) {
 		this.receiver = receiver;
 		this.value = value;
@@ -29,6 +38,12 @@ public class TransactionOutput extends AbstractHasheable implements Serializable
 		this.id = calculateHash();
 	}
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param dto
+	 * 			The dto to be converted into a transaction.
+	 */
 	public TransactionOutput(TransactionOutputDto dto) {
 		this.id = dto.id;
 		this.receiver = dto.receiver;

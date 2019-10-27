@@ -19,7 +19,7 @@ public class GetValidTransactions implements Command<List<Transaction>>{
 	
 	@Override
 	public List<Transaction> execute() {
-		List<Transaction> validTransactions = BlockChain.getInstance().getTransactions()
+		List<Transaction> validTransactions = BlockChain.getInstance().getPendingTransactions()
 				.stream().filter(x -> x.isValid()).collect(Collectors.toList());
 		return validTransactions;
 	}

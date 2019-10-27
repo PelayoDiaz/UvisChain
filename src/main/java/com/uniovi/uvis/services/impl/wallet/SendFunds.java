@@ -41,7 +41,7 @@ public class SendFunds extends AbstractSender<Transaction, TransactionDto> imple
 	public Transaction execute() {
 		ArrayList<TransactionInput> inputs = getTransactionInputs();
 		Transaction transaction = createTransaction(inputs);
-		BlockChain.getInstance().addTransaction(transaction);
+		BlockChain.getInstance().addPendingTransaction(transaction);
 		this.send(transaction, new BlockChainSessionHandler(), LISTENER);
 		return transaction;
 	}

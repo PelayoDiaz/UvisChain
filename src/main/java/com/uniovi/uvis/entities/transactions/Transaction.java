@@ -42,6 +42,18 @@ public class Transaction extends AbstractHasheable implements Serializable, Send
 	/** The outputs to be sent in the transaction */
 	private List<TransactionOutput> outputs;
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param sender
+	 * 			The sender Wallet.
+	 * @param receiver
+	 * 			The receiver address.
+	 * @param amount
+	 * 			The amount of funds to be sent.
+	 * @param inputs
+	 * 			The inputs to fill the transaction.
+	 */
 	public Transaction(Wallet sender, String receiver, double amount, ArrayList<TransactionInput> inputs) {
 		super();
 		this.sender = sender.getPublicKey();
@@ -53,6 +65,12 @@ public class Transaction extends AbstractHasheable implements Serializable, Send
 		this.id = calculateHash();
 	}
 	
+	/**
+	 * The DTO to be converted.
+	 * 
+	 * @param dto
+	 * 			DTO.
+	 */
 	public Transaction(TransactionDto dto) {
 		this.id = dto.id;
 		this.sender = CryptoUtil.fromByteToPublicKey(dto.sender);
@@ -209,6 +227,7 @@ public class Transaction extends AbstractHasheable implements Serializable, Send
 	 * 			The String of the data
 	 */
 	private String getData() {
+		//TODO: AÑADIR ID?
 		return CryptoUtil.getStringFromKey(this.sender) +
 				this.senderAddress +
 				this.receiver +
@@ -266,13 +285,6 @@ public class Transaction extends AbstractHasheable implements Serializable, Send
 	 */
 	public List<TransactionInput> getInputs() {
 		return new ArrayList<TransactionInput>(inputs);
-	}
-
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
 	}
 	
 	@Override

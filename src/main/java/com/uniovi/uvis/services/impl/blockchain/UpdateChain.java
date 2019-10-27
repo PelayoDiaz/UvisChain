@@ -22,7 +22,9 @@ public class UpdateChain implements Command<BlockChainDto>{
 	@Override
 	public BlockChainDto execute() {
 		BlockChainDto previousDto = BlockChain.getInstance().toDto();
-		BlockChain.getInstance().update(dto);
+		if (this.dto != null) {
+			BlockChain.getInstance().update(dto);
+		}
 		return previousDto;
 	}
 

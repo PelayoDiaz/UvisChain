@@ -10,7 +10,7 @@ import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.Node;
 import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.dto.WalletDto;
-import com.uniovi.uvis.services.impl.BlockChainServiceImpl;
+import com.uniovi.uvis.services.BlockChainService;
 import com.uniovi.uvis.services.impl.block.Miner;
 
 /**
@@ -23,7 +23,7 @@ import com.uniovi.uvis.services.impl.block.Miner;
 public class BlockChainController {
 	
 	@Autowired
-	private BlockChainServiceImpl blockChainService;
+	private BlockChainService blockChainService;
 
 	@MessageMapping("/chain/registerNode")
 	@SendTo("/topic/blockchain")

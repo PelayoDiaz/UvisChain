@@ -23,6 +23,9 @@ public class CreateBlock implements Command<Block>{
 
 	@Override
 	public Block execute() {
+		if (this.transactions == null || this.transactions.size()==0) {
+			return null;
+		}
 		Block block = new Block(BlockChain.getInstance().getLastBlock().getId());
 		block.addTransactions(transactions);
 		return block;

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.google.gson.GsonBuilder;
 import com.uniovi.uvis.entities.abst.Sendable;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.Node;
@@ -255,6 +254,9 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	 * 			The dto with the new information of the chain.
 	 */
 	public void update(BlockChainDto dto) {
+		if (dto == null) {
+			return;
+		}
 		this.chain = dto.chain.stream().map(x -> new Block(x)).collect(Collectors.toList());
 		this.transactions = dto.transactions.stream().map(x -> new Transaction(x)).collect(Collectors.toList());
 		this.nodes = dto.nodes;
@@ -282,7 +284,7 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	 * @param transaction
 	 * 			The transaction to be added.
 	 */
-	public void addTransaction(Transaction transaction) {
+	public void addPendingTransaction(Transaction transaction) {
 		this.transactions.add(transaction);
 	}
 	
@@ -301,7 +303,7 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	/**
 	 * @return the transactions
 	 */
-	public List<Transaction> getTransactions() {
+	public List<Transaction> getPendingTransactions() {
 		return new ArrayList<Transaction>(transactions);
 	}
 	
@@ -320,9 +322,11 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	 * 			True if the block has been added. False if not.
 	 */
 	public boolean addBlock(Block block, List<Transaction> originalTransactions) {
-		if(this.getLastBlock().isMined() && block.isMined()) {
+		if(this.getLastBlock().isMined() && block != null && block.isMined()) {
 			this.chain.add(block);
-			this.transactions.removeAll(originalTransactions);
+			if (originalTransactions != null) {
+				this.transactions.removeAll(originalTransactions);
+			}
 			return true;
 		}
 		return false;
@@ -335,12 +339,6 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	 */
 	public List<Block> getChain() {
 		return new ArrayList<Block>(this.chain);
-	}
-
-	@Override
-	public String toString() {
-		String gsonChain = new GsonBuilder().setPrettyPrinting().create().toJson(this.chain);
-		return gsonChain;
 	}
 	
 }

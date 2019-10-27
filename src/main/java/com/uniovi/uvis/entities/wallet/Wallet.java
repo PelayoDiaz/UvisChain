@@ -45,6 +45,16 @@ public class Wallet implements Serializable, Sendable<WalletDto> {
 		this.utxos = new HashMap<String, TransactionOutput>();
 	}
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param name
+	 * 			The name of the wallet.
+	 * @param address
+	 * 			The address of the wallet.
+	 * @param username
+	 * 			The username of the wallet.
+	 */
 	public Wallet(String name, String address, String username) {
 		this();
 		this.name = name;
@@ -52,6 +62,12 @@ public class Wallet implements Serializable, Sendable<WalletDto> {
 		this.username = username;
 	}
 	
+	/**
+	 * The dto to be converted into a wallet.
+	 * 
+	 * @param dto
+	 * 			The DTO.
+	 */
 	public Wallet(WalletDto dto) {
 		this();
 		this.name = dto.name;

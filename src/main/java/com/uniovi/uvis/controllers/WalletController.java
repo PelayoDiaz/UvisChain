@@ -9,7 +9,7 @@ import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.dto.WalletDto;
-import com.uniovi.uvis.services.impl.WalletServiceImpl;
+import com.uniovi.uvis.services.WalletService;
 
 /**
  * It controlls all the methods related to create wallets.
@@ -21,7 +21,7 @@ import com.uniovi.uvis.services.impl.WalletServiceImpl;
 public class WalletController {
 	
 	@Autowired
-	private WalletServiceImpl walletService;
+	private WalletService walletService;
 
 	@MessageMapping("/chain/createWallet")
 	@SendTo("/topic/blockchainClient")

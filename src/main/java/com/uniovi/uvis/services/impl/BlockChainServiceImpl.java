@@ -69,7 +69,7 @@ public class BlockChainServiceImpl implements BlockChainService{
 		}
 		Wallet sender = BlockChain.getInstance().getCoinBase();
 		executor.execute(executor.execute(new GetBalance(sender))>=BlockChain.PRIZE, new SendPrize(sender, receiverAddress, BlockChain.PRIZE));
-		return BlockChain.getInstance().getTransactions();
+		return BlockChain.getInstance().getPendingTransactions();
 	}
 
 }

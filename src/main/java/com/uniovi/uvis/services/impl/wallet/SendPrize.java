@@ -28,7 +28,7 @@ public class SendPrize extends SendFunds {
 	public Transaction execute() {
 		ArrayList<TransactionInput> inputs = getTransactionInputs();
 		Transaction transaction = createTransaction(inputs);
-		BlockChain.getInstance().addTransaction(transaction);
+		BlockChain.getInstance().addPendingTransaction(transaction);
 		return transaction;
 	}
 	
