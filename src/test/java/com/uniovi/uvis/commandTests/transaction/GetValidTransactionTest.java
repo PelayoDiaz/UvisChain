@@ -60,10 +60,10 @@ public class GetValidTransactionTest extends AbstractTest {
 	
 	@Test
 	/**
-	 * It checks that it doesn't returns those transactions whose outputs value
-	 * are less than the minimum allowed.
+	 * It checks that it doesn't returns those transactions whose inputs value
+	 * are less than the amount to be sent.
 	 */
-	public void amountGreaterThanOutputValueTransactionTest() {
+	public void amountGreaterThanInputValueTransactionTest() {
 		//At the beginning the list of pending transaction must be empty
 		assertEquals(0, executor.execute(new GetValidTransactions()).size());
 		Transaction transaction = this.createValidTransaction(5);

@@ -46,5 +46,14 @@ public class GetBalanceTest extends AbstractTest {
 		assertEquals(3.5, executor.execute(new GetBalance(this.walletA)), 0.01);
 		assertEquals(4, executor.execute(new GetBalance(this.walletB)), 0.01);
 	}
+	
+	@Test
+	/**
+	 * Checks that the method returns 0 as the amount of funds available
+	 * when the wallet to check is null.
+	 */
+	public void getBalanceNullTest() {
+		assertEquals(0, executor.execute(new GetBalance(null)), 0.01);
+	}
 
 }

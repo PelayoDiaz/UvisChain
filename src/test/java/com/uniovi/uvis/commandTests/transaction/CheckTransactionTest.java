@@ -22,6 +22,15 @@ public class CheckTransactionTest extends AbstractTest {
 	
 	@Test
 	/**
+	 * It checks that the method returns false when a null parameter is 
+	 * received.
+	 */
+	public void checkTransactionNotNullInvalidTest() {
+		assertFalse(executor.execute(new CheckTransaction(null)));
+	}
+	
+	@Test
+	/**
 	 * Checks that a transaction is invalid because there is no sender
 	 * with this direction
 	 */

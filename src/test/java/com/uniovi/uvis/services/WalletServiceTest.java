@@ -70,9 +70,9 @@ public class WalletServiceTest extends AbstractTest {
 	
 	@Test
 	/**
-	 * Checks that the sendFunds command is executed only if there is balance enough.
+	 * Checks that the sendFunds command is executed when there is the exact balance.
 	 */
-	public void sendFundsTest() {
+	public void sendFundsExactBalanceTest() {
 		TransactionDto dto = new TransactionDto();
 		dto.senderAddress = walletA.getAddress();
 		dto.receiver = walletB.getAddress();
@@ -86,4 +86,21 @@ public class WalletServiceTest extends AbstractTest {
 		assertEquals(transaction, BlockChain.getInstance().getPendingTransactions().get(0));
 	}
 
+	@Test
+	/**
+	 * Checks that the sendFunds command is executed when there is more balance than the needed.
+	 */
+	public void sendFundsMoreBalanceTest() {
+		TransactionDto dto = new TransactionDto();
+		dto.senderAddress = walletA.getAddress();
+		dto.receiver = walletB.getAddress();
+		dto.amount = 3;
+		
+		Transaction transaction = walletService.sendFunds(dto);
+		assertNotNull(transaction);
+		assertEquals(3, transaction.getAmount(), 0.01);
+		assertEquals(0, transaction.getOutputs().size());
+		assertEquals(1, BlockChain.getInstance().getPendingTransactions().size());
+		assertEquals(transaction, BlockChain.getInstance().getPendingTransactions().get(0));
+	}
 }

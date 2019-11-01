@@ -2,6 +2,7 @@ package com.uniovi.uvis.commandTests.wallet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -50,6 +51,20 @@ public class SendFundsAndPrizeTest extends AbstractTest {
 	
 	@Test
 	/**
+	 * Checks that a transaction can not be created because it has null parameters.
+	 */
+	public void sendFundsNullTest() {
+		//The transaction can not be created because the sender is null.
+		assertNull(executor.execute(new SendFunds(null, walletB.getAddress(), 3.5)));
+		assertEquals(0, BlockChain.getInstance().getPendingTransactions().size());
+		
+		//The transaction can not be created because the receiver is null.
+		assertNull(executor.execute(new SendFunds(walletA, null, 3.5)));
+		assertEquals(0, BlockChain.getInstance().getPendingTransactions().size());
+	}
+	
+	@Test
+	/**
 	 * Checks if the new transaction is created and added to the list of pending transactions.
 	 */
 	public void sendPrizeTest() {
@@ -59,6 +74,20 @@ public class SendFundsAndPrizeTest extends AbstractTest {
 		assertEquals(0, transaction.getOutputs().size());
 		assertEquals(1, BlockChain.getInstance().getPendingTransactions().size());
 		assertEquals(transaction, BlockChain.getInstance().getPendingTransactions().get(0));
+	}
+	
+	@Test
+	/**
+	 * Checks that a transaction can not be created because it has null parameters.
+	 */
+	public void sendPrizeNullTest() {
+		//The transaction can not be created because the sender is null.
+		assertNull(executor.execute(new SendPrize(null, walletB.getAddress(), 3.5)));
+		assertEquals(0, BlockChain.getInstance().getPendingTransactions().size());
+		
+		//The transaction can not be created because the receiver is null.
+		assertNull(executor.execute(new SendPrize(walletA, null, 3.5)));
+		assertEquals(0, BlockChain.getInstance().getPendingTransactions().size());
 	}
 
 }

@@ -56,7 +56,7 @@ public class TransactionTest extends AbstractTest {
 		
 		//Creatin outputs
 		TransactionOutput output1 = new TransactionOutput(walletA.getAddress(), 3, null);
-		TransactionOutput output2 = new TransactionOutput(walletA.getAddress(), 0.01, null);
+		TransactionOutput output2 = new TransactionOutput(walletA.getAddress(), 0.009, null);
 		BlockChain.getInstance().putUTXO(output1.getId(), output1);
 		BlockChain.getInstance().putUTXO(output2.getId(), output2);
 		
@@ -137,9 +137,6 @@ public class TransactionTest extends AbstractTest {
 		Transaction transaction = new Transaction(walletA, walletB.getAddress(), 3, inputs);
 		walletA.signTransaction(transaction);	
 		assertTrue(transaction.processTransaction());
-		
-		//Checks that there are three utxos. The coinbase, the one with the amount to send and the one with the left over
-		assertEquals(3, BlockChain.getInstance().getUTXOMap().size());
 		
 		assertEquals(3, BlockChain.getInstance().getUTXO(transaction.getOutputs().get(0).getId()).getValue(), 0.01);
 		assertTrue(BlockChain.getInstance().getUTXO(transaction.getOutputs().get(0).getId()).belongsTo(walletB.getAddress()));

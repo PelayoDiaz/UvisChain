@@ -20,6 +20,9 @@ public class AddWalletTest extends AbstractTest {
 		assertEquals(1, BlockChain.getInstance().getWallets().size());
 		executor.execute(new AddWallet(this.createWalletDto()));
 		assertEquals(2, BlockChain.getInstance().getWallets().size());
+		assertEquals("walletA", BlockChain.getInstance().getWallets().get("direccion1").name);
+		assertEquals("direccion1", BlockChain.getInstance().getWallets().get("direccion1").address);
+		assertEquals("userA", BlockChain.getInstance().getWallets().get("direccion1").username);
 	}
 	
 	@Test

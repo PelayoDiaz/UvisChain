@@ -31,7 +31,7 @@ public abstract class AbstractTest {
 	
 	@After
 	/**
-	 * We restore the original blockchain before every test.
+	 * We restore the original blockchain after every test.
 	 * 
 	 * @throws Exception
 	 */

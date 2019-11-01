@@ -15,7 +15,9 @@ public class RegisterNode implements Command<BlockChainDto>{
 
 	@Override
 	public BlockChainDto execute() {
-		BlockChain.getInstance().registerNode(node);
+		if (node!=null) {
+			BlockChain.getInstance().registerNode(node);
+		}
 		return BlockChain.getInstance().toDto();
 	}
 

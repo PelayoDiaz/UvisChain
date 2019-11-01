@@ -28,6 +28,10 @@ public class CheckTransaction implements Command<Boolean> {
 
 	@Override
 	public Boolean execute() {
+		if (this.transactionDto == null) {
+			logger.error("There is no transaction to check. TransactionDto is null.");
+			return Boolean.FALSE;
+		}
 		if (BlockChain.getInstance().getWallets().get(this.transactionDto.senderAddress)==null) {
 			logger.error("There is no sender address like this contained in the chain.");
 			return Boolean.FALSE;

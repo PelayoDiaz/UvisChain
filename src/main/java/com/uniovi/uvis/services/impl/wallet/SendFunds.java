@@ -39,11 +39,23 @@ public class SendFunds extends AbstractSender<Transaction, TransactionDto> imple
 
 	@Override
 	public Transaction execute() {
+		if (!this.canSendFunds()) {
+			return null;
+		}
 		ArrayList<TransactionInput> inputs = getTransactionInputs();
 		Transaction transaction = createTransaction(inputs);
 		BlockChain.getInstance().addPendingTransaction(transaction);
 		this.send(transaction, new BlockChainSessionHandler(), LISTENER);
 		return transaction;
+	}
+	
+	/**
+	 * Checks if the parameters to create the transaction are null.
+	 * 
+	 * @return True if they are not null, false if they are.
+	 */
+	protected boolean canSendFunds() {
+		return this.sender != null && this.receiverAddress != null;
 	}
 	
 	/**

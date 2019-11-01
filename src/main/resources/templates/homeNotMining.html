@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head th:replace="fragments/head" />
 <body>
 	<nav th:replace="fragments/nav" />
 	<div class="container" style="text-align: center">
-		<img src="/img/vagon.png" />
+		<img src="/img/vagon.png" alt="vagon image"/>
 		<h2 th:text="#{welcome}"></h2>
 
 	</div>
@@ -15,7 +15,7 @@
 			<div class="form-group">
 				<label class="control-label col-sm-2" for="address" th:text="#{wallet.address}"></label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" name="address"
+					<input type="text" class="form-control" name="address" id="address"
 						th:placeholder="#{wallet.address.placeholder}" required="true" />
 					<span class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">
 				</div>

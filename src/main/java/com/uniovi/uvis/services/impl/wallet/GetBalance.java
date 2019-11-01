@@ -22,6 +22,9 @@ public class GetBalance implements Command<Double>{
 
 	@Override
 	public Double execute() {
+		if (this.wallet == null) {
+			return new Double(0);
+		}
 		AtomicDouble total = new AtomicDouble(0);
 		BlockChain.getInstance().getUTXOMap().forEach((k, v) -> {
 			if (v.belongsTo(wallet.getAddress())) {
