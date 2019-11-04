@@ -37,7 +37,7 @@ public class HomeController {
 	@RequestMapping(value = { "/home" }, method = RequestMethod.GET)
 	public String home(Model model) {
 		if (!Miner.isMining()) {
-			model.addAttribute("wallet", new WalletDto());
+			model.addAttribute("walletDto", new WalletDto());
 			return "homeNotMining";
 		}
 		return "homeMining";
@@ -49,17 +49,16 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/home", method = RequestMethod.POST)
-	public String mine(@Validated WalletDto wallet, BindingResult result, Model model) {
-		logger.info("Sending prize in case of success to: " + wallet.address);
+	public String mine(@Validated WalletDto walletDto, BindingResult result, Model model) {
+		logger.info("Sending prize in case of success to: " + walletDto.address);
 		if (Miner.isMining()) {
 			return "redirect:home";
 		} else {
-			this.mineFormValidator.validate(wallet, result);
+			this.mineFormValidator.validate(walletDto, result);
 			if (result.hasErrors()) {
-				model.addAttribute("wallet", wallet);
 				return "homeNotMining";
 			}
-			List<Transaction> originalTransactions = this.blockChainService.sendPrizeTo(wallet.address);
+			List<Transaction> originalTransactions = this.blockChainService.sendPrizeTo(walletDto.address);
 			Block newBlock = this.blockService.createBlock();
 			this.blockService.mine(newBlock, originalTransactions);
 			return "redirect:home";

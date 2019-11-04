@@ -11,7 +11,7 @@
 	<div class="container">
 		<h3 th:text="#{form.title}"></h3>
 		
-		<form class="form-horizontal" method="post" action="/home" th:object="${wallet}">
+		<form class="form-horizontal" method="post" action="/home" th:object="${walletDto}">
 			<div class="form-group">
 				<label class="control-label col-sm-2" for="address" th:text="#{wallet.address}"></label>
 				<div class="col-sm-10">
