@@ -13,9 +13,9 @@ import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.Node;
 
 @SpringBootApplication
-public class UvisServerApplication {
+public class UvisChainApplication {
 	
-	private static Logger logger = LogManager.getLogger(UvisServerApplication.class);
+	private static Logger logger = LogManager.getLogger(UvisChainApplication.class);
 	
 	public static String port;
 	public static Node node;
@@ -34,7 +34,7 @@ public class UvisServerApplication {
 				start = initialize(rootUrl, node);
 			}
 			if (start) {
-				SpringApplication.run(UvisServerApplication.class, args);
+				SpringApplication.run(UvisChainApplication.class, args);
 			}
 		}		
 	}

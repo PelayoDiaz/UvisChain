@@ -9,7 +9,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.uniovi</groupId>
-	<artifactId>UvisServer</artifactId>
+	<artifactId>UvisChain</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>UvisServer</name>
 	<description>Simulación de una moneda virtual con BlockChain</description>

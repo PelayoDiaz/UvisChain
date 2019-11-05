@@ -30,7 +30,7 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	 */
 	private static final long serialVersionUID = 1713493104111662876L;
 	
-	/** The total amount of many available in  the blockchain */
+	/** The total amount of money available in  the blockchain */
 	private static final double QUARRY = 256000;
 	
 	/** The minimum value allowed to be sent */

@@ -7,7 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 
-import com.uniovi.uvis.UvisServerApplication;
+import com.uniovi.uvis.UvisChainApplication;
 import com.uniovi.uvis.communication.Sender;
 import com.uniovi.uvis.entities.abst.Sendable;
 import com.uniovi.uvis.entities.block.BlockChain;
@@ -21,7 +21,7 @@ public abstract class AbstractSender<T extends Sendable<E>, E extends AbstractDt
 	public void send(T sendable, StompSessionHandlerAdapter handler, String listener) {
 		List<Node> originalNodes = BlockChain.getInstance().getNodes();
 		for (Node node : originalNodes) {
-			if (!node.equals(UvisServerApplication.node)) {
+			if (!node.equals(UvisChainApplication.node)) {
 				doSend(sendable, node.getUrl(), handler, listener);
 			}
 		}
