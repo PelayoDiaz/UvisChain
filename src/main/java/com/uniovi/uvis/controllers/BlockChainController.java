@@ -55,4 +55,10 @@ public class BlockChainController {
 	public BlockChainDto addTransaction(TransactionDto dto) {
 		return this.blockChainService.addTransaction(dto);
 	}
+	
+	@MessageMapping("/chain/addNode")
+	@SendTo("/topic/blockchain")
+	public BlockChainDto addNode(Node node) {
+		return this.blockChainService.addNode(node);
+	}
 }

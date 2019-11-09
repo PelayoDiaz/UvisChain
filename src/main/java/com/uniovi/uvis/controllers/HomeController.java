@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,7 +22,7 @@ import com.uniovi.uvis.services.impl.block.Miner;
 import com.uniovi.uvis.validator.MineFormValidator;
 
 @Controller
-public class HomeController {
+public class HomeController implements ErrorController {
 	
 	private Logger logger = LogManager.getLogger(HomeController.class);
 	
@@ -71,4 +72,13 @@ public class HomeController {
 		return "redirect:home";
 	}
 	
+	@RequestMapping("/error")
+    public String handleError() {
+        return "error";
+    }
+
+	@Override
+	public String getErrorPath() {
+		return "/error";
+	}
 }

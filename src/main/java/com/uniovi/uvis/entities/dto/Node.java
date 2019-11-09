@@ -2,7 +2,9 @@ package com.uniovi.uvis.entities.dto;
 
 import java.io.Serializable;
 
-public class Node extends AbstractDto implements Serializable {
+import com.uniovi.uvis.entities.abst.Sendable;
+
+public class Node extends AbstractDto implements Serializable, Sendable<Node> {
 	
 	/**
 	 * Serializable.
@@ -48,6 +50,11 @@ public class Node extends AbstractDto implements Serializable {
 		} else if (!url.equals(other.url))
 			return false;
 		return true;
+	}
+
+	@Override
+	public Node toDto() {
+		return this;
 	}
 
 	

@@ -37,7 +37,7 @@ public class BlockChainServiceImpl implements BlockChainService{
 
 	@Override
 	public BlockChainDto registerNode(Node node) {
-		return executor.execute(new RegisterNode(node));
+		return executor.execute(new RegisterNode(node, true));
 	}
 
 	@Override
@@ -48,6 +48,11 @@ public class BlockChainServiceImpl implements BlockChainService{
 	@Override
 	public BlockChainDto addWallet(WalletDto dto) {
 		return executor.execute(new AddWallet(dto));
+	}
+
+	@Override
+	public BlockChainDto addNode(Node node) {
+		return executor.execute(new RegisterNode(node, false));
 	}
 
 	@Override

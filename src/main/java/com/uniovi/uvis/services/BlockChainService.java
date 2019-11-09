@@ -42,6 +42,16 @@ public interface BlockChainService {
 	public BlockChainDto addWallet(WalletDto dto);
 	
 	/**
+	 * Adds a new node to the chain and stores it to be used in communications.
+	 * 
+	 * @param node
+	 * 			The Node to be added to the net
+	 * @return BlockChainDto
+	 * 			A copy of the actual's node chain.
+	 */
+	public BlockChainDto addNode(Node node);
+	
+	/**
 	 * Updates the chain from the node for another send by other node.
 	 * 
 	 * @param dto

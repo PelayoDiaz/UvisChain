@@ -43,7 +43,7 @@ public class WalletServiceImpl implements WalletService {
 				new SendFunds(senderWallet, dto.receiver, dto.amount));
 		return transaction;
 	}
-
+	
 	@Override
 	public Wallet findByAddress(String address) {
 		WalletDto dto = BlockChain.getInstance().getWallets().get(address);

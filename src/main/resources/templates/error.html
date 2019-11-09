@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="es">
+<head th:replace="fragments/head" />
+<body>
+	<nav th:replace="fragments/nav" />
+	<div class="container" style="text-align: center">
+		<img src="/img/error.png" alt="error image"/>
+		<h1>404</h1>
+		<p th:text="#{error.page.not.found.message}"></p>
+
+	</div>
+	<footer th:replace="fragments/footer" />
+</body>
+</html>

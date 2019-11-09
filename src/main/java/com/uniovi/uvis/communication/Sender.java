@@ -8,6 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.client.ResourceAccessException;
+
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.AbstractDto;
 
@@ -42,11 +44,28 @@ public class Sender extends Thread {
 		initSession(url, handler);
 	}
 	
+	/**
+	 * Initalizes a conection with a node of the list contained into the chain.
+	 * 
+	 * @param url
+	 * 			The url of the node.
+	 * @param handler
+	 * 			The handler.
+	 * @throws ExecutionException
+	 */
 	private void initSession(String url, StompSessionHandlerAdapter handler) throws ExecutionException {
 		if (!sessions.containsKey(url)) {
-			StompSession session = Connection.initialize(url, handler); 
-			if (session!=null) {
-				sessions.put(url, session);
+			try {
+				StompSession session = Connection.initialize(url, handler); 
+				if (session!=null) {
+					sessions.put(url, session);
+				}
+			} catch (ExecutionException  e) {
+				logger.info(String.format("The node with url '%s' was desconected. Not stablishing connection ", this.url));
+				BlockChain.getInstance().removeNode(this.url);
+			} catch (Exception  e) {
+				logger.info(String.format("por aqui The node with url '%s' was desconected. Not stablishing connection ", this.url));
+				BlockChain.getInstance().removeNode(this.url);
 			}
 		}
 	}
@@ -56,8 +75,8 @@ public class Sender extends Thread {
 	 */
 	public void run() {
 		try {
-			StompSession session = sessions.get(this.url); 
-			synchronized (session) {
+			StompSession session = sessions.get(this.url);
+			if (session!=null) {
 				session.send(listener, dto);
 			}
 		} catch (IllegalStateException e) { //The node is not listening anymore, removes it from the list of nodes.
@@ -66,6 +85,4 @@ public class Sender extends Thread {
 			BlockChain.getInstance().removeNode(this.url);
 		}
 	}
-	
-
 }
