@@ -39,8 +39,10 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	/** The amount of funds send by coinbase when mining a block or wallet has been created. */
 	public static final double PRIZE = 5;
 	
+	/** The default difficulty for mining. */
 	public static final int DIFFICULTY = 6;
 	
+	/** Coinbase. It represents the original transaction and wallet. */
 	public static final String COIN_BASE = "coinBase";
 	
 	/** The unique Blockchain to be instantiated. */
@@ -50,7 +52,7 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	private List<Block> chain;
 	
 	/** The list of transactions to be added into the next mined block*/
-	private List<Transaction> transactions;
+	private List<Transaction> pendingTransactions;
 	
 	/** The list of the nodes using the blockchain. */
 	private List<Node> nodes;
@@ -61,6 +63,13 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	/** A map which contains all the wallets in the chain */
 	private Map<String, WalletDto> wallets;
 	
+	/**
+	 * Method to access the blockchain. It creates a new blockchain if it
+	 * hasn't been initialized or returns the existing one.
+	 * 
+	 * @return BlockChain
+	 * 			The blockchain of the sistem
+	 */
 	public static BlockChain getInstance() {
 		if (singleChain == null) {
 			singleChain = new BlockChain();
@@ -73,7 +82,7 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	 */
 	private BlockChain() {
 		this.chain = new ArrayList<Block>();
-		this.transactions = new ArrayList<Transaction>();
+		this.pendingTransactions = new ArrayList<Transaction>();
 		this.nodes = new ArrayList<Node>();
 		this.utxos = new HashMap<String, TransactionOutput>();
 		this.wallets = new HashMap<String, WalletDto>();
@@ -231,16 +240,60 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	 * 			The new transaction output stored.
 	 */
 	private void updateTransactionsOutput(String outputId, TransactionOutput leftOver) {
-		this.transactions.forEach(x -> x.getInputs()
+		this.pendingTransactions.forEach(x -> x.getInputs()
 				.stream().filter(y -> y.getOutputId().equals(outputId) && y.getUtxo()==null)
-				.forEach(a -> a.setOutputId(leftOver.getId())));
+				.forEach(a -> checkTransactionInputs(x, a, leftOver)));
+	}
+	
+	/**
+	 * Adds inputs to those transactions whose outputs has been used.
+	 * 
+	 * @param pendingTransaction
+	 * 			The transaction to update.
+	 * 
+	 * @param inputToUpdate
+	 * 			The input who lost the output.
+	 * @param leftOver
+	 * 			The leftover from the output used.
+	 */
+	private void checkTransactionInputs(Transaction pendingTransaction, TransactionInput inputToUpdate, TransactionOutput leftOver) {
+		String previousOutputId = inputToUpdate.getOutputId();
+		inputToUpdate.setOutputId(leftOver.getId());
+		double suma = pendingTransaction.getInputs().stream().mapToDouble(x -> this.utxos.get(x.getOutputId()).getValue()).sum();
+		while (suma<pendingTransaction.getAmount()) {
+			if (!this.searchNextOutput(pendingTransaction, previousOutputId)) {
+				return;
+			}
+			suma = pendingTransaction.getInputs().stream().mapToDouble(x -> this.utxos.get(x.getOutputId()).getValue()).sum();
+		}
+	}
+	
+	/**
+	 * Searches a new output for a pending transaction
+	 * 
+	 * @param pendingTransaction
+	 * 			The transaction to update.
+	 * @param 
+	 * @return true if exists more outputs available for the transaction, false if not.
+	 */
+	private boolean searchNextOutput(Transaction pendingTransaction, String previousOutputId) {
+		int previousSize = pendingTransaction.getInputs().size();
+		this.utxos.forEach((k, v) -> {
+			if (pendingTransaction.getInput(v.getId()) == null
+					&& !v.getId().equals(previousOutputId)
+					&& v.belongsTo(pendingTransaction.getSenderAddress())) {
+				pendingTransaction.addInput(new TransactionInput(v.getId()));
+				return;
+			}
+		});
+		return (previousSize+1 == pendingTransaction.getInputs().size());
 	}
 	
 	@Override
 	public BlockChainDto toDto() {
 		BlockChainDto dto = new BlockChainDto();
 		dto.chain = this.chain.stream().map(x -> x.toDto()).collect(Collectors.toList());
-		dto.transactions = this.transactions.stream().map(x -> x.toDto()).collect(Collectors.toList());
+		dto.transactions = this.pendingTransactions.stream().map(x -> x.toDto()).collect(Collectors.toList());
 		dto.nodes = this.nodes;
 		dto.utxos = this.utxos.values().stream().map(x -> x.toDto()).collect(Collectors.toList());
 		dto.wallets = this.wallets.values().stream().collect(Collectors.toList());
@@ -258,7 +311,7 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 			return;
 		}
 		this.chain = dto.chain.stream().map(x -> new Block(x)).collect(Collectors.toList());
-		this.transactions = dto.transactions.stream().map(x -> new Transaction(x)).collect(Collectors.toList());
+		this.pendingTransactions = dto.transactions.stream().map(x -> new Transaction(x)).collect(Collectors.toList());
 		this.nodes = dto.nodes;
 		this.utxos = new HashMap<String, TransactionOutput>();
 		dto.utxos.forEach(x -> putUTXO(x.id, new TransactionOutput(x)));
@@ -285,7 +338,7 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	 * 			The transaction to be added.
 	 */
 	public void addPendingTransaction(Transaction transaction) {
-		this.transactions.add(transaction);
+		this.pendingTransactions.add(transaction);
 	}
 	
 	/**
@@ -296,7 +349,7 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	 */
 	public void removePrize(Transaction transaction) {
 		if (transaction.getSenderAddress().equals(COIN_BASE)) {
-			this.transactions.remove(transaction);
+			this.pendingTransactions.remove(transaction);
 		}
 	}
 
@@ -304,7 +357,7 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 	 * @return the transactions
 	 */
 	public List<Transaction> getPendingTransactions() {
-		return new ArrayList<Transaction>(transactions);
+		return new ArrayList<Transaction>(pendingTransactions);
 	}
 	
 	/**
@@ -325,7 +378,7 @@ public class BlockChain implements Serializable, Sendable<BlockChainDto> {
 		if(this.getLastBlock().isMined() && block != null && block.isMined()) {
 			this.chain.add(block);
 			if (originalTransactions != null) {
-				this.transactions.removeAll(originalTransactions);
+				this.pendingTransactions.removeAll(originalTransactions);
 			}
 			return true;
 		}

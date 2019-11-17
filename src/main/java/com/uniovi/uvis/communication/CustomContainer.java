@@ -6,6 +6,12 @@ import org.springframework.stereotype.Component;
 
 import com.uniovi.uvis.UvisChainApplication;
 
+/**
+ * Class to change the port where the program is running.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 @Component
 public class CustomContainer implements WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
 

@@ -27,10 +27,22 @@ public class TransactionInput implements Serializable, Sendable<TransactionInput
 	 */
 	private TransactionOutput utxo;
 	
+	/**
+	 * Default constructor.
+	 * 
+	 * @param outputId
+	 * 			The id of the output to be included.
+	 */
 	public TransactionInput(String outputId) {
 		this.outputId = outputId;
 	}
 	
+	/**
+	 * Constructor to convert a DTO into its equivalent entity.
+	 * 
+	 * @param dto
+	 * 			The BlockDto to convert.
+	 */
 	public TransactionInput(TransactionInputDto dto) {
 		this.outputId = dto.outputId;
 		this.utxo = (dto.utxo == null) ? null : new TransactionOutput(dto.utxo);

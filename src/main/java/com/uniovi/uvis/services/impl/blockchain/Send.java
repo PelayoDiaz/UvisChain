@@ -6,6 +6,12 @@ import com.uniovi.uvis.entities.dto.BlockChainDto;
 import com.uniovi.uvis.services.impl.abst.AbstractSender;
 import com.uniovi.uvis.services.impl.command.Command;
 
+/**
+ * Sends a copy of a blockchain.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public class Send extends AbstractSender<BlockChain, BlockChainDto> implements Command<Void>{
 	
 	/** Url where the other nodes are listening. */
@@ -13,6 +19,12 @@ public class Send extends AbstractSender<BlockChain, BlockChainDto> implements C
 		
 	private BlockChain chain;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param chain
+	 * 			The chain to be sent.
+	 */
 	public Send(BlockChain chain) {
 		this.chain = chain;
 	}

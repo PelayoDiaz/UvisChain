@@ -16,6 +16,12 @@ public class GetBalance implements Command<Double>{
 	
 	private Wallet wallet;
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param wallet
+	 * 			The wallet to get the balance from.
+	 */
 	public GetBalance(Wallet wallet) {
 		this.wallet = wallet;
 	}

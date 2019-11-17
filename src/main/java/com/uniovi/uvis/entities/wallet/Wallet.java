@@ -13,6 +13,12 @@ import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.entities.transactions.TransactionOutput;
 import com.uniovi.uvis.util.CryptoUtil;
 
+/**
+ * Class used to identify where to send and receive transactions.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public class Wallet implements Serializable, Sendable<WalletDto> {
 	
 	/**
@@ -38,6 +44,9 @@ public class Wallet implements Serializable, Sendable<WalletDto> {
 	/** The username of wallet's owner. */
 	private String username;
 	
+	/**
+	 * Constructor to generate the key pair.
+	 */
 	private Wallet() {
 		KeyPair keyPair = CryptoUtil.generateKeyPair();
 		this.privateKey = keyPair.getPrivate();

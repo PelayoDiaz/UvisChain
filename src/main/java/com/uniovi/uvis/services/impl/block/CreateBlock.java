@@ -17,6 +17,12 @@ public class CreateBlock implements Command<Block>{
 	
 	private List<Transaction> transactions;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param validTransactions
+	 * 			The valid transactions to be included into the block.
+	 */
 	public CreateBlock(List<Transaction> validTransactions) {
 		this.transactions = validTransactions; //Processed Transactions
 	}

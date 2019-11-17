@@ -140,8 +140,6 @@ public class TransactionTest extends AbstractTest {
 		
 		assertEquals(3, BlockChain.getInstance().getUTXO(transaction.getOutputs().get(0).getId()).getValue(), 0.01);
 		assertTrue(BlockChain.getInstance().getUTXO(transaction.getOutputs().get(0).getId()).belongsTo(walletB.getAddress()));
-		
-		assertEquals(0.5, BlockChain.getInstance().getUTXO(transaction.getOutputs().get(1).getId()).getValue(), 0.01);
 		assertTrue(BlockChain.getInstance().getUTXO(transaction.getOutputs().get(1).getId()).belongsTo(walletA.getAddress()));
 	}
 

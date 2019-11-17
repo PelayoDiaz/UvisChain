@@ -6,10 +6,22 @@ import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.services.impl.command.Command;
 
+/**
+ * Adds a transaction to the chain.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public class AddTransaction implements Command<BlockChainDto> {
 	
 	private TransactionDto transactionDto;
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param dto
+	 * 			The transactionDto to convert into a transaction.
+	 */
 	public AddTransaction(TransactionDto dto) {
 		this.transactionDto = dto;
 	}

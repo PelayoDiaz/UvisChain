@@ -4,6 +4,12 @@ import java.io.Serializable;
 
 import com.uniovi.uvis.entities.abst.Sendable;
 
+/**
+ * The nodes connected into the net.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public class Node extends AbstractDto implements Serializable, Sendable<Node> {
 	
 	/**
@@ -16,6 +22,12 @@ public class Node extends AbstractDto implements Serializable, Sendable<Node> {
 	
 	public Node() {}
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param url
+	 * 			The ip address and the port where the node server is running.
+	 */
 	public Node(String url) {
 		super();
 		this.url = url;

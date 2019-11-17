@@ -15,6 +15,12 @@ import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.services.impl.block.Miner;
 import com.uniovi.uvis.util.CryptoUtil;
 
+/**
+ * The blocks into the chain.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public class Block extends AbstractHasheable implements Serializable, Sendable<BlockDto> {
 	
 	private Logger logger = LogManager.getLogger(Block.class);
@@ -39,6 +45,12 @@ public class Block extends AbstractHasheable implements Serializable, Sendable<B
 	/** Tells if a block is mined or not */
 	private boolean mined;
 	
+	/**
+	 * Default constructor.
+	 * 
+	 * @param previousHash
+	 * 			The hash of the previous block in the chain.
+	 */
 	public Block(String previousHash) {
 		super();
 		this.previousHash = previousHash;
@@ -46,6 +58,12 @@ public class Block extends AbstractHasheable implements Serializable, Sendable<B
 		this.transactions = new ArrayList<Transaction>();
 	}
 	
+	/**
+	 * Constructor to convert a DTO into its equivalent entity.
+	 * 
+	 * @param dto
+	 * 			The BlockDto to convert.
+	 */
 	public Block(BlockDto dto) {
 		this.id = dto.id;
 		this.previousHash = dto.previousHash;
@@ -122,6 +140,17 @@ public class Block extends AbstractHasheable implements Serializable, Sendable<B
 	 */
 	public boolean isMined() {
 		return mined;
+	}
+	
+	/**
+	 * Removes a transaction from the block
+	 * @param transaction
+	 * 			The transaction to delete.
+	 */
+	public void removeTransaction(Transaction transaction) {
+		if (transaction!=null) {
+			this.transactions.remove(transaction);
+		}
 	}
 	
 	@Override

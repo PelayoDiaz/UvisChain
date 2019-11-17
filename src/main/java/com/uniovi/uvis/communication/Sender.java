@@ -8,20 +8,31 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.web.client.ResourceAccessException;
 
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.AbstractDto;
 
+/**
+ * Class to communicate with the others nodes where the chain is stored.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public class Sender extends Thread {
 	
+	/** Logger. */
 	private Logger logger = LogManager.getLogger(Sender.class);
-		
+	
+	/** The dto to be sent in the communication. */
 	private AbstractDto dto;
+	
+	/** The listener where the dto will be received. */
 	private String listener;
 
+	/** The url of the node to communicate with. */
 	private String url;
 	
+	/** HashMap with all the opened sessions. */
 	public static Map<String, StompSession> sessions = new HashMap<String, StompSession>();
 
 	/**
@@ -45,7 +56,7 @@ public class Sender extends Thread {
 	}
 	
 	/**
-	 * Initalizes a conection with a node of the list contained into the chain.
+	 * Initializes a connection with a node of the list contained into the chain.
 	 * 
 	 * @param url
 	 * 			The url of the node.

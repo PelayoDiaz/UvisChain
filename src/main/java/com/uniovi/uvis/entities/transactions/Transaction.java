@@ -14,6 +14,12 @@ import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.wallet.Wallet;
 import com.uniovi.uvis.util.CryptoUtil;
 
+/**
+ * The transactions to be included into a block. The represent the money movement.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public class Transaction extends AbstractHasheable implements Serializable, Sendable<TransactionDto> {
 
 	/**
@@ -96,7 +102,7 @@ public class Transaction extends AbstractHasheable implements Serializable, Send
 		}
 		//Collects all the unspent outputs
 		this.inputs.forEach(x -> x.setUtxo(BlockChain.getInstance().getUTXO(x.getOutputId())));
-	
+
 		if (!this.isValid(this.getInputsValue())) {
 			return false;
 		}
@@ -166,6 +172,18 @@ public class Transaction extends AbstractHasheable implements Serializable, Send
 		//Sum all the values of the outputs
 		return this.inputs.stream().filter(y -> y.getUtxo()!=null)
 								.mapToDouble(x -> x.getUtxo().getValue()).sum();
+	}
+	
+	/**
+	 * Returns an input by searching it by its outputId.
+	 * 
+	 * @param outputId
+	 * 			The id of the output which the input references to.
+	 * @return TransactionInput
+	 * 			The input to search or null if it doesn't exists.
+	 */
+	public TransactionInput getInput(String outputId) {
+		return this.inputs.stream().filter(x -> x.getOutputId().equals(outputId)).findFirst().orElse(null);
 	}
 	
 	/**
@@ -285,6 +303,16 @@ public class Transaction extends AbstractHasheable implements Serializable, Send
 	 */
 	public List<TransactionInput> getInputs() {
 		return new ArrayList<TransactionInput>(inputs);
+	}
+	
+	/**
+	 * Adds an input to the list of inputs.
+	 * @param input
+	 */
+	public void addInput(TransactionInput input) {
+		if (input!=null) {
+			this.inputs.add(input);
+		}
 	}
 	
 	@Override

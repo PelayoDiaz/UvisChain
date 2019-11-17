@@ -7,6 +7,14 @@ import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.services.impl.command.Command;
 
+/**
+ * Checks if a transaction is valid. It will return true if the sender and
+ * receiver addresses exists and if the amount of money is greater or equals
+ * to the minimum allowed.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public class CheckTransaction implements Command<Boolean> {
 
 	private Logger logger = LogManager.getLogger(CheckTransaction.class);
@@ -14,9 +22,7 @@ public class CheckTransaction implements Command<Boolean> {
 	private TransactionDto transactionDto;
 	
 	/**
-	 * Checks if a transaction is valid. It will return true if the sender and
-	 * receiver addresses exists and if the amount of money is greater or equals
-	 * to the minimum allowed.
+	 * Constructor.
 	 *   
 	 * @param transactionDto 
 	 * 			The transactionDto of the transaction to check

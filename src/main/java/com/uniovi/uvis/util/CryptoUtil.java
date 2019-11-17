@@ -25,6 +25,11 @@ import com.uniovi.uvis.entities.transactions.Transaction;
 
 import org.bouncycastle.jce.provider.*;
 
+/**
+ * Class with statics methods for cryptographic operations.
+ * @author Pelayo Díaz Soto
+ *
+ */
 public class CryptoUtil {
 	
 	/**

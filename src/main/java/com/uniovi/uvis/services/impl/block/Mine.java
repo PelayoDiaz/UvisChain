@@ -6,13 +6,20 @@ import com.uniovi.uvis.entities.block.Block;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.services.impl.command.Command;
 
+/**
+ * Starts the process of mining to include a new block into the chain.
+ * It tries to mine a block by creating a thread.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public class Mine implements Command<Void> {
 	
 	private Block block;
 	private List<Transaction> originalTransactions;
 
 	/**
-	 * It tries to mine a block by creating a thread.
+	 * Constructor.
 	 * 
 	 * @param block
 	 * 			The block to be mined

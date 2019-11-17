@@ -21,6 +21,12 @@ import com.uniovi.uvis.services.BlockService;
 import com.uniovi.uvis.services.impl.block.Miner;
 import com.uniovi.uvis.validator.MineFormValidator;
 
+/**
+ * Class to attend to the user interface of the application.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 @Controller
 public class HomeController implements ErrorController {
 	

@@ -3,7 +3,6 @@ package com.uniovi.uvis.entities.dto;
 import java.io.Serializable;
 import java.util.List;
 
-
 public class BlockDto extends AbstractDto implements Serializable {
 
 	/**

@@ -6,6 +6,12 @@ import com.uniovi.uvis.entities.abst.Sendable;
 import com.uniovi.uvis.entities.dto.TransactionOutputDto;
 import com.uniovi.uvis.util.CryptoUtil;
 
+/**
+ * Class to store the amount of funds available to a wallet.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public class TransactionOutput extends AbstractHasheable implements Serializable, Sendable<TransactionOutputDto> {
 
 	/**

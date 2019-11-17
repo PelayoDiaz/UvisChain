@@ -2,6 +2,12 @@ package com.uniovi.uvis.entities.abst;
 
 import java.util.Date;
 
+/**
+ * Abstract class to stores all the attributes that the classes which generate hashes need.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public abstract class AbstractHasheable {
 	
 	/** The hash of the current object */
@@ -15,6 +21,8 @@ public abstract class AbstractHasheable {
 	}
 
 	/**
+	 * Returns the timeStamp.
+	 * 
 	 * @return Long
 	 * 			the timeStamp.
 	 */

@@ -7,6 +7,12 @@ import com.uniovi.uvis.entities.dto.Node;
 import com.uniovi.uvis.services.impl.abst.AbstractSender;
 import com.uniovi.uvis.services.impl.command.Command;
 
+/**
+ * Includes a new node to the chain.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public class RegisterNode extends AbstractSender<Node, Node> implements Command<BlockChainDto>{
 	
 	/** Url where the other nodes are listening. */
@@ -16,7 +22,7 @@ public class RegisterNode extends AbstractSender<Node, Node> implements Command<
 	private boolean hasToSend;
 
 	/**
-	 * Includes a new node to the chain.
+	 * Constructor.
 	 * 
 	 * @param node
 	 * 			The node to be included	 

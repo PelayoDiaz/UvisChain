@@ -8,6 +8,12 @@ import com.uniovi.uvis.entities.dto.TransactionDto;
 import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
 
+/**
+ * Interface which contains all the methods that manipulate the chain.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public interface BlockChainService {
 	
 	/**

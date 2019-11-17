@@ -15,6 +15,12 @@ public class UpdateChain implements Command<BlockChainDto>{
 
 	private BlockChainDto dto;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param dto
+	 * 			The dto of the chain with the changes to be included.
+	 */
 	public UpdateChain(BlockChainDto dto) {
 		this.dto = dto;
 	}

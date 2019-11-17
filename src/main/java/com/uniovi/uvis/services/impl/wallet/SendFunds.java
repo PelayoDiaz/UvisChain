@@ -12,6 +12,12 @@ import com.uniovi.uvis.entities.wallet.Wallet;
 import com.uniovi.uvis.services.impl.abst.AbstractSender;
 import com.uniovi.uvis.services.impl.command.Command;
 
+/**
+ * Creates a Transaction with an amount of funds to be send to a receiver.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public class SendFunds extends AbstractSender<Transaction, TransactionDto> implements Command<Transaction>{
 	
 	/** Url where the other nodes are listening. */
@@ -22,7 +28,7 @@ public class SendFunds extends AbstractSender<Transaction, TransactionDto> imple
 	private double amount;
 	
 	/**
-	 * Creates a Transaction with an amount of funds to be send to a receiver.
+	 * Constructor.
 	 * 
 	 * @param receiver
 	 * 				the receiver's address of the transaction. Is used to obtain the wallet id.

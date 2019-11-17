@@ -17,8 +17,27 @@ import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
+/**
+ * Class to create connections with WebSockets.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public class Connection {
 
+	/**
+	 * Initializes the different StompSessiones where the communications are made.
+	 * 
+	 * @param url 
+	 * 		The url to connect with.
+	 * @param sessionHandler
+	 * 		The session handler.
+	 * 
+	 * @return StompSession
+	 * 		The stompSession.
+	 * @throws ExecutionException
+	 * 		ExecutionException
+	 */
 	public static StompSession initialize(String url, StompSessionHandler sessionHandler) throws ExecutionException {
 
 		WebSocketContainer container = ContainerProvider.getWebSocketContainer();

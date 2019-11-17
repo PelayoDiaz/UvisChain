@@ -9,6 +9,13 @@ import org.springframework.validation.Validator;
 import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.services.WalletService;
 
+/**
+ * Validator for the Mine form.
+ * It checks if the introduced address exist into the chain.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 @Component
 public class MineFormValidator implements Validator {
 

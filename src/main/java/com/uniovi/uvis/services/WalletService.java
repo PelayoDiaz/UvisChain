@@ -5,6 +5,12 @@ import com.uniovi.uvis.entities.dto.WalletDto;
 import com.uniovi.uvis.entities.transactions.Transaction;
 import com.uniovi.uvis.entities.wallet.Wallet;
 
+/**
+ * Interface for all the operations related with wallets.
+ * 
+ * @author Pelayo Díaz Soto
+ *
+ */
 public interface WalletService {
 	
 	/**

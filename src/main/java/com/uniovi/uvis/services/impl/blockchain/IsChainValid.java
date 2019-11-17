@@ -21,6 +21,12 @@ public class IsChainValid implements Command<Boolean>{
 	
 	private BlockChain chain;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param chain
+	 * 			The chain to be validated.
+	 */
 	public IsChainValid(BlockChain chain) {
 		this.chain = chain;
 	}
@@ -122,7 +128,8 @@ public class IsChainValid implements Command<Boolean>{
 				logger.error("Output receiver is not who it should be");
 				throw new IllegalStateException("Output receiver is not who it should be");
 			}
-			if (transaction.getOutputs().get(1)!=null && !transaction.getOutputs().get(1).belongsTo(transaction.getSenderAddress())) {
+			if (transaction.getOutputs().size()>1 && transaction.getOutputs().get(1)!=null 
+					&& !transaction.getOutputs().get(1).belongsTo(transaction.getSenderAddress())) {
 				logger.error("The left over of the transaction is not for the sender");
 				throw new IllegalStateException("The left over of the transaction is not for the sender");
 			}

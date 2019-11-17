@@ -8,7 +8,7 @@ import com.uniovi.uvis.entities.transactions.Transaction;
 /**
  * Interface for all the operations related to manipulate a block
  * 
- * @author pdiaz
+ * @author Pelayo Díaz Soto
  *
  */
 public interface BlockService {
