@@ -30,6 +30,7 @@ public class UvisChainApplication {
 			if (port.equals(rootPort)) { //If both ports are equal, it is the genesis node.
 				BlockChain.getInstance().registerNode(node);
 			} else { //If not, then connect with the second port and initialize the node.
+				BlockChain.getInstance().registerNode(node);
 				String rootUrl = "ws://localhost:"+rootPort+"/uvischain";
 				start = initialize(rootUrl, node);
 			}

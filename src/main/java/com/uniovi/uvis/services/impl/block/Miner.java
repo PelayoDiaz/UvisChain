@@ -70,7 +70,7 @@ public class Miner extends Thread {
 			logger.info("Sending your chain to the rest of nodes.");
 		} else {
 			BlockChain.getInstance().removePrize(this.originalTransactions.get(this.originalTransactions.size()-1));
-			logger.info("Restoring your chain.");
+			logger.info("Updating your chain.");
 		}
 		mining = false;
 	}
