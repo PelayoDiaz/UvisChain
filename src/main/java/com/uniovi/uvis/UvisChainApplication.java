@@ -8,7 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.uniovi.uvis.communication.Sender;
-import com.uniovi.uvis.communication.handlers.BlockChainSessionHandler;
+import com.uniovi.uvis.communication.handlers.InitSessionHandler;
 import com.uniovi.uvis.entities.block.BlockChain;
 import com.uniovi.uvis.entities.dto.Node;
 
@@ -51,7 +51,7 @@ public class UvisChainApplication {
 	private static boolean initialize(String url, Node node) {
 		Sender sender;
 		try {
-			sender = new Sender(node, url, new BlockChainSessionHandler(), "/app/chain/registerNode");
+			sender = new Sender(node, url, new InitSessionHandler(), "/app/chain/registerNode");
 			sender.start();
 			return true;
 		} catch (ExecutionException e) {

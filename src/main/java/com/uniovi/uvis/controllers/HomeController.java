@@ -47,6 +47,7 @@ public class HomeController implements ErrorController {
 			model.addAttribute("walletDto", new WalletDto());
 			return "homeNotMining";
 		}
+		Miner.keepMining(true);
 		return "homeMining";
 	}
 	
